@@ -7,10 +7,16 @@
 #include "abilityScore.h"
 #include "speed.h"
 #include "armorClass.h"
+#include "save.h"
+#include "skill.h"
+#include "weapon.h"
+#include "armorClassItem.h"
+#include "gear.h"
+#include "currency.h"
+
+#include "../enums.h"
 
 using namespace std;
-
-enum alignment {LG, NG, CG, LN, TN, CN, LE, NE, CE};
 
 class character {
 public:
@@ -55,19 +61,17 @@ private:
     int _hitpoints;
     speed _speed;
     armorClass _armorClass;
-    short _fortitudeSave;
-    short _reflexSave;
-    short _willSave;
-    vector<string> _skills; //Needs Class Def
+    save saves [3];
+    vector<skill> _skills;
     vector<string> _languages;
 
     short _baseAttackBonus;
     short _spellResistance;
-    vector<string> _weapons; //Needs Class Def
+    vector<weapon> _weapons;
 
-    vector<string> _armorClassItems; //Needs Class Def
-    vector<string> _gear; //Needs Class Def
-    vector<string> _money; //Needs Class Def
+    vector<armorClassItem> _armorClassItems;
+    vector<gear> _gear;
+    currency _currency [4];
 
     vector<string> _feats; //Needs Class Def
     vector<string> _specialAbilities; //Needs Class Def

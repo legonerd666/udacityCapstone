@@ -1,7 +1,7 @@
 #ifndef ABILITYSCORE_H
 #define ABILITYSCORE_H
 
-enum abilityType {strength, dexterity, constitution, intelligence, wisdom, charisma};
+#include "../enums.h"
 
 class abilityScore {
 public:

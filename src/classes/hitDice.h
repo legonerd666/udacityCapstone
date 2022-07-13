@@ -3,9 +3,9 @@
 
 #include <string>
 
-using namespace std;
+#include "../enums.h"
 
-enum die {d4, d6, d8, d10, d12, d20};
+using namespace std;
 
 class hitDice
 {

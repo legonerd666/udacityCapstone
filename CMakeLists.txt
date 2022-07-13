@@ -7,4 +7,7 @@ set(CMAKE_CXX_FLAGS, "${CXX_FLAGS}")
 
 project(CharacterCreator)
 
-add_executable(CharacterCreator src/*.cpp src/classes/*.cpp)
+file(GLOB project_SRCS src/*.cpp src/classes/*.cpp)
+
+# Add project executable
+add_executable(CharacterCreator ${project_SRCS})
