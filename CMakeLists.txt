@@ -9,5 +9,4 @@ project(CharacterCreator)
 
 file(GLOB project_SRCS src/*.cpp src/classes/*.cpp)
 
-# Add project executable
 add_executable(CharacterCreator ${project_SRCS})
