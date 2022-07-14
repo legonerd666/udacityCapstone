@@ -15,4 +15,8 @@ enum damageType {piercing, slashing, bludgeoning};
 
 enum currencyType {copper, silver, gold, platinum};
 
+enum magicSchool {abjuration, conjuration, divination, enchantment, evocation, illusion, necromancy, transmutation, universal};
+
+enum casterType {bard, cleric, druid, paladin, sorcererWizard};
+
 #endif
