@@ -14,12 +14,23 @@ class role
 {
 public:
     role();
+
+    //Getters
+    string ToString();
+
+    //Setters
+    void Proficiencies(string newProficiencies);
+    void ClassFeatures(vector<specialAbility>&& newClassFeatures);
+    void Level(unsigned short newLevel);
+    void SpellStats(spellStat newSpellStats [10]);
+    void Spells(vector<spell>&& spells);
+
 private:
     string _proficiencies;
-    vector<specialAbility> _classFeatures;
+    vector<unique_ptr<specialAbility>> _classFeatures;
     unsigned short _level;
     spellStat spellStats [10];
-    vector<spell> spells;
+    vector<unique_ptr<spell>> spells;
 };
 
 #endif

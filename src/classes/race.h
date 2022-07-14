@@ -17,10 +17,10 @@ public:
 
     //Setters
     void Name(string newName);
-    void RacialAblities(vector<specialAbility> newRacialAbilities);
+    void RacialAblities(vector<specialAbility>&& newRacialAbilities);
 private:
     string _name;
-    vector<specialAbility> _racialAbilities;
+    vector<unique_ptr<specialAbility>> _racialAbilities;
 };
 
 

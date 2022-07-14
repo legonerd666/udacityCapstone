@@ -17,7 +17,6 @@ public:
 private:
     die _hitDie;
     short _numberOfHitDice;
-    string role; //Needs Class Def
 };
 
 #endif

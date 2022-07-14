@@ -2,6 +2,7 @@
 #define HITPOINTS_H
 
 #include <vector>
+#include <memory>
 
 #include "hitDice.h"
 
@@ -25,7 +26,7 @@ private:
     short _totalHP;
     short _currentDamage;
     short _nonLethalDamage;
-    vector<hitDice> _hitdice;
+    vector<unique_ptr<hitDice>> _hitdice;
 
 };
 
