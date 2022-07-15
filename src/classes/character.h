@@ -84,8 +84,8 @@ private:
     string _hairColor;
     string _eyeColor;
 
-    unique_ptr<abilityScore> _abilityScores [6];
     unique_ptr<hitPoints> _hitpoints;
+    unique_ptr<abilityScore> _abilityScores [6];
     unique_ptr<speed> _speed;
     unique_ptr<armorClass> _armorClass;
     unique_ptr<save> _saves [3];

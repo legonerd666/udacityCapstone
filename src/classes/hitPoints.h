@@ -4,7 +4,7 @@
 #include <vector>
 #include <memory>
 
-#include "hitDice.h"
+#include "hitDie.h"
 
 using namespace std;
 
@@ -13,9 +13,10 @@ public:
     hitPoints();
 
     //Getters
-    // short TotalHP();
-    // short CurrentHP();
-    // short CurrentNonLethalHP();
+    short TotalHP();
+    short CurrentHP();
+    short CurrentNonLethalHP();
+    vector<unique_ptr<hitDie>>& HitDice();
 
     //Setters
     // void TotalHP(short newTotalHP);
@@ -27,7 +28,7 @@ private:
     short _totalHP;
     short _currentDamage;
     short _nonLethalDamage;
-    vector<unique_ptr<hitDice>> _hitdice;
+    vector<unique_ptr<hitDie>> _hitdice;
 
 };
 

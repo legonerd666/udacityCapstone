@@ -6,3 +6,7 @@ abilityScore::abilityScore() {
     _score = 0;
     _adjustedScore = 0;
 }
+
+short abilityScore::AdjustedScore() {
+    return _adjustedScore;
+}

@@ -2,7 +2,6 @@
 
 #include "character.h"
 #include "../enums.h"
-#include "../enums.cpp"
 
 using namespace std;
 
@@ -51,61 +50,100 @@ string character::ToString()   {
     character += "|-----------------------------------------------------------------------------------------------------";
     character += "\n";
 
-    character += "| Character Name: ";
+    character += "| Characteristics: ";
+    character += "\n";
+
+    character += "|     Character Name:            ";
     character += _name;
     character += "\n";
 
-    character += "| Alignment: ";
-    character += AlignmentToString(_alignment);
+    character += "|     Alignment:                 ";
+    character += EnumToString(_alignment);
     character += "\n";
 
-    character += "| Player: ";
+    character += "|     Player:                    ";
     character += _player;
     character += "\n";
 
-    character += "| Class(es): ";
+    character += "|     Class(es):                 ";
     for (auto &&role : _roles) {
         character += role->ToString();
     }
     character += "\n";
 
-    character += "| Deity: ";
+    character += "|     Deity:                     ";
     character += _deity;
     character += "\n";
 
-    character += "| Homeland: ";
+    character += "|     Homeland:                  ";
     character += _homeland;
     character += "\n";
 
-    character += "| Race: ";
+    character += "|     Race:                      ";
     character += _race->ToString();
     character += "\n";
 
-    character += "| Gender: ";
+    character += "|     Gender:                    ";
     character += _gender;
     character += "\n";
 
-    character += "| Age: ";
+    character += "|     Age:                       ";
     character += to_string(_age);
     character += "\n";
 
-    character += "| Height: ";
+    character += "|     Height:                    ";
     character += to_string(_height);
     character += "\n";
 
-    character += "| Weight: ";
+    character += "|     Weight:                    ";
     character += to_string(_weight);
     character += "\n";
 
-    character += "| Hair: ";
+    character += "|     Hair:                      ";
     character += _hairColor;
     character += "\n";
 
-    character += "| Eyes: ";
+    character += "|     Eyes:                      ";
     character += _eyeColor;
     character += "\n";
 
     character += "|-----------------------------------------------------------------------------------------------------";
+    character += "\n";
+
+    character += "| Hit Points: ";
+    character += "\n";
+
+    character += "|     Total HP:                  ";
+    character += to_string(_hitpoints->TotalHP());
+    character += "\n";
+
+    character += "|     Hit Dice:                  ";
+    for (auto &&hitdie : _hitpoints->HitDice()){
+        character += hitdie->To_String();
+    }
+    character += "\n";
+
+    character += "|     Current HP:                ";
+    character += to_string(_hitpoints->CurrentHP());
+    if (_hitpoints->CurrentHP() == 0 && _hitpoints->CurrentNonLethalHP() > -1)
+        character += "    You are currently Disabled";
+    else if (_hitpoints->CurrentHP() < 0 && _hitpoints->CurrentHP() > (_abilityScores[2]->AdjustedScore() * -1))
+        character += "    You are Unconscious and Dying";
+    else if (_hitpoints->CurrentHP() < 0 && _hitpoints->CurrentHP() <= (_abilityScores[2]->AdjustedScore() * -1))
+        character += "    You are Dead";
+    
+    character += "\n";
+
+    character += "|     Current Non-Lethal HP:     ";
+    character += to_string(_hitpoints->CurrentNonLethalHP());
+    if (_hitpoints->CurrentNonLethalHP() == 0 && _hitpoints->CurrentHP() > 0)
+        character += "    You are currently Staggered";
+    else if (_hitpoints->CurrentNonLethalHP() < 0 && _hitpoints->CurrentHP() > -1)
+        character += "    You are currently Unconscious";
+    character += "\n";
+
+    
+    character += "\n";
 
     return character;
 }

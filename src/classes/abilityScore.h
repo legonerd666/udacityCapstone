@@ -10,7 +10,7 @@ public:
     //Getters
     // abilityType Type();
     // short Score();
-    // short AdjustedScore();
+    short AdjustedScore();
     // short Modifier();
     // short AdjustedModifier();
 

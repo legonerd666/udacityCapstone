@@ -1,5 +1,5 @@
-#ifndef HITDICE_H
-#define HITDICE_H
+#ifndef HITDIE_H
+#define HITDIE_H
 
 #include <string>
 
@@ -7,10 +7,10 @@
 
 using namespace std;
 
-class hitDice
+class hitDie
 {
 public:
-    hitDice();
+    hitDie();
 
     string To_String();
 

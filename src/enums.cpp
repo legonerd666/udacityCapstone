@@ -1,26 +1,49 @@
 #include "enums.h"
 
-string AlignmentToString(alignment alignment) {
-    switch (alignment) {
+#include <string>
+
+string EnumToString(alignment alignment){
+    switch (alignment)
+    {
     case LG:
-        return "Lawful Good";
-    case NG: 
-        return "Neutral Good";
-    case CG: 
-        return "Chaotic Good";
-    case LN: 
-        return "Lawful Neutral";
-    case TN: 
-        return "True Neutral";
-    case CN: 
-        return "Chaotic Neutral";
-    case LE: 
-        return "Lawful Evil";
-    case NE: 
-        return "Neutral Evil";
-    case CE: 
-        return "Chaotic Evil";
+        return "LG";
+    case NG:
+        return "NG";
+    case CG:
+        return "CG";
+    case LN:
+        return "LN";
+    case TN:
+        return "TN";
+    case CN:
+        return "CN";
+    case LE:
+        return "LE";
+    case NE:
+        return "NE";
+    case CE:
+        return "CE";
     default:
         return "Error: Invalid Alignment Enum";
+    }
+}
+
+string EnumToString(die die) {
+    switch (die)
+    {
+    case d4:
+        return "d4";
+    case d6:
+        return "d6";
+    case d8:
+        return "d8";
+    case d10:
+        return "d10";
+    case d12:
+        return "d12";
+    case d20:
+        return "d20";
+    default:
+        return "Error: Invalid Die Enum";
     }
 }

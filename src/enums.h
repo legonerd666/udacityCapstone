@@ -23,4 +23,8 @@ enum magicSchool {abjuration, conjuration, divination, enchantment, evocation, i
 
 enum casterType {bard, cleric, druid, paladin, sorcererWizard};
 
+string EnumToString(alignment alignment);
+
+string EnumToString(die die);
+
 #endif
