@@ -17,7 +17,7 @@ public:
 
     //Setters
     void Name(string newName);
-    void RacialAblities(vector<specialAbility>&& newRacialAbilities);
+    void RacialAblities(vector<unique_ptr<specialAbility>>&& newRacialAbilities);
 private:
     string _name;
     vector<unique_ptr<specialAbility>> _racialAbilities;

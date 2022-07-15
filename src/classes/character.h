@@ -35,10 +35,10 @@ public:
     void Name(string newName);
     void Alignment(alignment newAlignment);
     void Player(string newPlayer);
-    void Roles(vector<role>&& newRoles);
+    void Roles(vector<unique_ptr<role>>&& newRoles);
     void Deity(string newDeity);
     void Homeland(string newHomeland);
-    void Race(race&& newRace);
+    void Race(unique_ptr<race> newRace);
     void Gender(string newGender);
     void Age(short newAge);
     void Height(short newHeight);
@@ -46,24 +46,24 @@ public:
     void HairColor(string newHairColor);
     void EyeColor(string newEyeColor);
 
-    void AbilityScores(vector<abilityScore>&& newAbilityScores);
-    void HitPoints(hitPoints&& newHitPoints);
-    void Speed(speed&& newSpeed);
-    void ArmorClass(armorClass&& newArmorClass);
-    void saves(save newSaves [3]);
-    void Skills(vector<skill>&& newSkills);
+    void AbilityScores(unique_ptr<abilityScore> newAbilityScores [6]);
+    void HitPoints(unique_ptr<hitPoints> newHitPoints);
+    void Speed(unique_ptr<speed> newSpeed);
+    void ArmorClass(unique_ptr<armorClass> newArmorClass);
+    void saves(unique_ptr<save> newSaves [3]);
+    void Skills(vector<unique_ptr<skill>>&& newSkills);
     void Languages(string newLanguages);
     
     void BaseAttackBonus(vector<unsigned short> newBaseAttackBonuses);
     void SpellResistance(short newSpellResistance);
-    void Weapons(vector<weapon>&& newWeapons);
+    void Weapons(vector<unique_ptr<weapon>>&& newWeapons);
     void Proficiencies(string newProficiencies);
     
-    void ArmorClassItems(vector<armorClassItem>&& newArmorClassItems);
-    void Gear(vector<gear>&& newGear);
-    void Currency(vector<currency>&& newCurrency);
+    void ArmorClassItems(vector<unique_ptr<armorClassItem>>&& newArmorClassItems);
+    void Gear(vector<unique_ptr<gear>>&& newGear);
+    void Currency(vector<unique_ptr<currency>>&& newCurrency);
 
-    void Feats(vector<feat>&& newFeats);
+    void Feats(vector<unique_ptr<feat>>&& newFeats);
 
     void Xp(unsigned int newXp);
     void NextLevelXpAmount(unsigned int newNextLevelXpAmount);
@@ -84,11 +84,11 @@ private:
     string _hairColor;
     string _eyeColor;
 
-    abilityScore _abilityScores [6];
+    unique_ptr<abilityScore> _abilityScores [6];
     unique_ptr<hitPoints> _hitpoints;
     unique_ptr<speed> _speed;
     unique_ptr<armorClass> _armorClass;
-    save saves [3];
+    unique_ptr<save> saves [3];
     vector<unique_ptr<skill>> _skills;
     string _languages;
 

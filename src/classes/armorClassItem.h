@@ -15,7 +15,7 @@ public:
 private:
 
     string _armorClassItem;
-    short _bonus;
+    unsigned short _bonus;
     unsigned short _maxDexBonus;
     short _checkPenalty;
     short _spellFailureChance;

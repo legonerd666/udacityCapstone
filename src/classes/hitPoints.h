@@ -21,6 +21,7 @@ public:
     void TotalHP(short newTotalHP);
     void CurrentHP(short newCurrentHP);
     void CurrentNonLethalHP(short newCurrentNonLethalDamage);
+    void HitDice(vector<unique_ptr<hitDice>> newHitDice);
 
 private:
     short _totalHP;

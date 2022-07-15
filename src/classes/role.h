@@ -20,16 +20,16 @@ public:
 
     //Setters
     void Proficiencies(string newProficiencies);
-    void ClassFeatures(vector<specialAbility>&& newClassFeatures);
+    void ClassFeatures(vector<unique_ptr<specialAbility>>&& newClassFeatures);
     void Level(unsigned short newLevel);
-    void SpellStats(spellStat newSpellStats [10]);
-    void Spells(vector<spell>&& spells);
+    void SpellStats(unique_ptr<spellStat> newSpellStats [10]);
+    void Spells(vector<unique_ptr<spell>>&& spells);
 
 private:
     string _proficiencies;
     vector<unique_ptr<specialAbility>> _classFeatures;
     unsigned short _level;
-    spellStat spellStats [10];
+    unique_ptr<spellStat> spellStats [10];
     vector<unique_ptr<spell>> spells;
 };
 
