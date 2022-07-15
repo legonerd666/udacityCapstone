@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "classes/character.h"
+#include "enums.h"
 
 int main() {
     character testCharacter;

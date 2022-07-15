@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "specialAbility.h"
 #include "spell.h"
@@ -19,13 +20,14 @@ public:
     string ToString();
 
     //Setters
-    void Proficiencies(string newProficiencies);
-    void ClassFeatures(vector<unique_ptr<specialAbility>>&& newClassFeatures);
-    void Level(unsigned short newLevel);
-    void SpellStats(unique_ptr<spellStat> newSpellStats [10]);
-    void Spells(vector<unique_ptr<spell>>&& spells);
+    // void Proficiencies(string newProficiencies);
+    // void ClassFeatures(vector<unique_ptr<specialAbility>>&& newClassFeatures);
+    // void Level(unsigned short newLevel);
+    // void SpellStats(unique_ptr<spellStat> newSpellStats [10]);
+    // void Spells(vector<unique_ptr<spell>>&& spells);
 
 private:
+    string _name;
     string _proficiencies;
     vector<unique_ptr<specialAbility>> _classFeatures;
     unsigned short _level;

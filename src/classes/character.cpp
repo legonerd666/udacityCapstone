@@ -2,6 +2,7 @@
 
 #include "character.h"
 #include "../enums.h"
+#include "../enums.cpp"
 
 using namespace std;
 
@@ -46,5 +47,65 @@ character::character() {
 
 //Outputs the character data as a nicely formatted string
 string character::ToString()   {
-    return "Hello World!";
+    string character = "";
+    character += "|-----------------------------------------------------------------------------------------------------";
+    character += "\n";
+
+    character += "| Character Name: ";
+    character += _name;
+    character += "\n";
+
+    character += "| Alignment: ";
+    character += AlignmentToString(_alignment);
+    character += "\n";
+
+    character += "| Player: ";
+    character += _player;
+    character += "\n";
+
+    character += "| Class(es): ";
+    for (auto &&role : _roles) {
+        character += role->ToString();
+    }
+    character += "\n";
+
+    character += "| Deity: ";
+    character += _deity;
+    character += "\n";
+
+    character += "| Homeland: ";
+    character += _homeland;
+    character += "\n";
+
+    character += "| Race: ";
+    character += _race->ToString();
+    character += "\n";
+
+    character += "| Gender: ";
+    character += _gender;
+    character += "\n";
+
+    character += "| Age: ";
+    character += to_string(_age);
+    character += "\n";
+
+    character += "| Height: ";
+    character += to_string(_height);
+    character += "\n";
+
+    character += "| Weight: ";
+    character += to_string(_weight);
+    character += "\n";
+
+    character += "| Hair: ";
+    character += _hairColor;
+    character += "\n";
+
+    character += "| Eyes: ";
+    character += _eyeColor;
+    character += "\n";
+
+    character += "|-----------------------------------------------------------------------------------------------------";
+
+    return character;
 }

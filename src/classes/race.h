@@ -14,7 +14,7 @@ public:
     race();
     
     //Getters
-    //string ToString();
+    string ToString();
 
     //Setters
     //void Name(string newName);

@@ -1,6 +1,10 @@
 #ifndef ENUMS_H
 #define ENUMS_H
 
+#include <string>
+
+using namespace std;
+
 enum alignment {LG, NG, CG, LN, TN, CN, LE, NE, CE};
 
 enum abilityType {strength, dexterity, constitution, intelligence, wisdom, charisma};
