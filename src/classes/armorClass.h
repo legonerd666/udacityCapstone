@@ -7,16 +7,16 @@ public:
     armorClass();
 
     //Getters
-    short ArmorClass(short dexMod, short sizeMod);
-    short TouchArmorClass(short dexMod, short sizeMod);
-    short FlatFootedArmorClass(short sizeMod);
+    // short ArmorClass(short dexMod, short sizeMod);
+    // short TouchArmorClass(short dexMod, short sizeMod);
+    // short FlatFootedArmorClass(short sizeMod);
 
     //Setters
-    void Armor(short newArmor);
-    void Shield(short newShield);
-    void NaturalArmor(short newNaturalArmor);
-    void DeflectionMod(short newDeflectionMod);
-    void MiscMod(short NewMiscMod);
+    // void Armor(short newArmor);
+    // void Shield(short newShield);
+    // void NaturalArmor(short newNaturalArmor);
+    // void DeflectionMod(short newDeflectionMod);
+    // void MiscMod(short NewMiscMod);
 
 
 private:

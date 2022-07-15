@@ -8,16 +8,16 @@ public:
     abilityScore();
     
     //Getters
-    abilityType Type();
-    short Score();
-    short AdjustedScore();
-    short Modifier();
-    short AdjustedModifier();
+    // abilityType Type();
+    // short Score();
+    // short AdjustedScore();
+    // short Modifier();
+    // short AdjustedModifier();
 
     //Setters
-    void Type(abilityType newType);
-    void Score(short newScore);
-    void AdjustedScore(short newAdjustedScore);
+    // void Type(abilityType newType);
+    // void Score(short newScore);
+    // void AdjustedScore(short newAdjustedScore);
 
 private:
     abilityType _type;

@@ -7,40 +7,40 @@ public:
     speed();
 
     //Getters
-    short Base();
-    short Armored();
-    short Fly();
-    short Swim();
-    short Climb();
-    short Burrow();
+    // short Base();
+    // short Armored();
+    // short Fly();
+    // short Swim();
+    // short Climb();
+    // short Burrow();
 
     //Setters 
-    void _base(short newBase);
-    void _baseTempMod(short newBaseTempMod);
-    void _armored(short newArmored);
-    void _armoredTempMod(short newArmoredTempMod);
-    void _fly(short newFly);
-    void _flyTempMod(short newFlyTempMod);
-    void _swim(short newSwim);
-    void _swimTempMod(short newSwimTempMod);
-    void _climb(short newClimb);
-    void _climbTempMod(short newClimbTempMod);
-    void _burrow(short newBurrow);
-    void _burrowTempMod(short newBurrowTempMod);
+    // void Base(unsigned short newBase);
+    // void BaseTempMod(unsigned short newBaseTempMod);
+    // void Armored(unsigned short newArmored);
+    // void ArmoredTempMod(unsigned short newArmoredTempMod);
+    // void Fly(unsigned short newFly);
+    // void FlyTempMod(unsigned short newFlyTempMod);
+    // void Swim(unsigned short newSwim);
+    // void SwimTempMod(unsigned short newSwimTempMod);
+    // void Climb(unsigned short newClimb);
+    // void ClimbTempMod(unsigned short newClimbTempMod);
+    // void Burrow(unsigned short newBurrow);
+    // void BurrowTempMod(unsigned short newBurrowTempMod);
 
 private:
-    short _base;
-    short _baseTempMod;
-    short _armored;
-    short _armoredTempMod;
-    short _fly;
-    short _flyTempMod;
-    short _swim;
-    short _swimTempMod;
-    short _climb;
-    short _climbTempMod;
-    short _burrow;
-    short _burrowTempMod;
+    unsigned short _base;
+    unsigned short _baseTempMod;
+    unsigned short _armored;
+    unsigned short _armoredTempMod;
+    unsigned short _fly;
+    unsigned short _flyTempMod;
+    unsigned short _swim;
+    unsigned short _swimTempMod;
+    unsigned short _climb;
+    unsigned short _climbTempMod;
+    unsigned short _burrow;
+    unsigned short _burrowTempMod;
 };
 
 #endif

@@ -1,6 +1,9 @@
 #include <iostream>
 
+#include "classes/character.h"
+
 int main() {
-    std::cout << "Hello World!" << std::endl;
+    character testCharacter;
+    std::cout << testCharacter.ToString() << std::endl;
     return 0;
 }

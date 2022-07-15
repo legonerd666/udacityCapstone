@@ -13,15 +13,15 @@ public:
     hitPoints();
 
     //Getters
-    short TotalHP();
-    short CurrentHP();
-    short CurrentNonLethalHP();
+    // short TotalHP();
+    // short CurrentHP();
+    // short CurrentNonLethalHP();
 
     //Setters
-    void TotalHP(short newTotalHP);
-    void CurrentHP(short newCurrentHP);
-    void CurrentNonLethalHP(short newCurrentNonLethalDamage);
-    void HitDice(vector<unique_ptr<hitDice>> newHitDice);
+    // void TotalHP(short newTotalHP);
+    // void CurrentHP(short newCurrentHP);
+    // void CurrentNonLethalHP(short newCurrentNonLethalDamage);
+    // void HitDice(vector<unique_ptr<hitDice>> newHitDice);
 
 private:
     short _totalHP;

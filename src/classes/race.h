@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 
 #include "specialAbility.h"
 
@@ -13,11 +14,11 @@ public:
     race();
     
     //Getters
-    string ToString();
+    //string ToString();
 
     //Setters
-    void Name(string newName);
-    void RacialAblities(vector<unique_ptr<specialAbility>>&& newRacialAbilities);
+    //void Name(string newName);
+    //void RacialAblities(vector<unique_ptr<specialAbility>>&& newRacialAbilities);
 private:
     string _name;
     vector<unique_ptr<specialAbility>> _racialAbilities;

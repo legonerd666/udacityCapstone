@@ -11,11 +11,11 @@ public:
     currency();
 
     //Getters
-    string ToString();
+    // string ToString();
 
     //Setters
-    void Type(currencyType newType);
-    void Amount(int newAmount);
+    // void Type(currencyType newType);
+    // void Amount(int newAmount);
 
 private:
     currencyType _type;

@@ -8,13 +8,13 @@ public:
     save();
 
     //Getters
-    short GetSave(short abilityMod);
+    // short GetSave(short abilityMod);
 
     //Setters
-    void Type(saveType newType);
-    void Base(short newBase);
-    void MagicMod(short newMagicMod);
-    void MiscMod(short newMiscMod);
+    // void Type(saveType newType);
+    // void Base(short newBase);
+    // void MagicMod(short newMagicMod);
+    // void MiscMod(short newMiscMod);
 
 private:
     saveType _type;
