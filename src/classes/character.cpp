@@ -142,7 +142,34 @@ string character::ToString()   {
         character += "    You are currently Unconscious";
     character += "\n";
 
-    
+    character += "|-----------------------------------------------------------------------------------------------------";
+    character += "\n";
+
+    character += "| Speed: ";
+    character += "\n";
+
+    character += "|     Base Speed:                ";
+    character += to_string(_speed->Base());
+    character += "\n";
+
+    character += "|     Armored Speed:             ";
+    character += to_string(_speed->Armored());
+    character += "\n";
+
+    character += "|     Fly Speed:                 ";
+    character += to_string(_speed->Fly());
+    character += "\n";
+
+    character += "|     Swim Speed:                ";
+    character += to_string(_speed->Swim());
+    character += "\n";
+
+    character += "|     Climb Speed:               ";
+    character += to_string(_speed->Climb());
+    character += "\n";
+
+    character += "|     Burrow Speed:              ";
+    character += to_string(_speed->Burrow());
     character += "\n";
 
     return character;

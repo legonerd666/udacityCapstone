@@ -7,12 +7,12 @@ public:
     speed();
 
     //Getters
-    // short Base();
-    // short Armored();
-    // short Fly();
-    // short Swim();
-    // short Climb();
-    // short Burrow();
+    const short Base();
+    const short Armored();
+    const short Fly();
+    const short Swim();
+    const short Climb();
+    const short Burrow();
 
     //Setters 
     // void Base(unsigned short newBase);
