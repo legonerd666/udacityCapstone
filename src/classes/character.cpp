@@ -210,6 +210,12 @@ string character::ToStringForConsole()   {
     }
     character += to_string(_abilityScores[0]->Modifier());
     character += ")";
+
+    if (_abilityScores[0]->Score() <= 0){
+        character += " You cannot move and are unconscious";
+    }
+    
+
     character += "\n";
 
     character += "|          Temp Score:           ";
@@ -223,6 +229,11 @@ string character::ToStringForConsole()   {
     }
     character += to_string(_abilityScores[0]->AdjustedModifier());
     character += ")";
+
+    if (_abilityScores[0]->AdjustedScore() <= 0){
+        character += " You cannot move and are unconscious";
+    }
+
     character += "\n";
 
     #pragma endregion Strength
@@ -244,6 +255,11 @@ string character::ToStringForConsole()   {
     }
     character += to_string(_abilityScores[1]->Modifier());
     character += ")";
+
+    if (_abilityScores[1]->Score() <= 0){
+        character += " You cannot move";
+    }
+    
     character += "\n";
 
     character += "|          Temp Score:           ";
@@ -257,6 +273,11 @@ string character::ToStringForConsole()   {
     }
     character += to_string(_abilityScores[1]->AdjustedModifier());
     character += ")";
+
+    if (_abilityScores[1]->AdjustedScore() <= 0){
+        character += " You cannot move";
+    }
+    
     character += "\n";
 
     #pragma endregion Dexterity
@@ -278,6 +299,11 @@ string character::ToStringForConsole()   {
     }
     character += to_string(_abilityScores[2]->Modifier());
     character += ")";
+
+    if (_abilityScores[2]->Score() <= 0){
+        character += " You are dead";
+    }
+    
     character += "\n";
 
     character += "|          Temp Score:           ";
@@ -291,6 +317,11 @@ string character::ToStringForConsole()   {
     }
     character += to_string(_abilityScores[2]->AdjustedModifier());
     character += ")";
+
+    if (_abilityScores[2]->AdjustedScore() <= 0){
+        character += " You are dead";
+    }
+    
     character += "\n";
 
     #pragma endregion Constitution
@@ -312,6 +343,11 @@ string character::ToStringForConsole()   {
     }
     character += to_string(_abilityScores[3]->Modifier());
     character += ")";
+
+    if (_abilityScores[3]->Score() <= 0){
+        character += " You are comatose";
+    }
+    
     character += "\n";
 
     character += "|          Temp Score:           ";
@@ -325,6 +361,10 @@ string character::ToStringForConsole()   {
     }
     character += to_string(_abilityScores[3]->AdjustedModifier());
     character += ")";
+
+    if (_abilityScores[3]->AdjustedScore() <= 0){
+        character += " You are comatose";
+    }
     character += "\n";
 
     #pragma endregion Intelligence
@@ -346,6 +386,11 @@ string character::ToStringForConsole()   {
     }
     character += to_string(_abilityScores[4]->Modifier());
     character += ")";
+
+    if (_abilityScores[4]->Score() <= 0){
+        character += " You are incapable of rational thought and are unconscious";
+    }
+
     character += "\n";
 
     character += "|          Temp Score:           ";
@@ -359,6 +404,11 @@ string character::ToStringForConsole()   {
     }
     character += to_string(_abilityScores[4]->AdjustedModifier());
     character += ")";
+
+    if (_abilityScores[4]->AdjustedScore() <= 0){
+        character += " You are incapable of rational thought and are unconscious";
+    }
+
     character += "\n";
 
     #pragma endregion Wisdom
@@ -380,6 +430,11 @@ string character::ToStringForConsole()   {
     }
     character += to_string(_abilityScores[5]->Modifier());
     character += ")";
+
+    if (_abilityScores[5]->Score() <= 0){
+        character += " You are unable to exert yourself in any way and are unconscious";
+    }
+
     character += "\n";
 
     character += "|          Temp Score:           ";
@@ -393,6 +448,11 @@ string character::ToStringForConsole()   {
     }
     character += to_string(_abilityScores[5]->AdjustedModifier());
     character += ")";
+
+    if (_abilityScores[5]->AdjustedScore() <= 0){
+        character += " You are unable to exert yourself in any way and are unconscious";
+    }
+
     character += "\n";
 
     #pragma endregion Charisma

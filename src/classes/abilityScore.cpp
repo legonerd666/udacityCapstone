@@ -3,8 +3,8 @@
 
 abilityScore::abilityScore() {
     _type = strength;
-    _score = 0;
-    _adjustedScore = 0;
+    _score = 10;
+    _adjustedScore = 10;
 }
 
 const short abilityScore::Score() {
