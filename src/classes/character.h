@@ -28,7 +28,7 @@ public:
     character();
 
     //Getters
-    string ToString();
+    string ToStringForConsole();
 
     //Setters
 

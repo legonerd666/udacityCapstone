@@ -5,6 +5,6 @@
 
 int main() {
     character testCharacter;
-    std::cout << testCharacter.ToString() << std::endl;
+    std::cout << testCharacter.ToStringForConsole() << std::endl;
     return 0;
 }

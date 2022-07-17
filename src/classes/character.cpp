@@ -45,7 +45,10 @@ character::character() {
 }
 
 //Outputs the character data as a nicely formatted string
-string character::ToString()   {
+string character::ToStringForConsole()   {
+
+    #pragma region Characteristics
+
     string character = "";
     character += "|-----------------------------------------------------------------------------------------------------";
     character += "\n";
@@ -107,6 +110,10 @@ string character::ToString()   {
     character += _eyeColor;
     character += "\n";
 
+    #pragma endregion Characteristics
+
+    #pragma region HitPoints
+
     character += "|-----------------------------------------------------------------------------------------------------";
     character += "\n";
 
@@ -145,6 +152,10 @@ string character::ToString()   {
     character += "|-----------------------------------------------------------------------------------------------------";
     character += "\n";
 
+    #pragma endregion HitPoints
+
+    #pragma region Speed
+
     character += "| Speed: ";
     character += "\n";
 
@@ -171,6 +182,222 @@ string character::ToString()   {
     character += "|     Burrow Speed:              ";
     character += to_string(_speed->Burrow());
     character += "\n";
+
+    #pragma endregion Speed
+
+    #pragma region AbilityScores
+
+    character += "|-----------------------------------------------------------------------------------------------------";
+    character += "\n";
+
+    character += "| Ability Scores: ";
+    character += "\n";
+
+    #pragma region Strength
+
+    character += "|     Strength: ";
+    character += "\n";
+
+    character += "|          Score:                ";
+    character += to_string(_abilityScores[0]->Score());
+    if (_abilityScores[0]->Score() < 10 && _abilityScores[0]->Score() >= 0){
+        character += " ";
+    }
+    
+    character += " (";
+    if (_abilityScores[0]->Modifier() >= 0){
+       character += "+";
+    }
+    character += to_string(_abilityScores[0]->Modifier());
+    character += ")";
+    character += "\n";
+
+    character += "|          Temp Score:           ";
+    character += to_string(_abilityScores[0]->AdjustedScore());
+    if (_abilityScores[0]->AdjustedScore() < 10 && _abilityScores[0]->AdjustedScore() >= 0){
+        character += " ";
+    }
+    character += " (";
+    if (_abilityScores[0]->AdjustedModifier() >= 0){
+       character += "+";
+    }
+    character += to_string(_abilityScores[0]->AdjustedModifier());
+    character += ")";
+    character += "\n";
+
+    #pragma endregion Strength
+
+    #pragma region Dexterity
+
+    character += "|     Dexterity: ";
+    character += "\n";
+
+    character += "|          Score:                ";
+    character += to_string(_abilityScores[1]->Score());
+    if (_abilityScores[1]->Score() < 10 && _abilityScores[1]->Score() >= 0){
+        character += " ";
+    }
+    
+    character += " (";
+    if (_abilityScores[1]->Modifier() >= 0){
+       character += "+";
+    }
+    character += to_string(_abilityScores[1]->Modifier());
+    character += ")";
+    character += "\n";
+
+    character += "|          Temp Score:           ";
+    character += to_string(_abilityScores[1]->AdjustedScore());
+    if (_abilityScores[1]->AdjustedScore() < 10 && _abilityScores[1]->AdjustedScore() >= 0){
+        character += " ";
+    }
+    character += " (";
+    if (_abilityScores[1]->AdjustedModifier() >= 0){
+       character += "+";
+    }
+    character += to_string(_abilityScores[1]->AdjustedModifier());
+    character += ")";
+    character += "\n";
+
+    #pragma endregion Dexterity
+
+    #pragma region Constitution
+
+    character += "|     Constitution: ";
+    character += "\n";
+
+    character += "|          Score:                ";
+    character += to_string(_abilityScores[2]->Score());
+    if (_abilityScores[2]->Score() < 10 && _abilityScores[2]->Score() >= 0){
+        character += " ";
+    }
+    
+    character += " (";
+    if (_abilityScores[2]->Modifier() >= 0){
+       character += "+";
+    }
+    character += to_string(_abilityScores[2]->Modifier());
+    character += ")";
+    character += "\n";
+
+    character += "|          Temp Score:           ";
+    character += to_string(_abilityScores[2]->AdjustedScore());
+    if (_abilityScores[2]->AdjustedScore() < 10 && _abilityScores[2]->AdjustedScore() >= 0){
+        character += " ";
+    }
+    character += " (";
+    if (_abilityScores[2]->AdjustedModifier() >= 0){
+       character += "+";
+    }
+    character += to_string(_abilityScores[2]->AdjustedModifier());
+    character += ")";
+    character += "\n";
+
+    #pragma endregion Constitution
+
+    #pragma region Intelligence
+
+    character += "|     Intelligence: ";
+    character += "\n";
+
+    character += "|          Score:                ";
+    character += to_string(_abilityScores[3]->Score());
+    if (_abilityScores[3]->Score() < 10 && _abilityScores[3]->Score() >= 0){
+        character += " ";
+    }
+    
+    character += " (";
+    if (_abilityScores[3]->Modifier() >= 0){
+       character += "+";
+    }
+    character += to_string(_abilityScores[3]->Modifier());
+    character += ")";
+    character += "\n";
+
+    character += "|          Temp Score:           ";
+    character += to_string(_abilityScores[3]->AdjustedScore());
+    if (_abilityScores[3]->AdjustedScore() < 10 && _abilityScores[3]->AdjustedScore() >= 0){
+        character += " ";
+    }
+    character += " (";
+    if (_abilityScores[3]->AdjustedModifier() >= 0){
+       character += "+";
+    }
+    character += to_string(_abilityScores[3]->AdjustedModifier());
+    character += ")";
+    character += "\n";
+
+    #pragma endregion Intelligence
+
+    #pragma region Wisdom
+
+    character += "|     Wisdom: ";
+    character += "\n";
+
+    character += "|          Score:                ";
+    character += to_string(_abilityScores[4]->Score());
+    if (_abilityScores[4]->Score() < 10 && _abilityScores[4]->Score() >= 0){
+        character += " ";
+    }
+    
+    character += " (";
+    if (_abilityScores[4]->Modifier() >= 0){
+       character += "+";
+    }
+    character += to_string(_abilityScores[4]->Modifier());
+    character += ")";
+    character += "\n";
+
+    character += "|          Temp Score:           ";
+    character += to_string(_abilityScores[4]->AdjustedScore());
+    if (_abilityScores[4]->AdjustedScore() < 10 && _abilityScores[4]->AdjustedScore() >= 0){
+        character += " ";
+    }
+    character += " (";
+    if (_abilityScores[4]->AdjustedModifier() >= 0){
+       character += "+";
+    }
+    character += to_string(_abilityScores[4]->AdjustedModifier());
+    character += ")";
+    character += "\n";
+
+    #pragma endregion Wisdom
+
+    #pragma region Charisma
+
+    character += "|     Charisma: ";
+    character += "\n";
+
+    character += "|          Score:                ";
+    character += to_string(_abilityScores[5]->Score());
+    if (_abilityScores[5]->Score() < 10 && _abilityScores[5]->Score() >= 0){
+        character += " ";
+    }
+    
+    character += " (";
+    if (_abilityScores[5]->Modifier() >= 0){
+       character += "+";
+    }
+    character += to_string(_abilityScores[5]->Modifier());
+    character += ")";
+    character += "\n";
+
+    character += "|          Temp Score:           ";
+    character += to_string(_abilityScores[5]->AdjustedScore());
+    if (_abilityScores[5]->AdjustedScore() < 10 && _abilityScores[5]->AdjustedScore() >= 0){
+        character += " ";
+    }
+    character += " (";
+    if (_abilityScores[5]->AdjustedModifier() >= 0){
+       character += "+";
+    }
+    character += to_string(_abilityScores[5]->AdjustedModifier());
+    character += ")";
+    character += "\n";
+
+    #pragma endregion Charisma
+
+    #pragma endregion AbilityScores
 
     return character;
 }

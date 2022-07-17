@@ -9,10 +9,10 @@ public:
     
     //Getters
     // abilityType Type();
-    // short Score();
-    short AdjustedScore();
-    // short Modifier();
-    // short AdjustedModifier();
+    const short Score();
+    const short AdjustedScore();
+    const short Modifier();
+    const short AdjustedModifier();
 
     //Setters
     // void Type(abilityType newType);
