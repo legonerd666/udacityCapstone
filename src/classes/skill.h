@@ -6,27 +6,33 @@
 class skill
 {
 public:
-    skill();
+    //skill();
+
+    skill(skillType skillType);
 
     //Getters
-    short Total(short abilityMod);
-    abilityType AbilityType();
+    const short Total(short abilityMod);
+    const skillType SkillType();
+    const abilityType AbilityType();
+    const short Ranks();
+    const short MiscMod();
+    const bool IsClassSkill();
 
     //Setters
-    void SkillType(skillType newSkillType);
-    void AbilityType(abilityType newAbilityType);
-    void Ranks(short newRanks);
-    void MiscMod(short newMiscMod);
-    void IsClassSkill(bool newIsClassSkill);
-    void IsTrainedOnly(bool newIsTrainedOnly);
+    //void SkillType(skillType newSkillType);
+    //void AbilityType(abilityType newAbilityType);
+    //void Ranks(short newRanks);
+    //void MiscMod(short newMiscMod);
+    //void IsClassSkill(bool newIsClassSkill);
+    //void IsTrainedOnly(bool newIsTrainedOnly);
 
 private:
     skillType _skillType;
     abilityType _abilityType;
     short _ranks;
     short _miscMod;
-    bool isClassSkill;
-    bool isTrainedOnly;
+    bool _isClassSkill;
+    bool _isTrainedOnly;
 };
 
 

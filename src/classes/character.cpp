@@ -21,7 +21,7 @@ character::character() {
     _eyeColor = "Example Eye Color";
 
     for (int i = 0; i < 6; i++) {
-        _abilityScores[i] = make_unique<abilityScore>();
+        _abilityScores[i] = make_unique<abilityScore>(i*2+10);
     }
     _hitpoints = make_unique<hitPoints>();
     _speed = make_unique<speed>();
@@ -29,6 +29,41 @@ character::character() {
     for (int i = 0; i < 3; i++) {
         _saves[i] = make_unique<save>();
     }
+    _skills.emplace_back(make_unique<skill>(acrobatics));
+    _skills.emplace_back(make_unique<skill>(appraise));
+    _skills.emplace_back(make_unique<skill>(bluff));
+    _skills.emplace_back(make_unique<skill>(climb));
+    _skills.emplace_back(make_unique<skill>(craft));
+    _skills.emplace_back(make_unique<skill>(diplomacy));
+    _skills.emplace_back(make_unique<skill>(disableDevice));
+    _skills.emplace_back(make_unique<skill>(disguise));
+    _skills.emplace_back(make_unique<skill>(escapeArtist));
+    _skills.emplace_back(make_unique<skill>(fly));
+    _skills.emplace_back(make_unique<skill>(handleAnimal));
+    _skills.emplace_back(make_unique<skill>(heal));
+    _skills.emplace_back(make_unique<skill>(intimidate));
+    _skills.emplace_back(make_unique<skill>(knowArcana));
+    _skills.emplace_back(make_unique<skill>(knowDungeoneering));
+    _skills.emplace_back(make_unique<skill>(knowEngineering));
+    _skills.emplace_back(make_unique<skill>(knowGeography));
+    _skills.emplace_back(make_unique<skill>(knowHistory));
+    _skills.emplace_back(make_unique<skill>(knowLocal));
+    _skills.emplace_back(make_unique<skill>(knowNature));
+    _skills.emplace_back(make_unique<skill>(knowNobility));
+    _skills.emplace_back(make_unique<skill>(knowPlanes));
+    _skills.emplace_back(make_unique<skill>(knowReligion));
+    _skills.emplace_back(make_unique<skill>(linguistics));
+    _skills.emplace_back(make_unique<skill>(perception));
+    _skills.emplace_back(make_unique<skill>(perform));
+    _skills.emplace_back(make_unique<skill>(profession));
+    _skills.emplace_back(make_unique<skill>(ride));
+    _skills.emplace_back(make_unique<skill>(senseMotive));
+    _skills.emplace_back(make_unique<skill>(sleightOfHand));
+    _skills.emplace_back(make_unique<skill>(spellcraft));
+    _skills.emplace_back(make_unique<skill>(stealth));
+    _skills.emplace_back(make_unique<skill>(survival));
+    _skills.emplace_back(make_unique<skill>(swim));
+    _skills.emplace_back(make_unique<skill>(useMagicDevice));
     _languages = "Example Languages";
 
     _baseAttackBonuses;
@@ -235,6 +270,8 @@ string character::ToStringForConsole()   {
     }
 
     character += "\n";
+    character += "|";
+    character += "\n";
 
     #pragma endregion Strength
 
@@ -278,6 +315,8 @@ string character::ToStringForConsole()   {
         character += " You cannot move";
     }
     
+    character += "\n";
+    character += "|";
     character += "\n";
 
     #pragma endregion Dexterity
@@ -323,6 +362,8 @@ string character::ToStringForConsole()   {
     }
     
     character += "\n";
+    character += "|";
+    character += "\n";
 
     #pragma endregion Constitution
 
@@ -365,6 +406,9 @@ string character::ToStringForConsole()   {
     if (_abilityScores[3]->AdjustedScore() <= 0){
         character += " You are comatose";
     }
+
+    character += "\n";
+    character += "|";
     character += "\n";
 
     #pragma endregion Intelligence
@@ -410,6 +454,8 @@ string character::ToStringForConsole()   {
     }
 
     character += "\n";
+    character += "|";
+    character += "\n";
 
     #pragma endregion Wisdom
 
@@ -454,10 +500,51 @@ string character::ToStringForConsole()   {
     }
 
     character += "\n";
+    character += "|";
+    character += "\n";
 
     #pragma endregion Charisma
 
     #pragma endregion AbilityScores
+
+    #pragma region Skills
+
+    character += "|-----------------------------------------------------------------------------------------------------";
+    character += "\n";
+
+    character += "| Skills:                           (Ability Mod + Ranks + Misc + (3 if you have at least 1 rank and it's a class skill))";
+    character += "\n";
+
+    for (auto &&skill : _skills) {
+        character += "|    ";
+        character += EnumToString(skill->SkillType());
+        character += ":";
+        character += "\n";
+        character += "|        Total Bonus:            ";
+        {
+            short bonus = _abilityScores[EnumToIndex(skill->AbilityType())]->AdjustedModifier();
+            if (skill->Total(bonus) >= 0) {
+                character += "+";
+            }
+            character += to_string(skill->Total(bonus));
+            character += " (";
+            character += to_string(bonus);
+        }
+        character += " + ";
+        character += to_string(skill->Ranks());
+        character += " + ";
+        character += to_string(skill->MiscMod());
+        if (skill->IsClassSkill() && skill->Ranks() > 0) {
+            character += " + 3";
+        }
+        character += ")";
+        character += "\n";
+        character += "|";
+        character += "\n";
+    }
+    
+
+    #pragma endregion Skills
 
     return character;
 }

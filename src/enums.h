@@ -27,4 +27,10 @@ string EnumToString(alignment alignment);
 
 string EnumToString(die die);
 
+string EnumToString(skillType skillType);
+
+short EnumToIndex(abilityType abilityType);
+
+abilityType EnumToAbilityType(skillType skillType);
+
 #endif

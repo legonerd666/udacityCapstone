@@ -6,9 +6,9 @@
 class abilityScore {
 public:
     abilityScore();
+    abilityScore(short score);
     
     //Getters
-    // abilityType Type();
     const short Score();
     const short AdjustedScore();
     const short Modifier();
@@ -20,7 +20,6 @@ public:
     // void AdjustedScore(short newAdjustedScore);
 
 private:
-    abilityType _type;
     short _score;
     short _adjustedScore;
 };
