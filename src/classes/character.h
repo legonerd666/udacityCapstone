@@ -7,6 +7,7 @@
 
 #include "abilityScore.h"
 #include "speed.h"
+#include "initiative.h"
 #include "armorClass.h"
 #include "save.h"
 #include "skill.h"
@@ -87,6 +88,7 @@ private:
     unique_ptr<hitPoints> _hitpoints;
     unique_ptr<abilityScore> _abilityScores [6];
     unique_ptr<speed> _speed;
+    unique_ptr<initiative> _initiative;
     unique_ptr<armorClass> _armorClass;
     unique_ptr<save> _saves [3];
     vector<unique_ptr<skill>> _skills;

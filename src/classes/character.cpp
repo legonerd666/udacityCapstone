@@ -25,6 +25,7 @@ character::character() {
     }
     _hitpoints = make_unique<hitPoints>();
     _speed = make_unique<speed>();
+    _initiative = make_unique<initiative>();
     _armorClass = make_unique<armorClass>();
 
     _saves[0] = make_unique<save>(fortitude);
@@ -605,6 +606,33 @@ string character::ToStringForConsole()   {
     
 
     #pragma endregion Skills
+
+    #pragma region Combat
+
+    character += "|--------------------------------------------------------------------------------------------------------------------";
+    character += "\n";
+    character += "| Combat:";
+    character += "\n";
+    character += "|";
+    character += "\n";
+
+    #pragma region Initiative
+    
+    character += "|     Initiative:                ";
+    if (_initiative->Total(_abilityScores[1]->AdjustedModifier()) >= 0) {
+        character += "+";
+    }
+    character += to_string(_initiative->Total(_abilityScores[1]->AdjustedModifier()));
+    character += " (";
+    character += to_string(_abilityScores[1]->AdjustedModifier());
+    character += " + ";
+    character += to_string(_initiative->MiscMod());
+    character += ") (Dex + Misc)";
+    character += "\n";
+
+    #pragma endregion Initiative
+
+    #pragma endregion Combat
 
     return character;
 }
