@@ -21,14 +21,16 @@ character::character() {
     _eyeColor = "Example Eye Color";
 
     for (int i = 0; i < 6; i++) {
-        _abilityScores[i] = make_unique<abilityScore>(i*2+10);
+        _abilityScores[i] = make_unique<abilityScore>();
     }
     _hitpoints = make_unique<hitPoints>();
     _speed = make_unique<speed>();
     _armorClass = make_unique<armorClass>();
-    for (int i = 0; i < 3; i++) {
-        _saves[i] = make_unique<save>();
-    }
+
+    _saves[0] = make_unique<save>(fortitude);
+    _saves[1] = make_unique<save>(reflex);
+    _saves[2] = make_unique<save>(will);
+
     _skills.emplace_back(make_unique<skill>(acrobatics));
     _skills.emplace_back(make_unique<skill>(appraise));
     _skills.emplace_back(make_unique<skill>(bluff));
@@ -507,12 +509,50 @@ string character::ToStringForConsole()   {
 
     #pragma endregion AbilityScores
 
+    #pragma region Saves
+
+    character += "|-----------------------------------------------------------------------------------------------------";
+    character += "\n";
+
+    character += "| Saves:                            (Base + Ability + Magic + Misc + Temp)";
+    character += "\n";
+
+    for (auto &&save : _saves) {
+        character += "|     ";
+        character += EnumToString(save->SaveType());
+        character += ":";
+        character += "\n";
+        character += "|         Total Bonus             ";
+        {
+            short bonus = _abilityScores[EnumToIndex(save->AbilityType())]->AdjustedModifier();
+            if (save->Total(bonus) >= 0){
+                character += "+";
+            }
+            character += to_string(save->Total(bonus));
+            character += " (";
+            character += to_string(save->Base());
+            character += " + ";
+            character += to_string(bonus);
+        }
+        character += " + ";
+        character += to_string(save->MagicMod());
+        character += " + ";
+        character += to_string(save->MiscMod());
+        character += " + ";
+        character += to_string(save->TempMod());
+        character += " )";
+        character += "\n";
+    }
+    
+
+    #pragma endregion Saves
+
     #pragma region Skills
 
     character += "|-----------------------------------------------------------------------------------------------------";
     character += "\n";
 
-    character += "| Skills:                           (Ability Mod + Ranks + Misc + (3 if you have at least 1 rank and it's a class skill))";
+    character += "| Skills:                           (Ability + Ranks + Misc + (3 if you have at least 1 rank and it's a class skill))";
     character += "\n";
 
     for (auto &&skill : _skills) {

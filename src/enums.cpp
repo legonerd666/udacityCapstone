@@ -46,6 +46,20 @@ string EnumToString(die die) {
     }
 }
 
+string EnumToString(saveType saveType) {
+    switch (saveType)
+    {
+    case fortitude:
+        return "Fortitude";
+    case reflex:
+        return "Reflex";
+    case will: 
+        return "will";
+    default:
+        return "Error: Invalid Save Enum";
+    }
+}
+
 string EnumToString(skillType skillType) {
     switch (skillType) {
     case acrobatics:
@@ -139,6 +153,20 @@ short EnumToIndex(abilityType abilityType) {
         return 5;
     default:
         return -1;
+    }
+}
+
+abilityType EnumToAbilityType(saveType saveType) {
+    switch (saveType)
+    {
+    case fortitude:
+        return constitution;
+    case reflex:
+        return dexterity;
+    case will:
+        return wisdom;
+    default:
+        return strength;
     }
 }
 

@@ -6,9 +6,16 @@
 class save {
 public:
     save();
+    save(saveType saveType);
 
     //Getters
-    // short GetSave(short abilityMod);
+    short Total(short abilityMod);
+    saveType SaveType();
+    abilityType AbilityType();
+    short Base();
+    short MagicMod();
+    short MiscMod();
+    short TempMod();
 
     //Setters
     // void Type(saveType newType);
@@ -18,9 +25,11 @@ public:
 
 private:
     saveType _type;
+    abilityType _abilityType;
     short _base;
     short _magicMod;
     short _miscMod;
+    short _tempMod;
 };
 
 #endif
