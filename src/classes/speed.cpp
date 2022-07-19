@@ -15,26 +15,26 @@ speed::speed() {
     _burrowTempMod = 0;
 }
 
-const short speed::Base() {
+short speed::Base() {
     return _base;
 }
 
-const short speed::Armored() {
+short speed::Armored() {
     return _armored;
 }
 
-const short speed::Fly() {
+short speed::Fly() {
     return _fly;
 }
 
-const short speed::Swim() {
+short speed::Swim() {
     return _swim;
 }
 
-const short speed::Climb() {
+short speed::Climb() {
     return _climb;
 }
 
-const short speed::Burrow() {
+short speed::Burrow() {
     return _burrow;
 }

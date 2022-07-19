@@ -8,18 +8,18 @@ abilityScore::abilityScore() {
 
 abilityScore::abilityScore(short score): _score(score), _adjustedScore(score) {}
 
-const short abilityScore::Score() {
+short abilityScore::Score() {
     return _score;
 }
 
-const short abilityScore::AdjustedScore() {
+short abilityScore::AdjustedScore() {
     return _adjustedScore;
 }
 
-const short abilityScore::Modifier() {
+short abilityScore::Modifier() {
     return (_score / 2) - 5;
 }
 
-const short abilityScore::AdjustedModifier() {
+short abilityScore::AdjustedModifier() {
     return (_adjustedScore / 2) - 5;
 }

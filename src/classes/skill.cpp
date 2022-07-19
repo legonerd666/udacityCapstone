@@ -10,7 +10,7 @@ skill::skill(skillType skillType): _skillType(skillType) {
     _isTrainedOnly = false;
 }
 
-const short skill::Total(short abilityMod){
+short skill::Total(short abilityMod){
     if (_isClassSkill && _ranks > 0){
         return abilityMod + _ranks + _miscMod + 3;
     } else {
@@ -18,22 +18,22 @@ const short skill::Total(short abilityMod){
     }
 }
 
-const skillType skill::SkillType() {
+skillType skill::SkillType() {
     return _skillType;
 }
 
-const abilityType skill::AbilityType() {
+abilityType skill::AbilityType() {
     return _abilityType;
 }
 
-const short skill::Ranks() {
+short skill::Ranks() {
     return _ranks;
 }
 
-const short skill::MiscMod() {
+short skill::MiscMod() {
     return _miscMod;
 }
 
-const bool skill::IsClassSkill() {
+bool skill::IsClassSkill() {
     return _isClassSkill;
 }

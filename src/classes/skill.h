@@ -11,12 +11,12 @@ public:
     skill(skillType skillType);
 
     //Getters
-    const short Total(short abilityMod);
-    const skillType SkillType();
-    const abilityType AbilityType();
-    const short Ranks();
-    const short MiscMod();
-    const bool IsClassSkill();
+    short Total(short abilityMod);
+    skillType SkillType();
+    abilityType AbilityType();
+    short Ranks();
+    short MiscMod();
+    bool IsClassSkill();
 
     //Setters
     //void SkillType(skillType newSkillType);

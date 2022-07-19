@@ -87,10 +87,12 @@ string character::ToStringForConsole()   {
     #pragma region Characteristics
 
     string character = "";
-    character += "|-----------------------------------------------------------------------------------------------------";
+    character += "|--------------------------------------------------------------------------------------------------------------------";
     character += "\n";
 
     character += "| Characteristics: ";
+    character += "\n";
+    character += "|";
     character += "\n";
 
     character += "|     Character Name:            ";
@@ -146,15 +148,19 @@ string character::ToStringForConsole()   {
     character += "|     Eyes:                      ";
     character += _eyeColor;
     character += "\n";
+    character += "|";
+    character += "\n";
 
     #pragma endregion Characteristics
 
     #pragma region HitPoints
 
-    character += "|-----------------------------------------------------------------------------------------------------";
+    character += "|--------------------------------------------------------------------------------------------------------------------";
     character += "\n";
 
     character += "| Hit Points: ";
+    character += "\n";
+    character += "|";
     character += "\n";
 
     character += "|     Total HP:                  ";
@@ -185,15 +191,19 @@ string character::ToStringForConsole()   {
     else if (_hitpoints->CurrentNonLethalHP() < 0 && _hitpoints->CurrentHP() > -1)
         character += "    You are currently Unconscious";
     character += "\n";
-
-    character += "|-----------------------------------------------------------------------------------------------------";
+    character += "|";
     character += "\n";
 
     #pragma endregion HitPoints
 
     #pragma region Speed
 
+    character += "|--------------------------------------------------------------------------------------------------------------------";
+    character += "\n";
+
     character += "| Speed: ";
+    character += "\n";
+    character += "|";
     character += "\n";
 
     character += "|     Base Speed:                ";
@@ -219,15 +229,19 @@ string character::ToStringForConsole()   {
     character += "|     Burrow Speed:              ";
     character += to_string(_speed->Burrow());
     character += "\n";
+    character += "|";
+    character += "\n";
 
     #pragma endregion Speed
 
     #pragma region AbilityScores
 
-    character += "|-----------------------------------------------------------------------------------------------------";
+    character += "|--------------------------------------------------------------------------------------------------------------------";
     character += "\n";
 
     character += "| Ability Scores: ";
+    character += "\n";
+    character += "|";
     character += "\n";
 
     #pragma region Strength
@@ -511,10 +525,12 @@ string character::ToStringForConsole()   {
 
     #pragma region Saves
 
-    character += "|-----------------------------------------------------------------------------------------------------";
+    character += "|--------------------------------------------------------------------------------------------------------------------";
     character += "\n";
 
     character += "| Saves:                            (Base + Ability + Magic + Misc + Temp)";
+    character += "\n";
+    character += "|";
     character += "\n";
 
     for (auto &&save : _saves) {
@@ -522,7 +538,7 @@ string character::ToStringForConsole()   {
         character += EnumToString(save->SaveType());
         character += ":";
         character += "\n";
-        character += "|         Total Bonus             ";
+        character += "|          Total Bonus           ";
         {
             short bonus = _abilityScores[EnumToIndex(save->AbilityType())]->AdjustedModifier();
             if (save->Total(bonus) >= 0){
@@ -542,6 +558,8 @@ string character::ToStringForConsole()   {
         character += to_string(save->TempMod());
         character += " )";
         character += "\n";
+        character += "|";
+        character += "\n";
     }
     
 
@@ -549,10 +567,12 @@ string character::ToStringForConsole()   {
 
     #pragma region Skills
 
-    character += "|-----------------------------------------------------------------------------------------------------";
+    character += "|--------------------------------------------------------------------------------------------------------------------";
     character += "\n";
 
     character += "| Skills:                           (Ability + Ranks + Misc + (3 if you have at least 1 rank and it's a class skill))";
+    character += "\n";
+    character += "|";
     character += "\n";
 
     for (auto &&skill : _skills) {
@@ -560,7 +580,7 @@ string character::ToStringForConsole()   {
         character += EnumToString(skill->SkillType());
         character += ":";
         character += "\n";
-        character += "|        Total Bonus:            ";
+        character += "|          Total Bonus:          ";
         {
             short bonus = _abilityScores[EnumToIndex(skill->AbilityType())]->AdjustedModifier();
             if (skill->Total(bonus) >= 0) {
