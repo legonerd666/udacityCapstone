@@ -1,15 +1,24 @@
 #ifndef ARMORCLASS_H
 #define ARMORCLASS_H
 
+#include "../enums.h"
+
 class armorClass
 {
 public:
     armorClass();
 
     //Getters
-    // short ArmorClass(short dexMod, short sizeMod);
-    // short TouchArmorClass(short dexMod, short sizeMod);
-    // short FlatFootedArmorClass(short sizeMod);
+    short Total(short dexMod, sizeType sizeType);
+    short TouchArmorClass(short dexMod, sizeType sizeType);
+    short FlatFootedArmorClass(sizeType sizeType);
+
+    short Armor();
+    short Shield();
+    short NaturalArmor();
+    short DeflectionBonus();
+    short DodgeBonus();
+    short MiscMod();
 
     //Setters
     // void Armor(short newArmor);
@@ -23,7 +32,8 @@ private:
     short _armor;
     short _shield;
     short _naturalArmor;
-    short _deflectionMod;
+    short _deflectionBonus;
+    short _dodgeBonus;
     short _miscMod;
 
 };

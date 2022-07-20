@@ -9,6 +9,8 @@ enum alignment {LG, NG, CG, LN, TN, CN, LE, NE, CE};
 
 enum abilityType {strength, dexterity, constitution, intelligence, wisdom, charisma};
 
+enum sizeType {fine, diminutive, tiny, small, medium, large, huge, gargantuan, colossal};
+
 enum die {d4, d6, d8, d10, d12, d20};
 
 enum saveType {fortitude, reflex, will};
@@ -36,5 +38,7 @@ short EnumToIndex(abilityType abilityType);
 abilityType EnumToAbilityType(saveType saveType);
 
 abilityType EnumToAbilityType(skillType skillType);
+
+short EnumToBonus(sizeType sizeType);
 
 #endif

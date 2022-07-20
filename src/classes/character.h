@@ -78,6 +78,7 @@ private:
     string _deity;
     string _homeland;
     unique_ptr<race> _race;
+    sizeType _size;
     string _gender;
     short _age;
     short _height;

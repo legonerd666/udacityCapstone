@@ -13,6 +13,7 @@ character::character() {
     _deity = "Example Deity";
     _homeland = "Example Homeland";
     _race = make_unique<race>();
+    _size = medium;
     _gender = "Example Gender";
     _age = 0;
     _height = 0;
@@ -252,39 +253,31 @@ string character::ToStringForConsole()   {
 
     character += "|          Score:                ";
     character += to_string(_abilityScores[0]->Score());
-    if (_abilityScores[0]->Score() < 10 && _abilityScores[0]->Score() >= 0){
+    if (_abilityScores[0]->Score() < 10 && _abilityScores[0]->Score() >= 0)
         character += " ";
-    }
-    
     character += " (";
-    if (_abilityScores[0]->Modifier() >= 0){
+    if (_abilityScores[0]->Modifier() >= 0)
        character += "+";
-    }
     character += to_string(_abilityScores[0]->Modifier());
     character += ")";
-
-    if (_abilityScores[0]->Score() <= 0){
+    if (_abilityScores[0]->Score() <= 0)
         character += " You cannot move and are unconscious";
-    }
     
 
     character += "\n";
 
     character += "|          Temp Score:           ";
     character += to_string(_abilityScores[0]->AdjustedScore());
-    if (_abilityScores[0]->AdjustedScore() < 10 && _abilityScores[0]->AdjustedScore() >= 0){
+    if (_abilityScores[0]->AdjustedScore() < 10 && _abilityScores[0]->AdjustedScore() >= 0)
         character += " ";
-    }
     character += " (";
-    if (_abilityScores[0]->AdjustedModifier() >= 0){
+    if (_abilityScores[0]->AdjustedModifier() >= 0)
        character += "+";
-    }
     character += to_string(_abilityScores[0]->AdjustedModifier());
     character += ")";
 
-    if (_abilityScores[0]->AdjustedScore() <= 0){
+    if (_abilityScores[0]->AdjustedScore() <= 0)
         character += " You cannot move and are unconscious";
-    }
 
     character += "\n";
     character += "|";
@@ -299,38 +292,30 @@ string character::ToStringForConsole()   {
 
     character += "|          Score:                ";
     character += to_string(_abilityScores[1]->Score());
-    if (_abilityScores[1]->Score() < 10 && _abilityScores[1]->Score() >= 0){
+    if (_abilityScores[1]->Score() < 10 && _abilityScores[1]->Score() >= 0)
         character += " ";
-    }
-    
     character += " (";
-    if (_abilityScores[1]->Modifier() >= 0){
+    if (_abilityScores[1]->Modifier() >= 0)
        character += "+";
-    }
     character += to_string(_abilityScores[1]->Modifier());
     character += ")";
-
-    if (_abilityScores[1]->Score() <= 0){
+    if (_abilityScores[1]->Score() <= 0)
         character += " You cannot move";
-    }
     
     character += "\n";
 
     character += "|          Temp Score:           ";
     character += to_string(_abilityScores[1]->AdjustedScore());
-    if (_abilityScores[1]->AdjustedScore() < 10 && _abilityScores[1]->AdjustedScore() >= 0){
+    if (_abilityScores[1]->AdjustedScore() < 10 && _abilityScores[1]->AdjustedScore() >= 0)
         character += " ";
-    }
     character += " (";
-    if (_abilityScores[1]->AdjustedModifier() >= 0){
+    if (_abilityScores[1]->AdjustedModifier() >= 0)
        character += "+";
-    }
     character += to_string(_abilityScores[1]->AdjustedModifier());
     character += ")";
 
-    if (_abilityScores[1]->AdjustedScore() <= 0){
+    if (_abilityScores[1]->AdjustedScore() <= 0)
         character += " You cannot move";
-    }
     
     character += "\n";
     character += "|";
@@ -345,38 +330,32 @@ string character::ToStringForConsole()   {
 
     character += "|          Score:                ";
     character += to_string(_abilityScores[2]->Score());
-    if (_abilityScores[2]->Score() < 10 && _abilityScores[2]->Score() >= 0){
+    if (_abilityScores[2]->Score() < 10 && _abilityScores[2]->Score() >= 0)
         character += " ";
-    }
     
     character += " (";
-    if (_abilityScores[2]->Modifier() >= 0){
+    if (_abilityScores[2]->Modifier() >= 0)
        character += "+";
-    }
     character += to_string(_abilityScores[2]->Modifier());
     character += ")";
 
-    if (_abilityScores[2]->Score() <= 0){
+    if (_abilityScores[2]->Score() <= 0)
         character += " You are dead";
-    }
     
     character += "\n";
 
     character += "|          Temp Score:           ";
     character += to_string(_abilityScores[2]->AdjustedScore());
-    if (_abilityScores[2]->AdjustedScore() < 10 && _abilityScores[2]->AdjustedScore() >= 0){
+    if (_abilityScores[2]->AdjustedScore() < 10 && _abilityScores[2]->AdjustedScore() >= 0)
         character += " ";
-    }
     character += " (";
-    if (_abilityScores[2]->AdjustedModifier() >= 0){
+    if (_abilityScores[2]->AdjustedModifier() >= 0)
        character += "+";
-    }
     character += to_string(_abilityScores[2]->AdjustedModifier());
     character += ")";
 
-    if (_abilityScores[2]->AdjustedScore() <= 0){
+    if (_abilityScores[2]->AdjustedScore() <= 0)
         character += " You are dead";
-    }
     
     character += "\n";
     character += "|";
@@ -391,38 +370,32 @@ string character::ToStringForConsole()   {
 
     character += "|          Score:                ";
     character += to_string(_abilityScores[3]->Score());
-    if (_abilityScores[3]->Score() < 10 && _abilityScores[3]->Score() >= 0){
+    if (_abilityScores[3]->Score() < 10 && _abilityScores[3]->Score() >= 0)
         character += " ";
-    }
     
     character += " (";
-    if (_abilityScores[3]->Modifier() >= 0){
+    if (_abilityScores[3]->Modifier() >= 0)
        character += "+";
-    }
     character += to_string(_abilityScores[3]->Modifier());
     character += ")";
 
-    if (_abilityScores[3]->Score() <= 0){
+    if (_abilityScores[3]->Score() <= 0)
         character += " You are comatose";
-    }
     
     character += "\n";
 
     character += "|          Temp Score:           ";
     character += to_string(_abilityScores[3]->AdjustedScore());
-    if (_abilityScores[3]->AdjustedScore() < 10 && _abilityScores[3]->AdjustedScore() >= 0){
+    if (_abilityScores[3]->AdjustedScore() < 10 && _abilityScores[3]->AdjustedScore() >= 0)
         character += " ";
-    }
     character += " (";
-    if (_abilityScores[3]->AdjustedModifier() >= 0){
+    if (_abilityScores[3]->AdjustedModifier() >= 0)
        character += "+";
-    }
     character += to_string(_abilityScores[3]->AdjustedModifier());
     character += ")";
 
-    if (_abilityScores[3]->AdjustedScore() <= 0){
+    if (_abilityScores[3]->AdjustedScore() <= 0)
         character += " You are comatose";
-    }
 
     character += "\n";
     character += "|";
@@ -437,38 +410,32 @@ string character::ToStringForConsole()   {
 
     character += "|          Score:                ";
     character += to_string(_abilityScores[4]->Score());
-    if (_abilityScores[4]->Score() < 10 && _abilityScores[4]->Score() >= 0){
+    if (_abilityScores[4]->Score() < 10 && _abilityScores[4]->Score() >= 0)
         character += " ";
-    }
     
     character += " (";
-    if (_abilityScores[4]->Modifier() >= 0){
+    if (_abilityScores[4]->Modifier() >= 0)
        character += "+";
-    }
     character += to_string(_abilityScores[4]->Modifier());
     character += ")";
 
-    if (_abilityScores[4]->Score() <= 0){
+    if (_abilityScores[4]->Score() <= 0)
         character += " You are incapable of rational thought and are unconscious";
-    }
 
     character += "\n";
 
     character += "|          Temp Score:           ";
     character += to_string(_abilityScores[4]->AdjustedScore());
-    if (_abilityScores[4]->AdjustedScore() < 10 && _abilityScores[4]->AdjustedScore() >= 0){
+    if (_abilityScores[4]->AdjustedScore() < 10 && _abilityScores[4]->AdjustedScore() >= 0)
         character += " ";
-    }
     character += " (";
-    if (_abilityScores[4]->AdjustedModifier() >= 0){
+    if (_abilityScores[4]->AdjustedModifier() >= 0)
        character += "+";
-    }
     character += to_string(_abilityScores[4]->AdjustedModifier());
     character += ")";
 
-    if (_abilityScores[4]->AdjustedScore() <= 0){
+    if (_abilityScores[4]->AdjustedScore() <= 0)
         character += " You are incapable of rational thought and are unconscious";
-    }
 
     character += "\n";
     character += "|";
@@ -483,38 +450,32 @@ string character::ToStringForConsole()   {
 
     character += "|          Score:                ";
     character += to_string(_abilityScores[5]->Score());
-    if (_abilityScores[5]->Score() < 10 && _abilityScores[5]->Score() >= 0){
+    if (_abilityScores[5]->Score() < 10 && _abilityScores[5]->Score() >= 0)
         character += " ";
-    }
     
     character += " (";
-    if (_abilityScores[5]->Modifier() >= 0){
+    if (_abilityScores[5]->Modifier() >= 0)
        character += "+";
-    }
     character += to_string(_abilityScores[5]->Modifier());
     character += ")";
 
-    if (_abilityScores[5]->Score() <= 0){
+    if (_abilityScores[5]->Score() <= 0)
         character += " You are unable to exert yourself in any way and are unconscious";
-    }
 
     character += "\n";
 
     character += "|          Temp Score:           ";
     character += to_string(_abilityScores[5]->AdjustedScore());
-    if (_abilityScores[5]->AdjustedScore() < 10 && _abilityScores[5]->AdjustedScore() >= 0){
+    if (_abilityScores[5]->AdjustedScore() < 10 && _abilityScores[5]->AdjustedScore() >= 0)
         character += " ";
-    }
     character += " (";
-    if (_abilityScores[5]->AdjustedModifier() >= 0){
+    if (_abilityScores[5]->AdjustedModifier() >= 0)
        character += "+";
-    }
     character += to_string(_abilityScores[5]->AdjustedModifier());
     character += ")";
 
-    if (_abilityScores[5]->AdjustedScore() <= 0){
+    if (_abilityScores[5]->AdjustedScore() <= 0)
         character += " You are unable to exert yourself in any way and are unconscious";
-    }
 
     character += "\n";
     character += "|";
@@ -540,17 +501,13 @@ string character::ToStringForConsole()   {
         character += ":";
         character += "\n";
         character += "|          Total Bonus           ";
-        {
-            short bonus = _abilityScores[EnumToIndex(save->AbilityType())]->AdjustedModifier();
-            if (save->Total(bonus) >= 0){
-                character += "+";
-            }
-            character += to_string(save->Total(bonus));
-            character += " (";
-            character += to_string(save->Base());
-            character += " + ";
-            character += to_string(bonus);
-        }
+        if (save->Total(_abilityScores[EnumToIndex(save->AbilityType())]->AdjustedModifier()) >= 0)
+            character += "+";
+        character += to_string(save->Total(_abilityScores[EnumToIndex(save->AbilityType())]->AdjustedModifier()));
+        character += " (";
+        character += to_string(save->Base());
+        character += " + ";
+        character += to_string(_abilityScores[EnumToIndex(save->AbilityType())]->AdjustedModifier());
         character += " + ";
         character += to_string(save->MagicMod());
         character += " + ";
@@ -582,22 +539,17 @@ string character::ToStringForConsole()   {
         character += ":";
         character += "\n";
         character += "|          Total Bonus:          ";
-        {
-            short bonus = _abilityScores[EnumToIndex(skill->AbilityType())]->AdjustedModifier();
-            if (skill->Total(bonus) >= 0) {
-                character += "+";
-            }
-            character += to_string(skill->Total(bonus));
-            character += " (";
-            character += to_string(bonus);
-        }
+        if (skill->Total(_abilityScores[EnumToIndex(skill->AbilityType())]->AdjustedModifier()) >= 0)
+            character += "+";
+        character += to_string(skill->Total(_abilityScores[EnumToIndex(skill->AbilityType())]->AdjustedModifier()));
+        character += " (";
+        character += to_string(_abilityScores[EnumToIndex(skill->AbilityType())]->AdjustedModifier());
         character += " + ";
         character += to_string(skill->Ranks());
         character += " + ";
         character += to_string(skill->MiscMod());
-        if (skill->IsClassSkill() && skill->Ranks() > 0) {
+        if (skill->IsClassSkill() && skill->Ranks() > 0)
             character += " + 3";
-        }
         character += ")";
         character += "\n";
         character += "|";
@@ -619,9 +571,8 @@ string character::ToStringForConsole()   {
     #pragma region Initiative
     
     character += "|     Initiative:                ";
-    if (_initiative->Total(_abilityScores[1]->AdjustedModifier()) >= 0) {
+    if (_initiative->Total(_abilityScores[1]->AdjustedModifier()) >= 0)
         character += "+";
-    }
     character += to_string(_initiative->Total(_abilityScores[1]->AdjustedModifier()));
     character += " (";
     character += to_string(_abilityScores[1]->AdjustedModifier());
@@ -629,8 +580,78 @@ string character::ToStringForConsole()   {
     character += to_string(_initiative->MiscMod());
     character += ") (Dex + Misc)";
     character += "\n";
+    character += "|";
+    character += "\n";
 
     #pragma endregion Initiative
+
+    #pragma region Armor Class
+
+    character += "|     Armor Class:";
+    character += "\n";
+    character += "|";
+    character += "\n";
+    character += "|         AC:                    ";
+    character += to_string(_armorClass->Total(_abilityScores[1]->AdjustedModifier(), _size));
+    character += " (10 + ";
+    character += to_string(_armorClass->Armor());
+    character += " + ";
+    character += to_string(_armorClass->Shield());
+    character += " + ";
+    character += to_string(_abilityScores[1]->AdjustedModifier());
+    character += " + ";
+    character += to_string(EnumToBonus(_size));
+    character += " + ";
+    character += to_string(_armorClass->NaturalArmor());
+    character += " + ";
+    character += to_string(_armorClass->DeflectionBonus());
+    character += " + ";
+    character += to_string(_armorClass->DodgeBonus());
+    character += " + ";
+    character += to_string(_armorClass->MiscMod());
+    character += ")";
+    character += " (10 + Armor + Shield + Dex + Size + Natural Armor + Deflection + Dodge + Misc)";
+    character += "\n";
+    character += "|";
+    character += "\n";
+    character += "|         Touch AC:              ";
+    character += to_string(_armorClass->TouchArmorClass(_abilityScores[1]->AdjustedModifier(), _size));
+    character += " (10 + ";
+    character += to_string(_abilityScores[1]->AdjustedModifier());
+    character += " + ";
+    character += to_string(EnumToBonus(_size));
+    character += " + ";
+    character += to_string(_armorClass->DeflectionBonus());
+    character += " + ";
+    character += to_string(_armorClass->DodgeBonus());
+    character += " + ";
+    character += to_string(_armorClass->MiscMod());
+    character += ")";
+    character += "             (10 + Dex + Size + Deflection + Dodge + Misc)";
+    character += "\n";
+    character += "|";
+    character += "\n";
+    character += "|         Flat-Footed:           ";
+    character += to_string(_armorClass->FlatFootedArmorClass(_size));
+    character += " (10 + ";
+    character += to_string(_armorClass->Armor());
+    character += " + ";
+    character += to_string(_armorClass->Shield());
+    character += " + ";
+    character += to_string(EnumToBonus(_size));
+    character += " + ";
+    character += to_string(_armorClass->NaturalArmor());
+    character += " + ";
+    character += to_string(_armorClass->DeflectionBonus());
+    character += " + ";
+    character += to_string(_armorClass->MiscMod());
+    character += ")";
+    character += "         (10 + Armor + Shield + Size + Natural Armor + Deflection + Misc)";
+    character += "\n";
+    character += "|";
+    character += "\n";
+
+    #pragma endregion ArmorClass
 
     #pragma endregion Combat
 

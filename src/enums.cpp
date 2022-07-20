@@ -157,8 +157,7 @@ short EnumToIndex(abilityType abilityType) {
 }
 
 abilityType EnumToAbilityType(saveType saveType) {
-    switch (saveType)
-    {
+    switch (saveType) {
     case fortitude:
         return constitution;
     case reflex:
@@ -171,8 +170,7 @@ abilityType EnumToAbilityType(saveType saveType) {
 }
 
 abilityType EnumToAbilityType(skillType skillType) {
-    switch (skillType)
-    {
+    switch (skillType) {
     case climb: case swim:
         return strength;
     case acrobatics: case disableDevice: case escapeArtist: case fly: case ride: case sleightOfHand: case stealth:
@@ -185,5 +183,28 @@ abilityType EnumToAbilityType(skillType skillType) {
         return charisma;
     default:
         return constitution;
+    }
+}
+
+short EnumToBonus(sizeType sizeType){
+    switch (sizeType) {
+    case  colossal:
+        return -8;
+    case gargantuan:
+        return -4;
+    case huge:
+        return -2;
+    case large:
+        return -1;
+    case small:
+        return 1;
+    case tiny:
+        return 2;
+    case diminutive:
+        return 4;
+    case fine:
+        return 8;
+    default:
+        return 0;
     }
 }
