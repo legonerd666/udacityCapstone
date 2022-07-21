@@ -9,3 +9,7 @@ hitDie::hitDie() {
 string hitDie::To_String() {
     return to_string(_numberOfHitDice) + EnumToString(_hitDie) + " ";
 }
+
+short hitDie::HitDieNumber() {
+    return _numberOfHitDice;
+}

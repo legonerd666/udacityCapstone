@@ -165,7 +165,14 @@ string character::ToStringForConsole()   {
     character += "\n";
 
     character += "|     Total HP:                  ";
-    character += to_string(_hitpoints->TotalHP());
+    character += to_string(_hitpoints->TotalHP(_abilityScores[2]->AdjustedModifier()));
+    character += " (";
+    character += to_string(_hitpoints->TotalHP(0));
+    character += " + (";
+    character += to_string(_abilityScores[2]->AdjustedModifier());
+    character += " * ";
+    character += to_string(_hitpoints->TotalHitDice());
+    character += ")) (Rolled HP + (Constitution * Number of HitDice)) (Min 1)";
     character += "\n";
 
     character += "|     Hit Dice:                  ";
@@ -175,21 +182,21 @@ string character::ToStringForConsole()   {
     character += "\n";
 
     character += "|     Current HP:                ";
-    character += to_string(_hitpoints->CurrentHP());
-    if (_hitpoints->CurrentHP() == 0 && _hitpoints->CurrentNonLethalHP() > -1)
+    character += to_string(_hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()));
+    if (_hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) == 0 && _hitpoints->CurrentNonLethalHP(_abilityScores[2]->AdjustedModifier()) > -1)
         character += "    You are currently Disabled";
-    else if (_hitpoints->CurrentHP() < 0 && _hitpoints->CurrentHP() > (_abilityScores[2]->AdjustedScore() * -1))
+    else if (_hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) < 0 && _hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) > (_abilityScores[2]->AdjustedScore() * -1))
         character += "    You are Unconscious and Dying";
-    else if (_hitpoints->CurrentHP() < 0 && _hitpoints->CurrentHP() <= (_abilityScores[2]->AdjustedScore() * -1))
+    else if (_hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) < 0 && _hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) <= (_abilityScores[2]->AdjustedScore() * -1))
         character += "    You are Dead";
     
     character += "\n";
 
     character += "|     Current Non-Lethal HP:     ";
-    character += to_string(_hitpoints->CurrentNonLethalHP());
-    if (_hitpoints->CurrentNonLethalHP() == 0 && _hitpoints->CurrentHP() > 0)
+    character += to_string(_hitpoints->CurrentNonLethalHP(_abilityScores[2]->AdjustedModifier()));
+    if (_hitpoints->CurrentNonLethalHP(_abilityScores[2]->AdjustedModifier()) == 0 && _hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) > 0)
         character += "    You are currently Staggered";
-    else if (_hitpoints->CurrentNonLethalHP() < 0 && _hitpoints->CurrentHP() > -1)
+    else if (_hitpoints->CurrentNonLethalHP(_abilityScores[2]->AdjustedModifier()) < 0 && _hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) > -1)
         character += "    You are currently Unconscious";
     character += "\n";
     character += "|";
@@ -709,6 +716,50 @@ string character::ToStringForConsole()   {
     character += "\n";
 
     #pragma endregion Combat Stats
+
+    #pragma region Weapons
+
+    character += "|     Weapons:";
+    character += "\n";
+    character += "|";
+    character += "\n";
+    for (auto &&weapon : _weapons) {
+        character += "|         Name:                  ";
+        character += weapon->Name();
+        character += "\n";
+        character += "|         Attack Bonus:          ";
+        if (_baseAttackBonuses.front() + _abilityScores[EnumToIndex(weapon->AbilityType())]->AdjustedModifier() + EnumToBonus(_size) >= 0) {
+            character += "+";
+        }
+        
+        character += to_string(_baseAttackBonuses.front() + _abilityScores[EnumToIndex(weapon->AbilityType())]->AdjustedModifier() + EnumToBonus(_size));
+        character += "\n";
+        character += "|         Critical:              ";
+        character += weapon->CritRange();
+        character += "\n";
+        character += "|         Type:                  ";
+        character += weapon->DamageType();
+        character += "\n";
+        character += "|         Range:                 ";
+        character += weapon->Range();
+        character += "\n";
+        character += "|         Ammo:                  ";
+        character += to_string(weapon->Ammo());
+        character += "\n";
+        character += "|         Damage:                ";
+        character += weapon->Damage();
+        if (weapon->AbilityType() == strength) {
+            character += "+";
+            character += to_string(_abilityScores[0]->AdjustedModifier());
+        }
+        
+        character += "\n";
+        character += "|";
+        character += "\n";
+    }
+    
+
+    #pragma endregion Weapons
 
     #pragma endregion Combat
 

@@ -17,8 +17,6 @@ enum saveType {fortitude, reflex, will};
 
 enum skillType {acrobatics, appraise, bluff, climb, craft, diplomacy, disableDevice, disguise, escapeArtist, fly, handleAnimal, heal, intimidate, knowArcana, knowDungeoneering, knowEngineering, knowGeography, knowHistory, knowLocal, knowNature, knowNobility, knowPlanes, knowReligion, linguistics, perception, perform, profession, ride, senseMotive, sleightOfHand, spellcraft, stealth, survival, swim, useMagicDevice};
 
-enum damageType {piercing, slashing, bludgeoning};
-
 enum currencyType {copper, silver, gold, platinum};
 
 enum magicSchool {abjuration, conjuration, divination, enchantment, evocation, illusion, necromancy, transmutation, universal};

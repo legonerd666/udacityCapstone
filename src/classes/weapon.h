@@ -12,15 +12,22 @@ class weapon
 public:
     weapon();
 
+    weapon(string name, string critRange, string damageType, string range, die damageDie, short numberOfDice, abilityType abilityType);
+
     //Getters
-    string ToString();
-    short Damage(short abilityMod, short baseAttackBonus, short sizeMod);
+    string Name();
+    string CritRange();
+    string DamageType();
+    string Range();
+    short Ammo();
+    string Damage();
+    abilityType AbilityType();
+
 
 private:
-    string _weapon;
-    short _attackBonus;
+    string _name;
     string _criticalRange;
-    vector<damageType> _damageType;
+    string _damageType;
     string _range;
     short _ammo;
     die _damageDie;

@@ -14,6 +14,8 @@ public:
 
     string To_String();
 
+    short HitDieNumber();
+
 private:
     die _hitDie;
     short _numberOfHitDice;

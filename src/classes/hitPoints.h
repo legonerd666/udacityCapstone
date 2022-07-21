@@ -13,10 +13,11 @@ public:
     hitPoints();
 
     //Getters
-    short TotalHP();
-    short CurrentHP();
-    short CurrentNonLethalHP();
+    short TotalHP(short constitutionBonus);
+    short CurrentHP(short constitionBonus);
+    short CurrentNonLethalHP(short constitutionBonus);
     vector<unique_ptr<hitDie>>& HitDice();
+    short TotalHitDice();
 
     //Setters
     // void TotalHP(short newTotalHP);
@@ -29,7 +30,6 @@ private:
     short _currentDamage;
     short _nonLethalDamage;
     vector<unique_ptr<hitDie>> _hitdice;
-
 };
 
 
