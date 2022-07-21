@@ -69,8 +69,7 @@ character::character() {
     _skills.emplace_back(make_unique<skill>(swim));
     _skills.emplace_back(make_unique<skill>(useMagicDevice));
     _languages = "Example Languages";
-
-    _baseAttackBonuses;
+    _baseAttackBonuses.emplace_back(0);
     _spellResistance = 0;
     _proficiencies = "Example Proficiencies";
 
@@ -514,7 +513,7 @@ string character::ToStringForConsole()   {
         character += to_string(save->MiscMod());
         character += " + ";
         character += to_string(save->TempMod());
-        character += " )";
+        character += ")";
         character += "\n";
         character += "|";
         character += "\n";
@@ -653,7 +652,73 @@ string character::ToStringForConsole()   {
 
     #pragma endregion ArmorClass
 
+    #pragma region Combat Stats
+
+    character += "|     Base Attack Bonus:         ";
+    if (_baseAttackBonuses.size() == 1) {
+        character += "+";
+        character += to_string(_baseAttackBonuses.front());
+    } else {
+        for (auto &&BaB : _baseAttackBonuses) {
+            character += "+";
+            character += to_string(BaB);
+            if (BaB != _baseAttackBonuses.back())
+                character += "/";
+        }
+    }
+    
+    character += "\n";
+    character += "|";
+    character += "\n";
+
+    character += "|     Spell Resistance:          ";
+    character += to_string(_spellResistance);
+    character += "%";
+    character += "\n";
+    character += "|";
+    character += "\n";
+
+    character += "|     CMB:                       ";
+    character += to_string(CMB());
+    character += " (";
+    character += to_string(_baseAttackBonuses.front());
+    character += " + ";
+    character += to_string(_abilityScores[0]->AdjustedModifier());
+    character += " + ";
+    character += to_string(EnumToBonus(_size) * -1);
+    character += ")";
+    character += " (Base Attack + Strength + Size)";
+    character += "\n";
+    character += "|";
+    character += "\n";
+
+    character += "|     CMD:                       ";
+    character += to_string(CMD());
+    character += " (";
+    character += to_string(_baseAttackBonuses.front());
+    character += " + ";
+    character += to_string(_abilityScores[0]->AdjustedModifier());
+    character += " + ";
+    character += to_string(_abilityScores[1]->AdjustedModifier());
+    character += " + ";
+    character += to_string(EnumToBonus(_size) * -1);
+    character += " + 10)";
+    character += " (Base Attack + Strength + Dexterity + Size + 10)";
+    character += "\n";
+    character += "|";
+    character += "\n";
+
+    #pragma endregion Combat Stats
+
     #pragma endregion Combat
 
     return character;
+}
+
+short character::CMB() {
+    return _baseAttackBonuses.front() + _abilityScores[0]->AdjustedModifier() + (EnumToBonus(_size) * -1);
+}
+
+short character::CMD() {
+    return _baseAttackBonuses.front() + _abilityScores[0]->AdjustedModifier() + _abilityScores[1]->AdjustedModifier() + (EnumToBonus(_size) * -1) + 10;
 }

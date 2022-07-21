@@ -78,7 +78,7 @@ private:
     string _deity;
     string _homeland;
     unique_ptr<race> _race;
-    sizeType _size;
+     sizeType _size;
     string _gender;
     short _age;
     short _height;
@@ -108,7 +108,9 @@ private:
 
     unsigned int _xp;
     unsigned int _nextLevelXpAmount;
-    
+
+    short CMB();
+    short CMD();
 };
 
 #endif
