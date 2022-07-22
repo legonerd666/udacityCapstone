@@ -5,23 +5,135 @@
 
 using namespace std;
 
-enum alignment {LG, NG, CG, LN, TN, CN, LE, NE, CE};
+enum alignment
+{
+    LG,
+    NG,
+    CG,
+    LN,
+    TN,
+    CN,
+    LE,
+    NE,
+    CE
+};
 
-enum abilityType {strength, dexterity, constitution, intelligence, wisdom, charisma};
+enum abilityType
+{
+    strength,
+    dexterity,
+    constitution,
+    intelligence,
+    wisdom,
+    charisma
+};
 
-enum sizeType {fine, diminutive, tiny, small, medium, large, huge, gargantuan, colossal};
+enum sizeType
+{
+    fine,
+    diminutive,
+    tiny,
+    small,
+    medium,
+    large,
+    huge,
+    gargantuan,
+    colossal
+};
 
-enum die {d4, d6, d8, d10, d12, d20};
+enum die
+{
+    d4,
+    d6,
+    d8,
+    d10,
+    d12,
+    d20
+};
 
-enum saveType {fortitude, reflex, will};
+enum saveType
+{
+    fortitude,
+    reflex,
+    will
+};
 
-enum skillType {acrobatics, appraise, bluff, climb, craft, diplomacy, disableDevice, disguise, escapeArtist, fly, handleAnimal, heal, intimidate, knowArcana, knowDungeoneering, knowEngineering, knowGeography, knowHistory, knowLocal, knowNature, knowNobility, knowPlanes, knowReligion, linguistics, perception, perform, profession, ride, senseMotive, sleightOfHand, spellcraft, stealth, survival, swim, useMagicDevice};
+enum skillType
+{
+    acrobatics,
+    appraise,
+    bluff,
+    climb,
+    craft,
+    diplomacy,
+    disableDevice,
+    disguise,
+    escapeArtist,
+    fly,
+    handleAnimal,
+    heal,
+    intimidate,
+    knowArcana,
+    knowDungeoneering,
+    knowEngineering,
+    knowGeography,
+    knowHistory,
+    knowLocal,
+    knowNature,
+    knowNobility,
+    knowPlanes,
+    knowReligion,
+    linguistics,
+    perception,
+    perform,
+    profession,
+    ride,
+    senseMotive,
+    sleightOfHand,
+    spellcraft,
+    stealth,
+    survival,
+    swim,
+    useMagicDevice
+};
 
-enum currencyType {copper, silver, gold, platinum};
+enum currencyType
+{
+    copper,
+    silver,
+    gold,
+    platinum
+};
 
-enum magicSchool {abjuration, conjuration, divination, enchantment, evocation, illusion, necromancy, transmutation, universal};
+enum magicSchool
+{
+    abjuration,
+    conjuration,
+    divination,
+    enchantment,
+    evocation,
+    illusion,
+    necromancy,
+    transmutation,
+    universal
+};
 
-enum casterType {bard, cleric, druid, paladin, sorcererWizard};
+enum casterType
+{
+    bard,
+    cleric,
+    druid,
+    paladin,
+    sorcererWizard
+};
+
+enum loadType
+{
+    light,
+    mediumLoad,
+    heavy,
+    incalculable
+};
 
 string EnumToString(alignment alignment);
 
@@ -31,6 +143,8 @@ string EnumToString(saveType saveType);
 
 string EnumToString(skillType skillType);
 
+string EnumToString(loadType loadType);
+
 short EnumToIndex(abilityType abilityType);
 
 abilityType EnumToAbilityType(saveType saveType);
@@ -38,5 +152,7 @@ abilityType EnumToAbilityType(saveType saveType);
 abilityType EnumToAbilityType(skillType skillType);
 
 short EnumToBonus(sizeType sizeType);
+
+loadType CalcLoad(short strength, unsigned short weight);
 
 #endif

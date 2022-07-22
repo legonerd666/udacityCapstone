@@ -9,21 +9,22 @@ class gear
 {
 public:
     gear();
+    gear(string name, string description, unsigned short weight);
 
-    //Getters
-    short Weight();
-    string ToString();
+    // Getters
+    string Name();
+    string Description();
+    unsigned short Weight();
 
-    //Setters
-    void Name(string newName);
-    void Weight(unsigned short newWeight);
-    void Description(string newDescription);
+    // Setters
+    // void Name(string newName);
+    // void Weight(unsigned short newWeight);
+    // void Description(string newDescription);
 
 private:
     string _name;
-    unsigned short _weight;
     string _description;
+    unsigned short _weight;
 };
-
 
 #endif

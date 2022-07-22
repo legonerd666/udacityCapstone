@@ -24,14 +24,15 @@
 
 using namespace std;
 
-class character {
+class character
+{
 public:
     character();
 
-    //Getters
+    // Getters
     string ToStringForConsole();
 
-    //Setters
+    // Setters
 
     // void Name(string newName);
     // void Alignment(alignment newAlignment);
@@ -54,12 +55,12 @@ public:
     // void saves(unique_ptr<save> newSaves [3]);
     // void Skills(vector<unique_ptr<skill>>&& newSkills);
     // void Languages(string newLanguages);
-    
+
     // void BaseAttackBonus(vector<unsigned short> newBaseAttackBonuses);
     // void SpellResistance(short newSpellResistance);
     // void Weapons(vector<unique_ptr<weapon>>&& newWeapons);
     // void Proficiencies(string newProficiencies);
-    
+
     // void ArmorClassItems(vector<unique_ptr<armorClassItem>>&& newArmorClassItems);
     // void Gear(vector<unique_ptr<gear>>&& newGear);
     // void Currency(vector<unique_ptr<currency>>&& newCurrency);
@@ -68,9 +69,8 @@ public:
 
     // void Xp(unsigned int newXp);
     // void NextLevelXpAmount(unsigned int newNextLevelXpAmount);
-    
-private:
 
+private:
     string _name;
     alignment _alignment;
     string _player;
@@ -78,7 +78,7 @@ private:
     string _deity;
     string _homeland;
     unique_ptr<race> _race;
-     sizeType _size;
+    sizeType _size;
     string _gender;
     short _age;
     short _height;
@@ -87,11 +87,11 @@ private:
     string _eyeColor;
 
     unique_ptr<hitPoints> _hitpoints;
-    unique_ptr<abilityScore> _abilityScores [6];
+    unique_ptr<abilityScore> _abilityScores[6];
     unique_ptr<speed> _speed;
     unique_ptr<initiative> _initiative;
     unique_ptr<armorClass> _armorClass;
-    unique_ptr<save> _saves [3];
+    unique_ptr<save> _saves[3];
     vector<unique_ptr<skill>> _skills;
     string _languages;
 
@@ -102,7 +102,7 @@ private:
 
     vector<unique_ptr<armorClassItem>> _armorClassItems;
     vector<unique_ptr<gear>> _gear;
-    unique_ptr<currency> _currency [4];
+    unique_ptr<currency> _currency[4];
 
     vector<unique_ptr<feat>> _feats;
 

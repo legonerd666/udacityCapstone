@@ -3,9 +3,12 @@
 #include "character.h"
 #include "../enums.h"
 
+#include <climits>
+
 using namespace std;
 
-character::character() {
+character::character()
+{
 
     _name = "Example Name";
     _alignment = LG;
@@ -21,7 +24,8 @@ character::character() {
     _hairColor = "Example Hair Color";
     _eyeColor = "Example Eye Color";
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 6; i++)
+    {
         _abilityScores[i] = make_unique<abilityScore>();
     }
     _hitpoints = make_unique<hitPoints>();
@@ -73,19 +77,20 @@ character::character() {
     _spellResistance = 0;
     _proficiencies = "Example Proficiencies";
 
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++)
+    {
         _currency[i] = make_unique<currency>();
     }
 
     _xp = 0;
     _nextLevelXpAmount = 0;
-
 }
 
-//Outputs the character data as a nicely formatted string
-string character::ToStringForConsole()   {
+// Outputs the character data as a nicely formatted string
+string character::ToStringForConsole()
+{
 
-    #pragma region Characteristics
+#pragma region Characteristics
 
     string character = "";
     character += "|--------------------------------------------------------------------------------------------------------------------";
@@ -109,7 +114,8 @@ string character::ToStringForConsole()   {
     character += "\n";
 
     character += "|     Class(es):                 ";
-    for (auto &&role : _roles) {
+    for (auto &&role : _roles)
+    {
         character += role->ToString();
     }
     character += "\n";
@@ -152,9 +158,9 @@ string character::ToStringForConsole()   {
     character += "|";
     character += "\n";
 
-    #pragma endregion Characteristics
+#pragma endregion Characteristics
 
-    #pragma region HitPoints
+#pragma region HitPoints
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
     character += "\n";
@@ -176,7 +182,8 @@ string character::ToStringForConsole()   {
     character += "\n";
 
     character += "|     Hit Dice:                  ";
-    for (auto &&hitdie : _hitpoints->HitDice()){
+    for (auto &&hitdie : _hitpoints->HitDice())
+    {
         character += hitdie->To_String();
     }
     character += "\n";
@@ -189,7 +196,7 @@ string character::ToStringForConsole()   {
         character += "    You are Unconscious and Dying";
     else if (_hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) < 0 && _hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) <= (_abilityScores[2]->AdjustedScore() * -1))
         character += "    You are Dead";
-    
+
     character += "\n";
 
     character += "|     Current Non-Lethal HP:     ";
@@ -202,9 +209,9 @@ string character::ToStringForConsole()   {
     character += "|";
     character += "\n";
 
-    #pragma endregion HitPoints
+#pragma endregion HitPoints
 
-    #pragma region Speed
+#pragma region Speed
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
     character += "\n";
@@ -240,9 +247,9 @@ string character::ToStringForConsole()   {
     character += "|";
     character += "\n";
 
-    #pragma endregion Speed
+#pragma endregion Speed
 
-    #pragma region AbilityScores
+#pragma region AbilityScores
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
     character += "\n";
@@ -252,7 +259,7 @@ string character::ToStringForConsole()   {
     character += "|";
     character += "\n";
 
-    #pragma region Strength
+#pragma region Strength
 
     character += "|     Strength: ";
     character += "\n";
@@ -263,12 +270,11 @@ string character::ToStringForConsole()   {
         character += " ";
     character += " (";
     if (_abilityScores[0]->Modifier() >= 0)
-       character += "+";
+        character += "+";
     character += to_string(_abilityScores[0]->Modifier());
     character += ")";
     if (_abilityScores[0]->Score() <= 0)
         character += " You cannot move and are unconscious";
-    
 
     character += "\n";
 
@@ -278,7 +284,7 @@ string character::ToStringForConsole()   {
         character += " ";
     character += " (";
     if (_abilityScores[0]->AdjustedModifier() >= 0)
-       character += "+";
+        character += "+";
     character += to_string(_abilityScores[0]->AdjustedModifier());
     character += ")";
 
@@ -289,9 +295,9 @@ string character::ToStringForConsole()   {
     character += "|";
     character += "\n";
 
-    #pragma endregion Strength
+#pragma endregion Strength
 
-    #pragma region Dexterity
+#pragma region Dexterity
 
     character += "|     Dexterity: ";
     character += "\n";
@@ -302,12 +308,12 @@ string character::ToStringForConsole()   {
         character += " ";
     character += " (";
     if (_abilityScores[1]->Modifier() >= 0)
-       character += "+";
+        character += "+";
     character += to_string(_abilityScores[1]->Modifier());
     character += ")";
     if (_abilityScores[1]->Score() <= 0)
         character += " You cannot move";
-    
+
     character += "\n";
 
     character += "|          Temp Score:           ";
@@ -316,20 +322,20 @@ string character::ToStringForConsole()   {
         character += " ";
     character += " (";
     if (_abilityScores[1]->AdjustedModifier() >= 0)
-       character += "+";
+        character += "+";
     character += to_string(_abilityScores[1]->AdjustedModifier());
     character += ")";
 
     if (_abilityScores[1]->AdjustedScore() <= 0)
         character += " You cannot move";
-    
+
     character += "\n";
     character += "|";
     character += "\n";
 
-    #pragma endregion Dexterity
+#pragma endregion Dexterity
 
-    #pragma region Constitution
+#pragma region Constitution
 
     character += "|     Constitution: ";
     character += "\n";
@@ -338,16 +344,16 @@ string character::ToStringForConsole()   {
     character += to_string(_abilityScores[2]->Score());
     if (_abilityScores[2]->Score() < 10 && _abilityScores[2]->Score() >= 0)
         character += " ";
-    
+
     character += " (";
     if (_abilityScores[2]->Modifier() >= 0)
-       character += "+";
+        character += "+";
     character += to_string(_abilityScores[2]->Modifier());
     character += ")";
 
     if (_abilityScores[2]->Score() <= 0)
         character += " You are dead";
-    
+
     character += "\n";
 
     character += "|          Temp Score:           ";
@@ -356,20 +362,20 @@ string character::ToStringForConsole()   {
         character += " ";
     character += " (";
     if (_abilityScores[2]->AdjustedModifier() >= 0)
-       character += "+";
+        character += "+";
     character += to_string(_abilityScores[2]->AdjustedModifier());
     character += ")";
 
     if (_abilityScores[2]->AdjustedScore() <= 0)
         character += " You are dead";
-    
+
     character += "\n";
     character += "|";
     character += "\n";
 
-    #pragma endregion Constitution
+#pragma endregion Constitution
 
-    #pragma region Intelligence
+#pragma region Intelligence
 
     character += "|     Intelligence: ";
     character += "\n";
@@ -378,16 +384,16 @@ string character::ToStringForConsole()   {
     character += to_string(_abilityScores[3]->Score());
     if (_abilityScores[3]->Score() < 10 && _abilityScores[3]->Score() >= 0)
         character += " ";
-    
+
     character += " (";
     if (_abilityScores[3]->Modifier() >= 0)
-       character += "+";
+        character += "+";
     character += to_string(_abilityScores[3]->Modifier());
     character += ")";
 
     if (_abilityScores[3]->Score() <= 0)
         character += " You are comatose";
-    
+
     character += "\n";
 
     character += "|          Temp Score:           ";
@@ -396,7 +402,7 @@ string character::ToStringForConsole()   {
         character += " ";
     character += " (";
     if (_abilityScores[3]->AdjustedModifier() >= 0)
-       character += "+";
+        character += "+";
     character += to_string(_abilityScores[3]->AdjustedModifier());
     character += ")";
 
@@ -407,9 +413,9 @@ string character::ToStringForConsole()   {
     character += "|";
     character += "\n";
 
-    #pragma endregion Intelligence
+#pragma endregion Intelligence
 
-    #pragma region Wisdom
+#pragma region Wisdom
 
     character += "|     Wisdom: ";
     character += "\n";
@@ -418,10 +424,10 @@ string character::ToStringForConsole()   {
     character += to_string(_abilityScores[4]->Score());
     if (_abilityScores[4]->Score() < 10 && _abilityScores[4]->Score() >= 0)
         character += " ";
-    
+
     character += " (";
     if (_abilityScores[4]->Modifier() >= 0)
-       character += "+";
+        character += "+";
     character += to_string(_abilityScores[4]->Modifier());
     character += ")";
 
@@ -436,7 +442,7 @@ string character::ToStringForConsole()   {
         character += " ";
     character += " (";
     if (_abilityScores[4]->AdjustedModifier() >= 0)
-       character += "+";
+        character += "+";
     character += to_string(_abilityScores[4]->AdjustedModifier());
     character += ")";
 
@@ -447,9 +453,9 @@ string character::ToStringForConsole()   {
     character += "|";
     character += "\n";
 
-    #pragma endregion Wisdom
+#pragma endregion Wisdom
 
-    #pragma region Charisma
+#pragma region Charisma
 
     character += "|     Charisma: ";
     character += "\n";
@@ -458,10 +464,10 @@ string character::ToStringForConsole()   {
     character += to_string(_abilityScores[5]->Score());
     if (_abilityScores[5]->Score() < 10 && _abilityScores[5]->Score() >= 0)
         character += " ";
-    
+
     character += " (";
     if (_abilityScores[5]->Modifier() >= 0)
-       character += "+";
+        character += "+";
     character += to_string(_abilityScores[5]->Modifier());
     character += ")";
 
@@ -476,7 +482,7 @@ string character::ToStringForConsole()   {
         character += " ";
     character += " (";
     if (_abilityScores[5]->AdjustedModifier() >= 0)
-       character += "+";
+        character += "+";
     character += to_string(_abilityScores[5]->AdjustedModifier());
     character += ")";
 
@@ -487,11 +493,11 @@ string character::ToStringForConsole()   {
     character += "|";
     character += "\n";
 
-    #pragma endregion Charisma
+#pragma endregion Charisma
 
-    #pragma endregion AbilityScores
+#pragma endregion AbilityScores
 
-    #pragma region Saves
+#pragma region Saves
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
     character += "\n";
@@ -501,7 +507,8 @@ string character::ToStringForConsole()   {
     character += "|";
     character += "\n";
 
-    for (auto &&save : _saves) {
+    for (auto &&save : _saves)
+    {
         character += "|     ";
         character += EnumToString(save->SaveType());
         character += ":";
@@ -525,11 +532,10 @@ string character::ToStringForConsole()   {
         character += "|";
         character += "\n";
     }
-    
 
-    #pragma endregion Saves
+#pragma endregion Saves
 
-    #pragma region Skills
+#pragma region Skills
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
     character += "\n";
@@ -539,7 +545,8 @@ string character::ToStringForConsole()   {
     character += "|";
     character += "\n";
 
-    for (auto &&skill : _skills) {
+    for (auto &&skill : _skills)
+    {
         character += "|    ";
         character += EnumToString(skill->SkillType());
         character += ":";
@@ -561,11 +568,20 @@ string character::ToStringForConsole()   {
         character += "|";
         character += "\n";
     }
-    
 
-    #pragma endregion Skills
+#pragma endregion Skills
 
-    #pragma region Combat
+#pragma region Language
+
+    character += "|--------------------------------------------------------------------------------------------------------------------";
+    character += "\n";
+    character += "| Languages:                     ";
+    character += _languages;
+    character += "\n";
+
+#pragma endregion Language
+
+#pragma region Combat
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
     character += "\n";
@@ -574,8 +590,8 @@ string character::ToStringForConsole()   {
     character += "|";
     character += "\n";
 
-    #pragma region Initiative
-    
+#pragma region Initiative
+
     character += "|     Initiative:                ";
     if (_initiative->Total(_abilityScores[1]->AdjustedModifier()) >= 0)
         character += "+";
@@ -589,9 +605,9 @@ string character::ToStringForConsole()   {
     character += "|";
     character += "\n";
 
-    #pragma endregion Initiative
+#pragma endregion Initiative
 
-    #pragma region Armor Class
+#pragma region Armor Class
 
     character += "|     Armor Class:";
     character += "\n";
@@ -657,23 +673,27 @@ string character::ToStringForConsole()   {
     character += "|";
     character += "\n";
 
-    #pragma endregion ArmorClass
+#pragma endregion ArmorClass
 
-    #pragma region Combat Stats
+#pragma region Combat Stats
 
     character += "|     Base Attack Bonus:         ";
-    if (_baseAttackBonuses.size() == 1) {
+    if (_baseAttackBonuses.size() == 1)
+    {
         character += "+";
         character += to_string(_baseAttackBonuses.front());
-    } else {
-        for (auto &&BaB : _baseAttackBonuses) {
+    }
+    else
+    {
+        for (auto &&BaB : _baseAttackBonuses)
+        {
             character += "+";
             character += to_string(BaB);
             if (BaB != _baseAttackBonuses.back())
                 character += "/";
         }
     }
-    
+
     character += "\n";
     character += "|";
     character += "\n";
@@ -715,23 +735,25 @@ string character::ToStringForConsole()   {
     character += "|";
     character += "\n";
 
-    #pragma endregion Combat Stats
+#pragma endregion Combat Stats
 
-    #pragma region Weapons
+#pragma region Weapons
 
     character += "|     Weapons:";
     character += "\n";
     character += "|";
     character += "\n";
-    for (auto &&weapon : _weapons) {
+    for (auto &&weapon : _weapons)
+    {
         character += "|         Name:                  ";
         character += weapon->Name();
         character += "\n";
         character += "|         Attack Bonus:          ";
-        if (_baseAttackBonuses.front() + _abilityScores[EnumToIndex(weapon->AbilityType())]->AdjustedModifier() + EnumToBonus(_size) >= 0) {
+        if (_baseAttackBonuses.front() + _abilityScores[EnumToIndex(weapon->AbilityType())]->AdjustedModifier() + EnumToBonus(_size) >= 0)
+        {
             character += "+";
         }
-        
+
         character += to_string(_baseAttackBonuses.front() + _abilityScores[EnumToIndex(weapon->AbilityType())]->AdjustedModifier() + EnumToBonus(_size));
         character += "\n";
         character += "|         Critical:              ";
@@ -748,28 +770,194 @@ string character::ToStringForConsole()   {
         character += "\n";
         character += "|         Damage:                ";
         character += weapon->Damage();
-        if (weapon->AbilityType() == strength) {
+        if (weapon->AbilityType() == strength)
+        {
             character += "+";
             character += to_string(_abilityScores[0]->AdjustedModifier());
         }
-        
+
         character += "\n";
         character += "|";
         character += "\n";
     }
-    
 
-    #pragma endregion Weapons
+#pragma endregion Weapons
 
-    #pragma endregion Combat
+#pragma region Proficiencies
+
+    character += "|     Proficiencies:             ";
+    character += _proficiencies;
+    character += "\n";
+    character += "|";
+    character += "\n";
+
+#pragma endregion Proficiencies
+
+#pragma endregion Combat
+
+#pragma region Equipment
+
+    character += "| Equipment and Gear:";
+    character += "\n";
+    character += "|";
+    character += "\n";
+
+#pragma region ACItems
+    character += "|     AC Items:";
+    character += "\n";
+    character += "|";
+    character += "\n";
+    {
+        unsigned short totalBonus = 0;
+        unsigned short maxDexBonus = USHRT_MAX;
+        unsigned short totalCheckPenalty = 0;
+        unsigned short totalSpellFailureChance = 0;
+        unsigned short baseSpeedAdjustment = _speed->Base();
+        unsigned short totalWeight = 0;
+        for (auto &&acItem : _armorClassItems)
+        {
+            character += "|         Name:                  ";
+            character += acItem->Name();
+            character += "\n";
+            character += "|         Bonus:                 ";
+            character += "+";
+            character += to_string(acItem->Bonus());
+            character += "\n";
+            character += "|         Type:                  ";
+            character += acItem->Type();
+            character += "\n";
+            character += "|         Max Dex Bonus:         ";
+            if (acItem->MaxDexBonus() != USHRT_MAX)
+            {
+                character += to_string(acItem->MaxDexBonus());
+            }
+            else
+            {
+                character += "N/A";
+            }
+            character += "\n";
+            character += "|         Check Penalty:         ";
+            character += to_string(acItem->CheckPenalty());
+            character += "\n";
+            character += "|         Spell Failure %:       ";
+            character += to_string(acItem->SpellFailureChance());
+            character += "%";
+            character += "\n";
+            character += "|         Base Speed Adj:        ";
+            character += to_string(acItem->BaseSpeedAdjustment());
+            character += " ft.";
+            character += "\n";
+            character += "|         Weight:                ";
+            character += to_string(acItem->Weight());
+            character += " lbs.";
+            character += "\n";
+            character += "|         Properties:            ";
+            character += acItem->Properties();
+            character += "\n";
+            character += "|";
+            character += "\n";
+
+            totalBonus += acItem->Bonus();
+            if (acItem->MaxDexBonus() < maxDexBonus)
+            {
+                maxDexBonus = acItem->MaxDexBonus();
+            }
+            totalCheckPenalty += acItem->CheckPenalty() * -1;
+            totalSpellFailureChance += acItem->SpellFailureChance();
+            if (acItem->BaseSpeedAdjustment() < baseSpeedAdjustment)
+            {
+                baseSpeedAdjustment = acItem->BaseSpeedAdjustment();
+            }
+            totalWeight += acItem->Weight();
+        }
+
+        character += "|     AC Item Totals:";
+        character += "\n";
+        character += "|";
+        character += "\n";
+        character += "|         Bonus:                     ";
+        character += "+";
+        character += to_string(totalBonus);
+        character += "\n";
+        character += "|         Max Dex Bonus:             ";
+        if (maxDexBonus != USHRT_MAX)
+        {
+            character += "+";
+            character += to_string(maxDexBonus);
+        }
+        else
+        {
+            character += "N/A";
+        }
+        character += "\n";
+        character += "|         Check Penalty:             ";
+        character += "-";
+        character += to_string(totalCheckPenalty);
+        character += "\n";
+        character += "|         Spell Failure Chance:      ";
+        character += to_string(totalSpellFailureChance);
+        character += "%";
+        character += "\n";
+        character += "|         Base Speed Adj:            ";
+        character += to_string(baseSpeedAdjustment);
+        character += " ft.";
+        character += "\n";
+        character += "|         Weight:                    ";
+        character += to_string(totalWeight);
+        character += " lbs.";
+        character += " You are wearing a ";
+        character += EnumToString(CalcLoad(_abilityScores[0]->AdjustedScore(), totalWeight));
+        character += " Load.";
+    }
+    character += "\n";
+    character += "|";
+    character += "\n";
+
+#pragma endregion ACItems
+
+#pragma region Gear
+
+    character += "|     Gear:";
+    character += "\n";
+    character += "|";
+    character += "\n";
+    unsigned short totalWeight = 0;
+    for (auto &&item : _gear)
+    {
+        character += "|         Name:                      ";
+        character += item->Name();
+        character += "\n";
+        character += "|         Description:               ";
+        character += item->Description();
+        character += "\n";
+        character += "|         Weight:                    ";
+        character += to_string(item->Weight());
+        character += " lbs.";
+        character += "\n";
+        character += "|";
+        character += "\n";
+        totalWeight += item->Weight();
+    }
+    character += "|     Total Weight:                  ";
+    character += to_string(totalWeight);
+    character += " lbs.";
+    character += " You are carrying a ";
+    character += EnumToString(CalcLoad(_abilityScores[0]->AdjustedScore(), totalWeight));
+    character += " Load.";
+
+#pragma endregion Gear
+
+#pragma endregion Equipment
 
     return character;
 }
 
-short character::CMB() {
+short character::CMB()
+{
     return _baseAttackBonuses.front() + _abilityScores[0]->AdjustedModifier() + (EnumToBonus(_size) * -1);
 }
 
-short character::CMD() {
+short character::CMD()
+{
     return _baseAttackBonuses.front() + _abilityScores[0]->AdjustedModifier() + _abilityScores[1]->AdjustedModifier() + (EnumToBonus(_size) * -1) + 10;
 }

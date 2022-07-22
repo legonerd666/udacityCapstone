@@ -2,8 +2,10 @@
 
 #include <string>
 
-string EnumToString(alignment alignment){
-    switch (alignment) {
+string EnumToString(alignment alignment)
+{
+    switch (alignment)
+    {
     case LG:
         return "LG";
     case NG:
@@ -27,8 +29,10 @@ string EnumToString(alignment alignment){
     }
 }
 
-string EnumToString(die die) {
-    switch (die) {
+string EnumToString(die die)
+{
+    switch (die)
+    {
     case d4:
         return "d4";
     case d6:
@@ -46,22 +50,25 @@ string EnumToString(die die) {
     }
 }
 
-string EnumToString(saveType saveType) {
+string EnumToString(saveType saveType)
+{
     switch (saveType)
     {
     case fortitude:
         return "Fortitude";
     case reflex:
         return "Reflex";
-    case will: 
+    case will:
         return "will";
     default:
         return "Error: Invalid Save Enum";
     }
 }
 
-string EnumToString(skillType skillType) {
-    switch (skillType) {
+string EnumToString(skillType skillType)
+{
+    switch (skillType)
+    {
     case acrobatics:
         return "Acrobatics";
     case appraise:
@@ -137,8 +144,25 @@ string EnumToString(skillType skillType) {
     }
 }
 
-short EnumToIndex(abilityType abilityType) {
-    switch (abilityType) {
+string EnumToString(loadType loadType)
+{
+    switch (loadType)
+    {
+    case light:
+        return "Light";
+    case mediumLoad:
+        return "Medium";
+    case heavy:
+        return "Heavy";
+    default:
+        return "Incalculable";
+    }
+}
+
+short EnumToIndex(abilityType abilityType)
+{
+    switch (abilityType)
+    {
     case strength:
         return 0;
     case dexterity:
@@ -156,8 +180,10 @@ short EnumToIndex(abilityType abilityType) {
     }
 }
 
-abilityType EnumToAbilityType(saveType saveType) {
-    switch (saveType) {
+abilityType EnumToAbilityType(saveType saveType)
+{
+    switch (saveType)
+    {
     case fortitude:
         return constitution;
     case reflex:
@@ -169,26 +195,60 @@ abilityType EnumToAbilityType(saveType saveType) {
     }
 }
 
-abilityType EnumToAbilityType(skillType skillType) {
-    switch (skillType) {
-    case climb: case swim:
+abilityType EnumToAbilityType(skillType skillType)
+{
+    switch (skillType)
+    {
+    case climb:
+    case swim:
         return strength;
-    case acrobatics: case disableDevice: case escapeArtist: case fly: case ride: case sleightOfHand: case stealth:
+    case acrobatics:
+    case disableDevice:
+    case escapeArtist:
+    case fly:
+    case ride:
+    case sleightOfHand:
+    case stealth:
         return dexterity;
-    case appraise: case craft: case knowArcana: case knowDungeoneering: case knowEngineering: case knowGeography: case knowHistory: case knowLocal: case knowNature: case knowNobility: case knowPlanes: case knowReligion: case linguistics: case spellcraft:
+    case appraise:
+    case craft:
+    case knowArcana:
+    case knowDungeoneering:
+    case knowEngineering:
+    case knowGeography:
+    case knowHistory:
+    case knowLocal:
+    case knowNature:
+    case knowNobility:
+    case knowPlanes:
+    case knowReligion:
+    case linguistics:
+    case spellcraft:
         return intelligence;
-    case heal: case perception: case profession: case senseMotive: case survival:
+    case heal:
+    case perception:
+    case profession:
+    case senseMotive:
+    case survival:
         return wisdom;
-    case bluff: case diplomacy: case disguise: case handleAnimal: case intimidate: case perform: case useMagicDevice:
+    case bluff:
+    case diplomacy:
+    case disguise:
+    case handleAnimal:
+    case intimidate:
+    case perform:
+    case useMagicDevice:
         return charisma;
     default:
         return constitution;
     }
 }
 
-short EnumToBonus(sizeType sizeType){
-    switch (sizeType) {
-    case  colossal:
+short EnumToBonus(sizeType sizeType)
+{
+    switch (sizeType)
+    {
+    case colossal:
         return -8;
     case gargantuan:
         return -4;
@@ -206,5 +266,392 @@ short EnumToBonus(sizeType sizeType){
         return 8;
     default:
         return 0;
+    }
+}
+
+loadType CalcLoad(short strength, unsigned short weight)
+{
+    switch (strength)
+    {
+    case 1:
+        if (weight <= 3)
+        {
+            return light;
+        }
+        else if (weight <= 6)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 2:
+        if (weight <= 6)
+        {
+            return light;
+        }
+        else if (weight <= 13)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 3:
+        if (weight <= 10)
+        {
+            return light;
+        }
+        else if (weight <= 20)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 4:
+        if (weight <= 13)
+        {
+            return light;
+        }
+        else if (weight <= 26)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 5:
+        if (weight <= 16)
+        {
+            return light;
+        }
+        else if (weight <= 33)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 6:
+        if (weight <= 20)
+        {
+            return light;
+        }
+        else if (weight <= 40)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 7:
+        if (weight <= 23)
+        {
+            return light;
+        }
+        else if (weight <= 46)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 8:
+        if (weight <= 26)
+        {
+            return light;
+        }
+        else if (weight <= 53)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 9:
+        if (weight <= 30)
+        {
+            return light;
+        }
+        else if (weight <= 60)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 10:
+        if (weight <= 33)
+        {
+            return light;
+        }
+        else if (weight <= 66)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 11:
+        if (weight <= 38)
+        {
+            return light;
+        }
+        else if (weight <= 76)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 12:
+        if (weight <= 43)
+        {
+            return light;
+        }
+        else if (weight <= 86)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 13:
+        if (weight <= 50)
+        {
+            return light;
+        }
+        else if (weight <= 100)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 14:
+        if (weight <= 58)
+        {
+            return light;
+        }
+        else if (weight <= 116)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 15:
+        if (weight <= 66)
+        {
+            return light;
+        }
+        else if (weight <= 133)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 16:
+        if (weight <= 76)
+        {
+            return light;
+        }
+        else if (weight <= 153)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 17:
+        if (weight <= 86)
+        {
+            return light;
+        }
+        else if (weight <= 173)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 18:
+        if (weight <= 100)
+        {
+            return light;
+        }
+        else if (weight <= 200)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 19:
+        if (weight <= 116)
+        {
+            return light;
+        }
+        else if (weight <= 233)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 20:
+        if (weight <= 133)
+        {
+            return light;
+        }
+        else if (weight <= 266)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 21:
+        if (weight <= 153)
+        {
+            return light;
+        }
+        else if (weight <= 306)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 22:
+        if (weight <= 173)
+        {
+            return light;
+        }
+        else if (weight <= 346)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 23:
+        if (weight <= 200)
+        {
+            return light;
+        }
+        else if (weight <= 400)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 24:
+        if (weight <= 233)
+        {
+            return light;
+        }
+        else if (weight <= 466)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 25:
+        if (weight <= 266)
+        {
+            return light;
+        }
+        else if (weight <= 533)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 26:
+        if (weight <= 306)
+        {
+            return light;
+        }
+        else if (weight <= 613)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 27:
+        if (weight <= 346)
+        {
+            return light;
+        }
+        else if (weight <= 693)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 28:
+        if (weight <= 400)
+        {
+            return light;
+        }
+        else if (weight <= 800)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+    case 29:
+        if (weight <= 466)
+        {
+            return light;
+        }
+        else if (weight <= 933)
+        {
+            return mediumLoad;
+        }
+        else
+        {
+            return heavy;
+        }
+
+    default:
+        return incalculable;
     }
 }
