@@ -155,4 +155,6 @@ short EnumToBonus(sizeType sizeType);
 
 loadType CalcLoad(short strength, unsigned short weight);
 
+short CalcMaxLoad(short strength);
+
 #endif

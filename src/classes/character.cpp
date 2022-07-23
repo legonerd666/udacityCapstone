@@ -921,29 +921,55 @@ string character::ToStringForConsole()
     character += "\n";
     character += "|";
     character += "\n";
-    unsigned short totalWeight = 0;
-    for (auto &&item : _gear)
     {
-        character += "|         Name:                      ";
-        character += item->Name();
-        character += "\n";
-        character += "|         Description:               ";
-        character += item->Description();
-        character += "\n";
-        character += "|         Weight:                    ";
-        character += to_string(item->Weight());
+        unsigned short totalWeight = 0;
+        for (auto &&item : _gear)
+        {
+            character += "|         Name:                      ";
+            character += item->Name();
+            character += "\n";
+            character += "|         Description:               ";
+            character += item->Description();
+            character += "\n";
+            character += "|         Weight:                    ";
+            character += to_string(item->Weight());
+            character += " lbs.";
+            character += "\n";
+            character += "|";
+            character += "\n";
+            totalWeight += item->Weight();
+        }
+        character += "|     Total Weight:                  ";
+        character += to_string(totalWeight);
         character += " lbs.";
+        character += " You are carrying a ";
+        character += EnumToString(CalcLoad(_abilityScores[0]->AdjustedScore(), totalWeight));
+        character += " Load.";
         character += "\n";
         character += "|";
         character += "\n";
-        totalWeight += item->Weight();
+        character += "|     Max Carry Weight:";
+        character += "\n";
+        character += "|";
+        character += "\n";
+        character += "|         Lift Over Head:            ";
+        {
+            short maxLoad = CalcMaxLoad(_abilityScores[0]->AdjustedScore());
+            character += to_string(maxLoad);
+            character += " lbs.";
+            character += "\n";
+            character += "|         Lift Off Ground:           ";
+            character += to_string(maxLoad * 2);
+            character += " lbs.";
+            character += "\n";
+            character += "|         Push/Drag:                 ";
+            character += to_string(maxLoad * 5);
+            character += " lbs.";
+        }
     }
-    character += "|     Total Weight:                  ";
-    character += to_string(totalWeight);
-    character += " lbs.";
-    character += " You are carrying a ";
-    character += EnumToString(CalcLoad(_abilityScores[0]->AdjustedScore(), totalWeight));
-    character += " Load.";
+    character += "\n";
+    character += "|";
+    character += "\n";
 
 #pragma endregion Gear
 

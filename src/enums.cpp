@@ -270,6 +270,7 @@ short EnumToBonus(sizeType sizeType)
 }
 
 loadType CalcLoad(short strength, unsigned short weight)
+
 {
     switch (strength)
     {
@@ -653,5 +654,101 @@ loadType CalcLoad(short strength, unsigned short weight)
 
     default:
         return incalculable;
+    }
+}
+
+short CalcMaxLoad(short strength)
+{
+    switch (strength)
+    {
+    case 1:
+        return 10;
+
+    case 2:
+        return 20;
+
+    case 3:
+        return 30;
+
+    case 4:
+        return 40;
+
+    case 5:
+        return 50;
+
+    case 6:
+        return 60;
+
+    case 7:
+        return 70;
+
+    case 8:
+        return 80;
+
+    case 9:
+        return 90;
+
+    case 10:
+        return 100;
+
+    case 11:
+        return 115;
+
+    case 12:
+        return 130;
+
+    case 13:
+        return 150;
+
+    case 14:
+        return 175;
+
+    case 15:
+        return 200;
+
+    case 16:
+        return 230;
+
+    case 17:
+        return 260;
+
+    case 18:
+        return 300;
+
+    case 19:
+        return 350;
+
+    case 20:
+        return 400;
+
+    case 21:
+        return 460;
+
+    case 22:
+        return 520;
+
+    case 23:
+        return 600;
+
+    case 24:
+        return 700;
+
+    case 25:
+        return 800;
+
+    case 26:
+        return 920;
+
+    case 27:
+        return 1040;
+
+    case 28:
+        return 1200;
+
+    case 29:
+        return 1400;
+
+    default:
+        return -1;
     }
 }
