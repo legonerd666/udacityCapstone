@@ -77,10 +77,10 @@ character::character()
     _spellResistance = 0;
     _proficiencies = "Example Proficiencies";
 
-    for (int i = 0; i < 4; i++)
-    {
-        _currency[i] = make_unique<currency>();
-    }
+    _currency[0] = make_unique<currency>(copper, 0);
+    _currency[1] = make_unique<currency>(silver, 0);
+    _currency[2] = make_unique<currency>(gold, 0);
+    _currency[3] = make_unique<currency>(platinum, 0);
 
     _xp = 0;
     _nextLevelXpAmount = 0;
@@ -972,6 +972,37 @@ string character::ToStringForConsole()
     character += "\n";
 
 #pragma endregion Gear
+
+#pragma region Money
+
+    character += "|     Money:";
+    character += "\n";
+    character += "|";
+    character += "\n";
+    for (auto &&currency : _currency)
+    {
+        character += "|         ";
+        character += EnumToString(currency->Type());
+        character += ":";
+        switch (EnumToString(currency->Type()).size())
+        {
+        case 6:
+            character += "                    ";
+            break;
+        case 4:
+            character += "                      ";
+            break;
+        default:
+            character += "                  ";
+            break;
+        }
+        character += to_string(currency->Amount());
+        character += "\n";
+        character += "|";
+        character += "\n";
+    }
+
+#pragma endregion Money
 
 #pragma endregion Equipment
 

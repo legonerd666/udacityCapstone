@@ -159,6 +159,21 @@ string EnumToString(loadType loadType)
     }
 }
 
+string EnumToString(currencyType currencyType)
+{
+    switch (currencyType)
+    {
+    case copper:
+        return "Copper";
+    case silver:
+        return "Silver";
+    case gold:
+        return "Gold";
+    default:
+        return "Platinum";
+    }
+}
+
 short EnumToIndex(abilityType abilityType)
 {
     switch (abilityType)

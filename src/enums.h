@@ -145,6 +145,8 @@ string EnumToString(skillType skillType);
 
 string EnumToString(loadType loadType);
 
+string EnumToString(currencyType currencyType);
+
 short EnumToIndex(abilityType abilityType);
 
 abilityType EnumToAbilityType(saveType saveType);

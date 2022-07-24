@@ -6,16 +6,19 @@
 
 using namespace std;
 
-class currency {
+class currency
+{
 public:
     currency();
+    currency(currencyType type, int amount);
 
-    //Getters
-    // string ToString();
+    // Getters
+    currencyType Type();
+    int Amount();
 
-    //Setters
-    // void Type(currencyType newType);
-    // void Amount(int newAmount);
+    // Setters
+    //  void Type(currencyType newType);
+    //  void Amount(int newAmount);
 
 private:
     currencyType _type;
