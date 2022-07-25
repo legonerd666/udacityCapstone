@@ -116,7 +116,10 @@ string character::ToStringForConsole()
     character += "|     Class(es):                 ";
     for (auto &&role : _roles)
     {
-        character += role->ToString();
+        character += role->Name();
+        character += " ";
+        character += role->Level();
+        character += ". ";
     }
     character += "\n";
 
@@ -129,7 +132,7 @@ string character::ToStringForConsole()
     character += "\n";
 
     character += "|     Race:                      ";
-    character += _race->ToString();
+    character += _race->Name();
     character += "\n";
 
     character += "|     Gender:                    ";
@@ -797,6 +800,8 @@ string character::ToStringForConsole()
 
 #pragma region Equipment
 
+    character += "|--------------------------------------------------------------------------------------------------------------------";
+    character += "\n";
     character += "| Equipment and Gear:";
     character += "\n";
     character += "|";
@@ -1005,6 +1010,85 @@ string character::ToStringForConsole()
 #pragma endregion Money
 
 #pragma endregion Equipment
+
+#pragma region Feats
+
+    character += "|--------------------------------------------------------------------------------------------------------------------";
+    character += "\n";
+    character += "| Feats: ";
+    character += "\n";
+    character += "|";
+    character += "\n";
+    for (auto &&feat : _feats)
+    {
+        character += "|     Name:                          ";
+        character += feat->Name();
+        character += "\n";
+        character += "|     Description:                   ";
+        character += feat->Description();
+        character += "\n";
+        character += "|";
+        character += "\n";
+    }
+
+#pragma endregion Feats
+
+#pragma region Racial Traits
+
+    character += "|--------------------------------------------------------------------------------------------------------------------";
+    character += "\n";
+    character += "| Racial Traits: ";
+    character += "\n";
+    character += "|";
+    character += "\n";
+    for (auto &&trait : _race->RacialTraits())
+    {
+        character += "|     Name:                          ";
+        character += trait->Name();
+        character += "\n";
+        character += "|     Description:                   ";
+        character += trait->Description();
+        character += "\n";
+        character += "|";
+        character += "\n";
+    }
+
+#pragma endregion Racial Traits
+
+#pragma region Class Features
+
+    character += "|--------------------------------------------------------------------------------------------------------------------";
+    character += "\n";
+    character += "| Class Features: ";
+    character += "\n";
+    character += "|";
+    character += "\n";
+    for (auto &&role : _roles)
+    {
+        if (role->ClassFeatures().size() > 0)
+        {
+            character += "|     ";
+            character += role->Name();
+            character += ":";
+            character += "\n";
+            character += "|";
+            character += "\n";
+
+            for (auto &&feature : role->ClassFeatures())
+            {
+                character += "|         Name:                      ";
+                character += feature->Name();
+                character += "\n";
+                character += "|         Description:               ";
+                character += feature->Description();
+                character += "\n";
+                character += "|";
+                character += "\n";
+            }
+        }
+    }
+
+#pragma endregion Class Features
 
     return character;
 }

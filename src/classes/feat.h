@@ -9,18 +9,15 @@ class feat
 {
 public:
     feat();
+    feat(string name, string description);
 
-    //Getters
-    string ToString();
+    // Getters
+    string Name();
+    string Description();
 
-    //Setters
-    void Prerequisites(string newPrerequisites);
-    void Benefit(string Benefit);
-    
 private:
-    string _prerequisites;
-    string _benefit;
+    string _name;
+    string _description;
 };
-
 
 #endif

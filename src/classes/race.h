@@ -5,24 +5,25 @@
 #include <vector>
 #include <memory>
 
-#include "specialAbility.h"
+#include "feat.h"
 
 using namespace std;
 
-class race  {
+class race
+{
 public:
     race();
-    
-    //Getters
-    string ToString();
 
-    //Setters
-    //void Name(string newName);
-    //void RacialAblities(vector<unique_ptr<specialAbility>>&& newRacialAbilities);
+    // Getters
+    string Name();
+    vector<shared_ptr<feat>> RacialTraits();
+
+    // Setters
+    // void Name(string newName);
+    // void RacialAblities(vector<unique_ptr<specialAbility>>&& newRacialAbilities);
 private:
     string _name;
-    vector<unique_ptr<specialAbility>> _racialAbilities;
+    vector<shared_ptr<feat>> _racialTraits;
 };
-
 
 #endif
