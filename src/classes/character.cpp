@@ -84,6 +84,8 @@ character::character()
 
     _xp = 0;
     _nextLevelXpAmount = 0;
+
+    _roles.emplace_back(make_unique<role>());
 }
 
 // Outputs the character data as a nicely formatted string
@@ -1089,6 +1091,58 @@ string character::ToStringForConsole()
     }
 
 #pragma endregion Class Features
+
+#pragma region Exp
+
+    character += "|--------------------------------------------------------------------------------------------------------------------";
+    character += "\n";
+    character += "| Experience Points:                 ";
+    character += to_string(_xp);
+    character += "\n";
+    character += "|";
+    character += "\n";
+    character += "| Next Level:                        ";
+    character += to_string(_nextLevelXpAmount);
+    character += "\n";
+    character += "|";
+    character += "\n";
+
+#pragma endregion Exp
+
+#pragma region Spells
+
+    character += "|--------------------------------------------------------------------------------------------------------------------";
+    character += "\n";
+    character += "| Spells:";
+    character += "\n";
+    character += "|";
+    character += "\n";
+    for (auto &&role : _roles)
+    {
+        if (role->IsCastingClass())
+        {
+            character += "|     ";
+            character += role->Name();
+            character += ":";
+            character += "\n";
+            character += "|";
+            character += "\n";
+
+            for (short i = 0; i < 10; i++)
+            {
+                character += "|         Spell Level:               ";
+                character += to_string(role->SpellStats()[i]->SpellLevel());
+                character += "\n";
+                //  character += "|         Description:               ";
+                //  character += feature->Description();
+                character += "\n";
+                character += "|";
+                character += "\n";
+            }
+        }
+    }
+
+#pragma endregion Spells
 
     return character;
 }

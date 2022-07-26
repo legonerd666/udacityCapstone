@@ -10,21 +10,19 @@ class spellStat
 {
 public:
     spellStat();
+    spellStat(unsigned short spellLevel, short spellsKnown, abilityType abilityType, short spellsPerDay, short bonusSpells);
 
-    //Getters
-    string ToString();
-    short SpellDC();
-
-    //Setters
-    void SpellLevel(unsigned short newSpellLevel);
-    void SpellsKnown(short newSpellsKnown);
-    void AbilityType(abilityType newAbilityType);
-    void SpellsPerDay(short newSpellsPerDay);
-    void BonusSpells(short newBonusSpells);
+    // Getters
+    unsigned short SpellLevel();
+    short SpellsKnown();
+    abilityType AbilityType();
+    short SpellsPerDay();
+    short BonusSpells();
+    short SpellDC(short abilityMod);
 
 private:
     unsigned short _spellLevel;
-    short spellsKnown;
+    short _spellsKnown;
     abilityType _abilityType;
     short _spellsPerDay;
     short _bonusSpells;

@@ -20,20 +20,16 @@ public:
     string Name();
     unsigned short Level();
     vector<shared_ptr<feat>> ClassFeatures();
-
-    // Setters
-    //  void Proficiencies(string newProficiencies);
-    //  void ClassFeatures(vector<unique_ptr<specialAbility>>&& newClassFeatures);
-    //  void Level(unsigned short newLevel);
-    //  void SpellStats(unique_ptr<spellStat> newSpellStats [10]);
-    //  void Spells(vector<unique_ptr<spell>>&& spells);
+    shared_ptr<spellStat> *SpellStats();
+    bool IsCastingClass();
 
 private:
     string _name;
     unsigned short _level;
     vector<shared_ptr<feat>> _classFeatures;
-    unique_ptr<spellStat> spellStats[10];
+    shared_ptr<spellStat> _spellStats[10];
     vector<unique_ptr<spell>> spells;
+    bool _isCastingClass;
 };
 
 #endif
