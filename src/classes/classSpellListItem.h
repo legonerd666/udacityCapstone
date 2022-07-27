@@ -1,3 +1,6 @@
+#ifndef CLASSSPELLLISTITEM_H
+#define CLASSSPELLLISTITEM_H
+
 #include "../enums.h"
 
 class classSpellListItem
@@ -14,3 +17,5 @@ private:
     casterType _casterType;
     unsigned short _level;
 };
+
+#endif
