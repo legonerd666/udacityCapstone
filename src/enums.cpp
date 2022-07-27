@@ -29,6 +29,27 @@ string EnumToString(alignment alignment)
     }
 }
 
+string EnumToString(abilityType abilityType)
+{
+    switch (abilityType)
+    {
+    case strength:
+        return "Strength";
+    case dexterity:
+        return "Dexterity";
+    case constitution:
+        return "Constitution";
+    case intelligence:
+        return "Intelligence";
+    case wisdom:
+        return "Wisdom";
+    case charisma:
+        return "Charisma";
+    default:
+        return "Invalid Enum abilityType";
+    }
+}
+
 string EnumToString(die die)
 {
     switch (die)

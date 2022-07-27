@@ -9,7 +9,6 @@ using namespace std;
 
 character::character()
 {
-
     _name = "Example Name";
     _alignment = LG;
     _player = "Example Player";
@@ -23,11 +22,6 @@ character::character()
     _weight = 0;
     _hairColor = "Example Hair Color";
     _eyeColor = "Example Eye Color";
-
-    for (int i = 0; i < 6; i++)
-    {
-        _abilityScores[i] = make_unique<abilityScore>();
-    }
     _hitpoints = make_unique<hitPoints>();
     _speed = make_unique<speed>();
     _initiative = make_unique<initiative>();
@@ -1250,6 +1244,14 @@ string character::ToStringForConsole()
 #pragma endregion Spells
 
     return character;
+}
+
+void character::AbilityScores(short newAbilityScores[6])
+{
+    for (short i = 0; i < 6; i++)
+    {
+        _abilityScores[i] = make_unique<abilityScore>(newAbilityScores[i]);
+    }
 }
 
 short character::CMB()

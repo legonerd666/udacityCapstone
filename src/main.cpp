@@ -2,10 +2,12 @@
 
 #include "classes/character.h"
 #include "enums.h"
+#include "creator.h"
+#include <memory>
 
 int main()
 {
-    character testCharacter;
-    std::cout << testCharacter.ToStringForConsole() << std::endl;
+    std::unique_ptr<character> testCharacter = make_unique<character>();
+    Intro(std::move(testCharacter));
     return 0;
 }

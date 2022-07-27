@@ -137,6 +137,8 @@ enum loadType
 
 string EnumToString(alignment alignment);
 
+string EnumToString(abilityType abilityType);
+
 string EnumToString(die die);
 
 string EnumToString(saveType saveType);

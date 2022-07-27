@@ -48,7 +48,7 @@ public:
     // void HairColor(string newHairColor);
     // void EyeColor(string newEyeColor);
 
-    // void AbilityScores(unique_ptr<abilityScore> newAbilityScores [6]);
+    void AbilityScores(short newAbilityScores[6]);
     // void HitPoints(unique_ptr<hitPoints> newHitPoints);
     // void Speed(unique_ptr<speed> newSpeed);
     // void ArmorClass(unique_ptr<armorClass> newArmorClass);
