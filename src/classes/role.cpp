@@ -26,6 +26,11 @@ shared_ptr<spellStat> *role::SpellStats()
     return _spellStats;
 }
 
+vector<shared_ptr<spell>> role::Spells()
+{
+    return _spells;
+}
+
 bool role::IsCastingClass()
 {
     return _isCastingClass;

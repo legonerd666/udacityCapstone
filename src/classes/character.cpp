@@ -1127,31 +1127,48 @@ string character::ToStringForConsole()
             character += "\n";
             character += "|";
             character += "\n";
-
+            character += "|         Stats:";
+            character += "\n";
+            character += "|";
+            character += "\n";
             for (short i = 0; i < 10; i++)
             {
                 if (role->SpellStats()[i]->SpellsKnown() > 0)
                 {
-                    character += "|         Spell Level:               ";
+                    character += "|             Spell Level:           ";
                     character += to_string(role->SpellStats()[i]->SpellLevel());
                     character += "\n";
                     character += "|";
                     character += "\n";
-                    character += "|             Spells Known:          ";
+                    character += "|                 Spells Known:      ";
                     character += to_string(role->SpellStats()[i]->SpellsKnown());
                     character += "\n";
-                    character += "|             Spell Save DC:         ";
+                    character += "|                 Spell Save DC:     ";
                     character += to_string(role->SpellStats()[i]->SpellDC(_abilityScores[EnumToIndex(role->SpellStats()[i]->AbilityType())]->AdjustedModifier()));
                     character += "\n";
-                    character += "|             Spells Per Day:        ";
+                    character += "|                 Spells Per Day:    ";
                     character += to_string(role->SpellStats()[i]->SpellsPerDay());
                     character += "\n";
-                    character += "|             Bonus Spells:          ";
+                    character += "|                 Bonus Spells:      ";
                     character += to_string(role->SpellStats()[i]->BonusSpells());
                     character += "\n";
                     character += "|";
                     character += "\n";
                 }
+            }
+
+            character += "|         Spells:"
+
+                for (auto &&spell : role->Spells())
+            {
+                character += "|             Name:                  ";
+                character += spell->;
+                character += "\n";
+                character += "|";
+                character += "\n";
+                character += "|                 Magic School:      ";
+                character += to_string(role->SpellStats()[i]->SpellsKnown());
+                character += "\n";
             }
         }
     }

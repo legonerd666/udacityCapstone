@@ -21,6 +21,7 @@ public:
     unsigned short Level();
     vector<shared_ptr<feat>> ClassFeatures();
     shared_ptr<spellStat> *SpellStats();
+    vector<shared_ptr<spell>> Spells();
     bool IsCastingClass();
 
 private:
@@ -28,7 +29,7 @@ private:
     unsigned short _level;
     vector<shared_ptr<feat>> _classFeatures;
     shared_ptr<spellStat> _spellStats[10];
-    vector<unique_ptr<spell>> spells;
+    vector<shared_ptr<spell>> _spells;
     bool _isCastingClass;
 };
 

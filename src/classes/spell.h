@@ -12,24 +12,22 @@ class spell
 public:
     spell();
 
-    //Getters
-    string ToString();
-    vector<string> Roles();
-
-    //Setters
-    void School(magicSchool newSchool);
-    void Roles(vector<casterType> newCasterTypes);
-    void Level(unsigned short newLevel);
-    void CastingTime(string newCastingTime);
-    void Components(string newComponents);
-    void Range(string newRange);
-    void Target(string newTarget);
-    void Duration(string newDuration);
-    void SavingThrow(string newSavingThrow);
-    void SpellResistance(string newSpellResistance);
-    void Description(string newDescription);
+    // Getters
+    string Name();
+    magicSchool School();
+    vector<casterType> Roles();
+    unsigned short Level();
+    string CastingTime();
+    string Components();
+    string Range();
+    string Target();
+    string Duration();
+    saveType SavingThrow();
+    string SpellResistance();
+    string Description();
 
 private:
+    string _name;
     magicSchool _school;
     vector<casterType> _casterTypes;
     unsigned short _level;
@@ -38,10 +36,9 @@ private:
     string _range;
     string _target;
     string _duration;
-    string _savingThrow;
+    saveType _savingThrow;
     string _spellResistance;
     string _description;
-
 };
 
 #endif
