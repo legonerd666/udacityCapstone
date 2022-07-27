@@ -147,6 +147,10 @@ string EnumToString(loadType loadType);
 
 string EnumToString(currencyType currencyType);
 
+string EnumToString(magicSchool magicSchool);
+
+string EnumToString(casterType casterType);
+
 short EnumToIndex(abilityType abilityType);
 
 abilityType EnumToAbilityType(saveType saveType);

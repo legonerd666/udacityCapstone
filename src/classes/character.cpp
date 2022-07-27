@@ -1157,17 +1157,64 @@ string character::ToStringForConsole()
                 }
             }
 
-            character += "|         Spells:"
+            character += "|         Spells:";
+            character += "\n";
+            character += "|";
+            character += "\n";
 
-                for (auto &&spell : role->Spells())
+            for (auto &&spell : role->Spells())
             {
                 character += "|             Name:                  ";
-                character += spell->;
+                character += spell->Name();
                 character += "\n";
                 character += "|";
                 character += "\n";
                 character += "|                 Magic School:      ";
-                character += to_string(role->SpellStats()[i]->SpellsKnown());
+                character += EnumToString(spell->School());
+                character += "\n";
+                character += "|                 Level:             ";
+                for (auto &&classSpellListItem : spell->Roles())
+                {
+                    character += EnumToString(classSpellListItem->CasterType());
+                    character += " ";
+                    character += to_string(classSpellListItem->Level());
+                    if (classSpellListItem != spell->Roles().back())
+                        character += ", ";
+                }
+                character += "\n";
+                character += "|                 Casting Time:      ";
+                character += spell->CastingTime();
+                character += "\n";
+                character += "|                 Components:        ";
+                character += spell->Components();
+                character += "\n";
+                character += "|                 Range:             ";
+                character += spell->Range();
+                character += "\n";
+                character += "|                 Target:            ";
+                character += spell->Target();
+                character += "\n";
+                character += "|                 Duration:          ";
+                character += spell->Duration();
+                character += "\n";
+                character += "|                 Saving Throw:      ";
+                character += EnumToString(spell->SavingThrow());
+                character += "\n";
+                character += "|                 Spell Resistance:  ";
+                switch (spell->SpellResistance())
+                {
+                case true:
+                    character += "yes";
+                    break;
+                default:
+                    character += "no";
+                    break;
+                }
+                character += "\n";
+                character += "|                 Description:       ";
+                character += spell->Description();
+                character += "\n";
+                character += "|";
                 character += "\n";
             }
         }

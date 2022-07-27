@@ -4,8 +4,7 @@ spell::spell()
 {
     _name = "Example Spell";
     _school = evocation;
-    _casterTypes.emplace_back(sorcererWizard);
-    _level = 0;
+    _roles.emplace_back(make_shared<classSpellListItem>());
     _castingTime = "Example Casting Time";
     _components = "V, S, M (Example Material Component)";
     _range = "Example Range";
@@ -16,26 +15,57 @@ spell::spell()
     _description = "Example Description";
 }
 
-string spell::Name() {}
+string spell::Name()
+{
+    return _name;
+}
 
-magicSchool spell::School() {}
+magicSchool spell::School()
+{
+    return _school;
+}
 
-vector<casterType> spell::Roles() {}
+vector<shared_ptr<classSpellListItem>> spell::Roles()
+{
+    return _roles;
+}
 
-unsigned short spell::Level() {}
+string spell::CastingTime()
+{
+    return _castingTime;
+}
 
-string spell::CastingTime() {}
+string spell::Components()
+{
+    return _components;
+}
 
-string spell::Components() {}
+string spell::Range()
+{
+    return _range;
+}
 
-string spell::Range() {}
+string spell::Target()
+{
+    return _target;
+}
 
-string spell::Target() {}
+string spell::Duration()
+{
+    return _duration;
+}
 
-string spell::Duration() {}
+saveType spell::SavingThrow()
+{
+    return _savingThrow;
+}
 
-saveType spell::SavingThrow() {}
+bool spell::SpellResistance()
+{
+    return _spellResistance;
+}
 
-bool spell::SpellResistance() {}
-
-string spell::Description() {}
+string spell::Description()
+{
+    return _description;
+}

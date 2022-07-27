@@ -174,6 +174,48 @@ string EnumToString(currencyType currencyType)
     }
 }
 
+string EnumToString(magicSchool magicSchool)
+{
+    switch (magicSchool)
+    {
+    case abjuration:
+        return "Abjuration";
+    case conjuration:
+        return "Conjuration";
+    case divination:
+        return "Divination";
+    case enchantment:
+        return "Enchantment";
+    case evocation:
+        return "Evocation";
+    case illusion:
+        return "Illusion";
+    case necromancy:
+        return "Necromancy";
+    case transmutation:
+        return "Transmutation";
+    default:
+        return "Universal";
+    }
+}
+
+string EnumToString(casterType casterType)
+{
+    switch (casterType)
+    {
+    case bard:
+        return "Bard";
+    case cleric:
+        return "Cleric";
+    case druid:
+        return "Druid";
+    case paladin:
+        return "Paladin";
+    default:
+        return "Sorcerer/Wizard";
+    }
+}
+
 short EnumToIndex(abilityType abilityType)
 {
     switch (abilityType)

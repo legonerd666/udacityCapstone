@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include "../enums.h"
+#include "classSpellListItem.h"
+#include <memory>
 
 using namespace std;
 
@@ -15,8 +17,7 @@ public:
     // Getters
     string Name();
     magicSchool School();
-    vector<casterType> Roles();
-    unsigned short Level();
+    vector<shared_ptr<classSpellListItem>> Roles();
     string CastingTime();
     string Components();
     string Range();
@@ -29,8 +30,7 @@ public:
 private:
     string _name;
     magicSchool _school;
-    vector<casterType> _casterTypes;
-    unsigned short _level;
+    vector<shared_ptr<classSpellListItem>> _roles;
     string _castingTime;
     string _components;
     string _range;
