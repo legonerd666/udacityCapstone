@@ -59,7 +59,7 @@ string EnumToString(saveType saveType)
     case reflex:
         return "Reflex";
     case will:
-        return "will";
+        return "Will";
     default:
         return "Error: Invalid Save Enum";
     }
