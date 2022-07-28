@@ -85,6 +85,7 @@ character::character()
 // Outputs the character data as a nicely formatted string
 string character::ToStringForConsole()
 {
+    unique_lock<mutex> lock(_mutex);
 
 #pragma region Characteristics
 
@@ -1243,11 +1244,14 @@ string character::ToStringForConsole()
 
 #pragma endregion Spells
 
+    character += "|--------------------------------------------------------------------------------------------------------------------";
+    character += "\n";
     return character;
 }
 
 void character::AbilityScores(short newAbilityScores[6])
 {
+    unique_lock<mutex> lock(_mutex);
     for (short i = 0; i < 6; i++)
     {
         _abilityScores[i] = make_unique<abilityScore>(newAbilityScores[i]);

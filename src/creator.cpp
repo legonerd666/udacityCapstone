@@ -8,15 +8,25 @@
 
 using namespace std;
 
-void Intro(unique_ptr<character> &&character)
+creator::creator() {}
+
+creator::~creator()
+{
+    for (auto &&thread : _threads)
+    {
+        thread.join();
+    }
+}
+
+void creator::Intro(shared_ptr<character> &&characterSheet)
 {
     DelayedCout("Welcome to the character creator, I will walk you through creating a character in Pathfinder 1e right here in the console!");
     DelayedCout("What will happen is as follows: I will ask you questions about the next section in the character sheet, and you will type an appropriate response in the console. Then we repeat this step for the next field.");
     DelayedCout("After all the required steps have been completed I will do a bit of math and fill out any other fields that don't need your input and print your new character sheet to the console for you to use!");
-    AbilityScores(move(character));
+    AbilityScores(move(characterSheet));
 }
 
-void AbilityScores(unique_ptr<character> &&character)
+void creator::AbilityScores(shared_ptr<character> &&characterSheet)
 {
     short abilityScores[6];
     DelayedCout("First up: ability scores!");
@@ -30,10 +40,10 @@ void AbilityScores(unique_ptr<character> &&character)
     abilityScores[3] = GetScore(intelligence);
     abilityScores[4] = GetScore(wisdom);
     abilityScores[5] = GetScore(charisma);
-    character->AbilityScores(abilityScores);
+    _threads.emplace_back(thread(&character::AbilityScores, characterSheet, abilityScores));
 }
 
-short GetScore(abilityType abilityType)
+short creator::GetScore(abilityType abilityType)
 {
     DelayedCout("What do you want your " + EnumToString(abilityType) + " to be: ", false);
     string score;
@@ -57,13 +67,13 @@ short GetScore(abilityType abilityType)
     }
 }
 
-void DelayedCout(string &&string)
+void creator::DelayedCout(string &&string)
 {
     cout << string << endl;
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
 }
 
-void DelayedCout(string &&string, bool doNewLine)
+void creator::DelayedCout(string &&string, bool doNewLine)
 {
     if (doNewLine)
     {

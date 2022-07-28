@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include <mutex>
 
 #include "abilityScore.h"
 #include "speed.h"
@@ -108,6 +109,8 @@ private:
 
     unsigned int _xp;
     unsigned int _nextLevelXpAmount;
+
+    mutex _mutex;
 
     short CMB();
     short CMD();

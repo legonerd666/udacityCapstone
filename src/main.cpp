@@ -7,7 +7,8 @@
 
 int main()
 {
-    std::unique_ptr<character> testCharacter = make_unique<character>();
-    Intro(std::move(testCharacter));
+    std::shared_ptr<character> testCharacter = make_shared<character>();
+    creator Creator = creator();
+    Creator.Intro(std::move(testCharacter));
     return 0;
 }
