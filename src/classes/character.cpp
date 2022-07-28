@@ -14,7 +14,6 @@ character::character()
     _player = "Example Player";
     _deity = "Example Deity";
     _homeland = "Example Homeland";
-    _race = make_unique<race>();
     _gender = "Example Gender";
     _age = 0;
     _height = 0;
@@ -1256,6 +1255,11 @@ void character::AbilityScores(short newAbilityScores[6])
     }
 }
 
+void character::Race(string name)
+{
+    _race = make_unique<race>(name);
+}
+
 void character::Size(sizeType sizeType)
 {
     unique_lock<mutex> lock(_mutex);
@@ -1266,6 +1270,12 @@ void character::Speed(short baseSpeed)
 {
     unique_lock<mutex> lock(_mutex);
     _speed = make_unique<speed>(baseSpeed);
+}
+
+void character::AddRacialTrait(shared_ptr<feat> &&racialTrait)
+{
+    unique_lock<mutex> lock(_mutex);
+    _race->AddRacialTrait(move(racialTrait));
 }
 
 short character::CMB()

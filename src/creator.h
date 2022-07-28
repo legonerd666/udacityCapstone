@@ -27,6 +27,7 @@ private:
     short GetScoreAdj(abilityType abilityType);
     sizeType GetSize();
     short GetSpeed();
+    void RacialTraits(shared_ptr<character> character);
     vector<thread> _threads;
 };
 

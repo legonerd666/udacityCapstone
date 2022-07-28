@@ -13,6 +13,7 @@ class race
 {
 public:
     race();
+    race(string name);
 
     // Getters
     string Name();
@@ -21,6 +22,10 @@ public:
     // Setters
     // void Name(string newName);
     // void RacialAblities(vector<unique_ptr<specialAbility>>&& newRacialAbilities);
+
+    // Adders
+    void AddRacialTrait(shared_ptr<feat> &&racialTrait);
+
 private:
     string _name;
     vector<shared_ptr<feat>> _racialTraits;

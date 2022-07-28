@@ -46,14 +46,18 @@ void creator::AbilityScores(shared_ptr<character> &&characterSheet)
 
 void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6])
 {
+    DelayedCout("Now that that's done, it's time to pick your race!");
+    DelayedCout("Look in the Pathfinder Core Rulebook and decide which race suits your character most;");
+    DelayedCout("Then I'll ask you for all the information about the race and add it to your character sheet!");
+    DelayedCout("Let's get a name for your race: ", false);
+    string name;
+    getline(cin, name, '\n');
+    _threads.emplace_back(thread(&character::Race, characterSheet, move(name)));
 #pragma region Ability Scores
 
     {
         short abilityScoreAdjs[6];
-        DelayedCout("Now that that's done, it's time to pick your race!");
-        DelayedCout("Look in the Pathfinder Core Rulebook and decide which race suits your character most;");
-        DelayedCout("Then I'll ask you for all the information about the race and add it to your character sheet!");
-        DelayedCout("First things first, races often come with minor adjustments to your ability scores, giving one or more stats +2 bonus or a -2 penalty.");
+        DelayedCout("Since we now have a name, First things first, races often come with minor adjustments to your ability scores, giving one or more stats +2 bonus or a -2 penalty.");
         DelayedCout("Let's add those now.");
         abilityScoreAdjs[0] = GetScoreAdj(strength);
         abilityScoreAdjs[1] = GetScoreAdj(dexterity);
@@ -69,18 +73,27 @@ void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6
     _threads.emplace_back(thread(&character::AbilityScores, characterSheet, move(abilityScores)));
 
 #pragma endregion Ability Scores
+
 #pragma region Size
 
     DelayedCout("Ok, Now let's write down your size!");
     _threads.emplace_back(thread(&character::Size, characterSheet, move(GetSize())));
 
 #pragma endregion Size
+
 #pragma region Speed
 
     DelayedCout("Time to enter their speed!");
     _threads.emplace_back(thread(&character::Speed, characterSheet, move(GetSpeed())));
 
 #pragma endregion Speed
+
+#pragma region Racial Traits
+
+    DelayedCout("Now you get to enter any racial traits!");
+    RacialTraits(characterSheet);
+
+#pragma endregion Racial Traits
 }
 
 short creator::GetScore(abilityType abilityType)
@@ -110,7 +123,7 @@ short creator::GetScore(abilityType abilityType)
 short creator::GetScoreAdj(abilityType abilityType)
 {
     DelayedCout("Is your " + EnumToString(abilityType) + " changed by your race?");
-    DelayedCout("Y/n:", false);
+    DelayedCout("Y/n: ", false);
     string isChanged;
     getline(cin, isChanged, '\n');
     if (tolower(isChanged.front()) == 'y')
@@ -212,6 +225,36 @@ short creator::GetSpeed()
         DelayedCout("Let's try again but this time just give me the number. (eg. 30)");
         return GetSpeed();
     }
+}
+
+void creator::RacialTraits(shared_ptr<character> characterSheet)
+{
+    DelayedCout("Would you like to add a racial trait?");
+    DelayedCout("Y/n: ", false);
+    string addTrait;
+    getline(cin, addTrait, '\n');
+    if (tolower(addTrait.front()) == 'y')
+    {
+        DelayedCout("Lemme know the name of the racial trait and I'll write it down for you: ", false);
+        string name;
+        getline(cin, name, '\n');
+        DelayedCout("Great name! Now you need to tell me what the trait does and then you can make any others if you have more to add.");
+        DelayedCout(name + "'s description: ", false);
+        string description;
+        getline(cin, description, '\n');
+        _threads.emplace_back(&character::AddRacialTrait, characterSheet, move(make_shared<feat>(name, description)));
+        RacialTraits(move(characterSheet));
+    }
+    else if (tolower(addTrait.front()) == 'n')
+    {
+        return;
+    }
+    else
+    {
+        DelayedCout("Please answer either Y or n.");
+        RacialTraits(move(characterSheet));
+    }
+    return;
 }
 
 void creator::DelayedCout(string &&string)

@@ -50,6 +50,7 @@ public:
     // void EyeColor(string newEyeColor);
 
     void AbilityScores(short newAbilityScores[6]);
+    void Race(string name);
     void Size(sizeType sizeType);
     void Speed(short baseSpeed);
     // void HitPoints(unique_ptr<hitPoints> newHitPoints);
@@ -72,6 +73,9 @@ public:
 
     // void Xp(unsigned int newXp);
     // void NextLevelXpAmount(unsigned int newNextLevelXpAmount);
+
+    // Adders
+    void AddRacialTrait(shared_ptr<feat> &&racialTrait);
 
 private:
     string _name;
