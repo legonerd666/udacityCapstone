@@ -13,9 +13,14 @@ class creator
 public:
     creator();
     ~creator();
+
     void Intro(shared_ptr<character> &&character);
     void AbilityScores(shared_ptr<character> &&character);
+    void Race(shared_ptr<character> &&character, short abilityScores[6]);
+
     short GetScore(abilityType abilityType);
+    short GetScoreAdj(abilityType abilityType);
+    sizeType GetSize();
 
     void DelayedCout(string &&string);
     void DelayedCout(string &&string, bool doNewLine);

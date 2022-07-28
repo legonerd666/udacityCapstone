@@ -15,7 +15,6 @@ character::character()
     _deity = "Example Deity";
     _homeland = "Example Homeland";
     _race = make_unique<race>();
-    _size = medium;
     _gender = "Example Gender";
     _age = 0;
     _height = 0;
@@ -1256,6 +1255,12 @@ void character::AbilityScores(short newAbilityScores[6])
     {
         _abilityScores[i] = make_unique<abilityScore>(newAbilityScores[i]);
     }
+}
+
+void character::Size(sizeType sizeType)
+{
+    unique_lock<mutex> lock(_mutex);
+    _size = sizeType;
 }
 
 short character::CMB()

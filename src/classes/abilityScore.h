@@ -3,26 +3,26 @@
 
 #include "../enums.h"
 
-class abilityScore {
+class abilityScore
+{
 public:
     abilityScore();
     abilityScore(short score);
-    
-    //Getters
+
+    // Getters
     short Score();
     short AdjustedScore();
     short Modifier();
     short AdjustedModifier();
 
-    //Setters
-    // void Type(abilityType newType);
-    // void Score(short newScore);
-    // void AdjustedScore(short newAdjustedScore);
+    // Setters
+    //  void Type(abilityType newType);
+    //  void Score(short newScore);
+    //  void AdjustedScore(short newAdjustedScore);
 
 private:
     short _score;
     short _adjustedScore;
 };
-
 
 #endif

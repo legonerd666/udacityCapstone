@@ -5,8 +5,9 @@ class speed
 {
 public:
     speed();
+    speed(unsigned short baseSpeed);
 
-    //Getters
+    // Getters
     short Base();
     short Armored();
     short Fly();
@@ -14,19 +15,19 @@ public:
     short Climb();
     short Burrow();
 
-    //Setters 
-    // void Base(unsigned short newBase);
-    // void BaseTempMod(unsigned short newBaseTempMod);
-    // void Armored(unsigned short newArmored);
-    // void ArmoredTempMod(unsigned short newArmoredTempMod);
-    // void Fly(unsigned short newFly);
-    // void FlyTempMod(unsigned short newFlyTempMod);
-    // void Swim(unsigned short newSwim);
-    // void SwimTempMod(unsigned short newSwimTempMod);
-    // void Climb(unsigned short newClimb);
-    // void ClimbTempMod(unsigned short newClimbTempMod);
-    // void Burrow(unsigned short newBurrow);
-    // void BurrowTempMod(unsigned short newBurrowTempMod);
+    // Setters
+    //  void Base(unsigned short newBase);
+    //  void BaseTempMod(unsigned short newBaseTempMod);
+    //  void Armored(unsigned short newArmored);
+    //  void ArmoredTempMod(unsigned short newArmoredTempMod);
+    //  void Fly(unsigned short newFly);
+    //  void FlyTempMod(unsigned short newFlyTempMod);
+    //  void Swim(unsigned short newSwim);
+    //  void SwimTempMod(unsigned short newSwimTempMod);
+    //  void Climb(unsigned short newClimb);
+    //  void ClimbTempMod(unsigned short newClimbTempMod);
+    //  void Burrow(unsigned short newBurrow);
+    //  void BurrowTempMod(unsigned short newBurrowTempMod);
 
 private:
     unsigned short _base;
