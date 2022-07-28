@@ -22,7 +22,6 @@ character::character()
     _hairColor = "Example Hair Color";
     _eyeColor = "Example Eye Color";
     _hitpoints = make_unique<hitPoints>();
-    _speed = make_unique<speed>();
     _initiative = make_unique<initiative>();
     _armorClass = make_unique<armorClass>();
 
@@ -1261,6 +1260,12 @@ void character::Size(sizeType sizeType)
 {
     unique_lock<mutex> lock(_mutex);
     _size = sizeType;
+}
+
+void character::Speed(short baseSpeed)
+{
+    unique_lock<mutex> lock(_mutex);
+    _speed = make_unique<speed>(baseSpeed);
 }
 
 short character::CMB()

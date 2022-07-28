@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <thread>
+#include <climits>
 
 using namespace std;
 
@@ -46,6 +47,7 @@ void creator::AbilityScores(shared_ptr<character> &&characterSheet)
 void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6])
 {
 #pragma region Ability Scores
+
     {
         short abilityScoreAdjs[6];
         DelayedCout("Now that that's done, it's time to pick your race!");
@@ -65,12 +67,20 @@ void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6
         }
     }
     _threads.emplace_back(thread(&character::AbilityScores, characterSheet, move(abilityScores)));
+
 #pragma endregion Ability Scores
+#pragma region Size
 
     DelayedCout("Ok, Now let's write down your size!");
     _threads.emplace_back(thread(&character::Size, characterSheet, move(GetSize())));
-    this_thread::sleep_for(chrono::milliseconds(1));
-    cout << characterSheet->ToStringForConsole();
+
+#pragma endregion Size
+#pragma region Speed
+
+    DelayedCout("Time to enter their speed!");
+    _threads.emplace_back(thread(&character::Speed, characterSheet, move(GetSpeed())));
+
+#pragma endregion Speed
 }
 
 short creator::GetScore(abilityType abilityType)
@@ -177,6 +187,30 @@ sizeType creator::GetSize()
     {
         DelayedCout("Actually, I need the number corresponding to the size. Please enter the number this time.");
         return GetSize();
+    }
+}
+
+short creator::GetSpeed()
+{
+    DelayedCout("The base speed in feet per turn of your race is: ", false);
+    string speed;
+    getline(cin, speed, '\n');
+    try
+    {
+        if (stoi(speed) >= 0 && stoi(speed) <= USHRT_MAX)
+            return stoi(speed);
+        else
+        {
+            DelayedCout("Please unsure your speed entered is at least 0 and at most " + to_string(USHRT_MAX) + ".");
+            DelayedCout("Let's go again.");
+            return GetSpeed();
+        }
+    }
+    catch (const std::exception &e)
+    {
+        DelayedCout("I jsut need the number of feet per turn, nothing more or less.");
+        DelayedCout("Let's try again but this time just give me the number. (eg. 30)");
+        return GetSpeed();
     }
 }
 

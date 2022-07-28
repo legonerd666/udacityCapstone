@@ -51,6 +51,7 @@ public:
 
     void AbilityScores(short newAbilityScores[6]);
     void Size(sizeType sizeType);
+    void Speed(short baseSpeed);
     // void HitPoints(unique_ptr<hitPoints> newHitPoints);
     // void Speed(unique_ptr<speed> newSpeed);
     // void ArmorClass(unique_ptr<armorClass> newArmorClass);

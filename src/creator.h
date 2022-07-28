@@ -15,17 +15,18 @@ public:
     ~creator();
 
     void Intro(shared_ptr<character> &&character);
+
+    void DelayedCout(string &&string);
+    void DelayedCout(string &&string, bool doNewLine);
+
+private:
     void AbilityScores(shared_ptr<character> &&character);
     void Race(shared_ptr<character> &&character, short abilityScores[6]);
 
     short GetScore(abilityType abilityType);
     short GetScoreAdj(abilityType abilityType);
     sizeType GetSize();
-
-    void DelayedCout(string &&string);
-    void DelayedCout(string &&string, bool doNewLine);
-
-private:
+    short GetSpeed();
     vector<thread> _threads;
 };
 
