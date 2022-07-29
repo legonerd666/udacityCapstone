@@ -66,7 +66,6 @@ character::character()
     _languages = "Example Languages";
     _baseAttackBonuses.emplace_back(0);
     _spellResistance = 0;
-    _proficiencies = "Example Proficiencies";
 
     _currency[0] = make_unique<currency>(copper, 0);
     _currency[1] = make_unique<currency>(silver, 0);
@@ -1270,6 +1269,11 @@ void character::Speed(short baseSpeed)
 {
     unique_lock<mutex> lock(_mutex);
     _speed = make_unique<speed>(baseSpeed);
+}
+
+void character::Proficiencies(string proficiencies)
+{
+    _proficiencies = proficiencies;
 }
 
 void character::AddRacialTrait(shared_ptr<feat> &&racialTrait)

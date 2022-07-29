@@ -94,6 +94,16 @@ void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6
     RacialTraits(characterSheet);
 
 #pragma endregion Racial Traits
+
+#pragma region Weapon Familiarity
+
+    DelayedCout("Races often get familiarity with some weapons, I'll give you a prompt to write down any and all weapons that you gain proficiency with due to you race.");
+    DelayedCout("Weapons: ", false);
+    string weapons;
+    getline(cin, weapons, '\n');
+    _threads.emplace_back(thread(&character::Proficiencies, characterSheet, weapons));
+
+#pragma endregion Weapon Familiarity
 }
 
 short creator::GetScore(abilityType abilityType)

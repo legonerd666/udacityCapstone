@@ -53,6 +53,7 @@ public:
     void Race(string name);
     void Size(sizeType sizeType);
     void Speed(short baseSpeed);
+    void Proficiencies(string proficiencies);
     // void HitPoints(unique_ptr<hitPoints> newHitPoints);
     // void Speed(unique_ptr<speed> newSpeed);
     // void ArmorClass(unique_ptr<armorClass> newArmorClass);
