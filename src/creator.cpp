@@ -116,14 +116,27 @@ void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6
     if (characterSheet->AbilityMod(intelligence) > 0)
     {
         DelayedCout("You get to choose " + to_string(characterSheet->AbilityMod(intelligence)) + " extra languages from your race list!");
-        ExtraLanguages(characterSheet, languages);
+        ExtraLanguages(characterSheet, move(languages));
     }
     else
     {
-        _threads.emplace_back(thread(&character::Languages, characterSheet, languages));
+        _threads.emplace_back(thread(&character::Languages, characterSheet, move(languages)));
     }
 
 #pragma endregion Languages
+
+    Role(move(characterSheet));
+}
+
+void creator::Role(shared_ptr<character> &&characterSheet)
+{
+    DelayedCout("Time to select your class! Look in the Pathfinder 1e Core Rulebook for which class you want to play and then I will get that info from you and write it in your character sheet!");
+    DelayedCout("Figured out your class? What's it called: ", false);
+    string name;
+    getline(cin, name, '\n');
+    _threads.emplace_back(thread(&character::AddRole, characterSheet, move(name)));
+    this_thread::sleep_for(chrono::milliseconds(1));
+    cout << characterSheet->ToStringForConsole();
 }
 
 short creator::GetScore(abilityType abilityType)

@@ -15,6 +15,7 @@ class role
 {
 public:
     role();
+    role(string name);
 
     // Getters
     string Name();

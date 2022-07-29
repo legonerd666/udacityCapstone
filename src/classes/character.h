@@ -79,6 +79,7 @@ public:
 
     // Adders
     void AddRacialTrait(shared_ptr<feat> &&racialTrait);
+    void AddRole(string name);
 
 private:
     string _name;

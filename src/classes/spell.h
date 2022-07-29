@@ -23,7 +23,7 @@ public:
     string Range();
     string Target();
     string Duration();
-    saveType SavingThrow();
+    string SavingThrow();
     bool SpellResistance();
     string Description();
 
@@ -36,7 +36,7 @@ private:
     string _range;
     string _target;
     string _duration;
-    saveType _savingThrow;
+    string _savingThrow;
     bool _spellResistance;
     string _description;
 };

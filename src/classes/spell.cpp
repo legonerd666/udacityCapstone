@@ -10,7 +10,7 @@ spell::spell()
     _range = "Example Range";
     _target = "Example Target(s)";
     _duration = "Example Duration";
-    _savingThrow = fortitude;
+    _savingThrow = "None";
     _spellResistance = false;
     _description = "Example Description";
 }
@@ -55,7 +55,7 @@ string spell::Duration()
     return _duration;
 }
 
-saveType spell::SavingThrow()
+string spell::SavingThrow()
 {
     return _savingThrow;
 }

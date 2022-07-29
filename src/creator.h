@@ -22,6 +22,7 @@ public:
 private:
     void AbilityScores(shared_ptr<character> &&character);
     void Race(shared_ptr<character> &&character, short abilityScores[6]);
+    void Role(shared_ptr<character> &&character);
 
     short GetScore(abilityType abilityType);
     short GetScoreAdj(abilityType abilityType);

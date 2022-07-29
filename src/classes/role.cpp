@@ -6,6 +6,10 @@ role::role()
     _level = 1;
 }
 
+role::role(string name) : _name(name), _level(1)
+{
+}
+
 string role::Name()
 {
     return _name;

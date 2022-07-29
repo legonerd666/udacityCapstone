@@ -73,8 +73,6 @@ character::character()
 
     _xp = 0;
     _nextLevelXpAmount = 0;
-
-    _roles.emplace_back(make_unique<role>());
 }
 
 // Outputs the character data as a nicely formatted string
@@ -110,7 +108,7 @@ string character::ToStringForConsole()
     {
         character += role->Name();
         character += " ";
-        character += role->Level();
+        character += to_string(role->Level());
         character += ". ";
     }
     character += "\n";
@@ -1215,7 +1213,7 @@ string character::ToStringForConsole()
                 character += spell->Duration();
                 character += "\n";
                 character += "|                 Saving Throw:      ";
-                character += EnumToString(spell->SavingThrow());
+                character += spell->SavingThrow();
                 character += "\n";
                 character += "|                 Spell Resistance:  ";
                 switch (spell->SpellResistance())
@@ -1289,6 +1287,12 @@ void character::AddRacialTrait(shared_ptr<feat> &&racialTrait)
 {
     unique_lock<mutex> lock(_mutex);
     _race->AddRacialTrait(move(racialTrait));
+}
+
+void character::AddRole(string name)
+{
+    unique_lock<mutex> lock(_mutex);
+    _roles.emplace_back(make_unique<role>(name));
 }
 
 short character::CMB()
