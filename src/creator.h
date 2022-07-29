@@ -28,6 +28,8 @@ private:
     sizeType GetSize();
     short GetSpeed();
     void RacialTraits(shared_ptr<character> character);
+    void ExtraLanguages(shared_ptr<character> character, string languages);
+
     vector<thread> _threads;
 };
 

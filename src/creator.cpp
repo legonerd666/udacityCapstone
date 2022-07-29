@@ -101,9 +101,29 @@ void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6
     DelayedCout("Weapons: ", false);
     string weapons;
     getline(cin, weapons, '\n');
-    _threads.emplace_back(thread(&character::Proficiencies, characterSheet, weapons));
+    _threads.emplace_back(thread(&character::Proficiencies, characterSheet, move(weapons)));
 
 #pragma endregion Weapon Familiarity
+
+#pragma region Languages
+
+    DelayedCout("Each race knows a number of languages by default, you also can pick a number of extra languages based on your intelligence modifier.");
+    DelayedCout("These extra languages are chosen from a list given under the races langauges in the Pathfinder 1e Core Rulebook");
+    DelayedCout("What languages do you speak by default?");
+    DelayedCout("Languages: ", false);
+    string languages;
+    getline(cin, languages, '\n');
+    if (characterSheet->AbilityMod(intelligence) > 0)
+    {
+        DelayedCout("You get to choose " + to_string(characterSheet->AbilityMod(intelligence)) + " extra languages from your race list!");
+        ExtraLanguages(characterSheet, languages);
+    }
+    else
+    {
+        _threads.emplace_back(thread(&character::Languages, characterSheet, languages));
+    }
+
+#pragma endregion Languages
 }
 
 short creator::GetScore(abilityType abilityType)
@@ -265,6 +285,19 @@ void creator::RacialTraits(shared_ptr<character> characterSheet)
         RacialTraits(move(characterSheet));
     }
     return;
+}
+
+void creator::ExtraLanguages(shared_ptr<character> characterSheet, string languages)
+{
+    for (short i = 0; i < characterSheet->AbilityMod(intelligence); i++)
+    {
+        DelayedCout("Please enter an extra language from your list: ", false);
+        string language;
+        getline(cin, language, '\n');
+        languages += " ";
+        languages += language;
+    }
+    _threads.emplace_back(thread(&character::Languages, move(characterSheet), languages));
 }
 
 void creator::DelayedCout(string &&string)

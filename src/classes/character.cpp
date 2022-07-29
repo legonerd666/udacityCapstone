@@ -63,7 +63,6 @@ character::character()
     _skills.emplace_back(make_unique<skill>(survival));
     _skills.emplace_back(make_unique<skill>(swim));
     _skills.emplace_back(make_unique<skill>(useMagicDevice));
-    _languages = "Example Languages";
     _baseAttackBonuses.emplace_back(0);
     _spellResistance = 0;
 
@@ -1245,6 +1244,11 @@ string character::ToStringForConsole()
     return character;
 }
 
+short character::AbilityMod(abilityType abilityType)
+{
+    return _abilityScores[EnumToIndex(abilityType)]->AdjustedModifier();
+}
+
 void character::AbilityScores(short newAbilityScores[6])
 {
     unique_lock<mutex> lock(_mutex);
@@ -1274,6 +1278,11 @@ void character::Speed(short baseSpeed)
 void character::Proficiencies(string proficiencies)
 {
     _proficiencies = proficiencies;
+}
+
+void character::Languages(string languages)
+{
+    _languages = languages;
 }
 
 void character::AddRacialTrait(shared_ptr<feat> &&racialTrait)
