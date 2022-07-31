@@ -137,8 +137,8 @@ void creator::Role(shared_ptr<character> &&characterSheet)
     _threads.emplace_back(thread(&character::AddRole, characterSheet, move(name)));
     DelayedCout("Great! Now what hit die does this class use?");
     _threads.emplace_back(thread(&character::HitPoints, characterSheet, move(GetHitDie())));
-    this_thread::sleep_for(chrono::milliseconds(1));
-    cout << characterSheet->ToStringForConsole();
+    DelayedCout("Now I need the skills that are class skills for you.");
+    SetClassSkills(characterSheet);
 }
 
 short creator::GetScore(abilityType abilityType)
@@ -348,6 +348,10 @@ die creator::GetHitDie()
         DelayedCout("Could I maybe get the number of the die you wanted...? Not too sure what you meant by \"" + hitdie + "\"...");
         return GetHitDie();
     }
+}
+
+void SetClassSkills(shared_ptr<character> characterSheet)
+{
 }
 
 void creator::DelayedCout(string &&string)
