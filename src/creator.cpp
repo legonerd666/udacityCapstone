@@ -135,6 +135,8 @@ void creator::Role(shared_ptr<character> &&characterSheet)
     string name;
     getline(cin, name, '\n');
     _threads.emplace_back(thread(&character::AddRole, characterSheet, move(name)));
+    DelayedCout("Great! Now what hit die does this class use?");
+    _threads.emplace_back(thread(&character::HitPoints, characterSheet, move(GetHitDie())));
     this_thread::sleep_for(chrono::milliseconds(1));
     cout << characterSheet->ToStringForConsole();
 }
@@ -311,6 +313,41 @@ void creator::ExtraLanguages(shared_ptr<character> characterSheet, string langua
         languages += language;
     }
     _threads.emplace_back(thread(&character::Languages, move(characterSheet), languages));
+}
+
+die creator::GetHitDie()
+{
+    DelayedCout("I will give you the option to set your hitdie to one of 4 dice.");
+    DelayedCout("The options will be displayed as the letter \"d\" which stands for die.");
+    DelayedCout("And then the number which is the highest the die can roll.");
+    DelayedCout("For example d4 is a 4-sided die.");
+    DelayedCout("1. d6\n2. d8\n3. d10\n4. d12");
+    DelayedCout("What is your class's hitdie:", false);
+    string hitdie;
+    getline(cin, hitdie, '\n');
+    try
+    {
+        switch (stoi(hitdie))
+        {
+        case 1:
+            return d6;
+        case 2:
+            return d8;
+        case 3:
+            return d10;
+        case 4:
+            return d12;
+        default:
+            DelayedCout("Umm... I'm gonna need you to give me one of the numbers I showed...");
+            DelayedCout("We'll go again, this time answer 1, 2, 3, or 4.");
+            return GetHitDie();
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("Could I maybe get the number of the die you wanted...? Not too sure what you meant by \"" + hitdie + "\"...");
+        return GetHitDie();
+    }
 }
 
 void creator::DelayedCout(string &&string)

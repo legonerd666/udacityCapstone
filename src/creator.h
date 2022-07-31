@@ -30,6 +30,7 @@ private:
     short GetSpeed();
     void RacialTraits(shared_ptr<character> character);
     void ExtraLanguages(shared_ptr<character> character, string languages);
+    die GetHitDie();
 
     vector<thread> _threads;
 };

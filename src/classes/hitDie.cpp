@@ -1,15 +1,22 @@
 #include "hitDie.h"
 #include "../enums.h"
 
-hitDie::hitDie() {
+hitDie::hitDie()
+{
     _hitDie = d8;
     _numberOfHitDice = 1;
 }
 
-string hitDie::To_String() {
+hitDie::hitDie(die hitdie) : _hitDie(hitdie), _numberOfHitDice(1)
+{
+}
+
+string hitDie::To_String()
+{
     return to_string(_numberOfHitDice) + EnumToString(_hitDie) + " ";
 }
 
-short hitDie::HitDieNumber() {
+short hitDie::HitDieNumber()
+{
     return _numberOfHitDice;
 }

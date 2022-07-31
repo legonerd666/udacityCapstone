@@ -8,22 +8,24 @@
 
 using namespace std;
 
-class hitPoints {
+class hitPoints
+{
 public:
     hitPoints();
+    hitPoints(die hitdie);
 
-    //Getters
+    // Getters
     short TotalHP(short constitutionBonus);
     short CurrentHP(short constitionBonus);
     short CurrentNonLethalHP(short constitutionBonus);
-    vector<unique_ptr<hitDie>>& HitDice();
+    vector<unique_ptr<hitDie>> &HitDice();
     short TotalHitDice();
 
-    //Setters
-    // void TotalHP(short newTotalHP);
-    // void CurrentHP(short newCurrentHP);
-    // void CurrentNonLethalHP(short newCurrentNonLethalDamage);
-    // void HitDice(vector<unique_ptr<hitDice>> newHitDice);
+    // Setters
+    //  void TotalHP(short newTotalHP);
+    //  void CurrentHP(short newCurrentHP);
+    //  void CurrentNonLethalHP(short newCurrentNonLethalDamage);
+    //  void HitDice(vector<unique_ptr<hitDice>> newHitDice);
 
 private:
     short _totalHP;
@@ -31,6 +33,5 @@ private:
     short _nonLethalDamage;
     vector<unique_ptr<hitDie>> _hitdice;
 };
-
 
 #endif

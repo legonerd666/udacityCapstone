@@ -11,6 +11,7 @@ class hitDie
 {
 public:
     hitDie();
+    hitDie(die hitdie);
 
     string To_String();
 

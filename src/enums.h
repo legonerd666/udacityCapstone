@@ -153,6 +153,8 @@ string EnumToString(magicSchool magicSchool);
 
 string EnumToString(casterType casterType);
 
+short EnumToMax(die die);
+
 short EnumToIndex(abilityType abilityType);
 
 abilityType EnumToAbilityType(saveType saveType);

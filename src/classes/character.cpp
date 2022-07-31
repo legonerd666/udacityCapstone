@@ -20,7 +20,6 @@ character::character()
     _weight = 0;
     _hairColor = "Example Hair Color";
     _eyeColor = "Example Eye Color";
-    _hitpoints = make_unique<hitPoints>();
     _initiative = make_unique<initiative>();
     _armorClass = make_unique<armorClass>();
 
@@ -1281,6 +1280,11 @@ void character::Proficiencies(string proficiencies)
 void character::Languages(string languages)
 {
     _languages = languages;
+}
+
+void character::HitPoints(die hitdie)
+{
+    _hitpoints = make_unique<hitPoints>(hitdie);
 }
 
 void character::AddRacialTrait(shared_ptr<feat> &&racialTrait)
