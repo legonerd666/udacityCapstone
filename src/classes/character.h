@@ -33,6 +33,7 @@ public:
     // Getters
     string ToStringForConsole();
     short AbilityMod(abilityType abilityType);
+    string Proficiencies();
 
     // Setters
 

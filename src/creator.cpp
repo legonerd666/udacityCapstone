@@ -101,7 +101,8 @@ void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6
     DelayedCout("Weapons: ", false);
     string weapons;
     getline(cin, weapons, '\n');
-    _threads.emplace_back(thread(&character::Proficiencies, characterSheet, move(weapons)));
+    _threads.emplace_back(thread([characterSheet, weapons]()
+                                 { characterSheet->Proficiencies(weapons); }));
 
 #pragma endregion Weapon Familiarity
 
@@ -140,6 +141,13 @@ void creator::Role(shared_ptr<character> &&characterSheet)
     DelayedCout("Now I need the skills that are class skills for you.");
     SetClassSkills(characterSheet);
     SetSkillRanks(characterSheet);
+    DelayedCout("Classes give you proficiency with different weapons and armors, please input those proficiencies.");
+    DelayedCout("Proficiencies: ", false);
+    string proficiencies;
+    getline(cin, proficiencies, '\n');
+    proficiencies = characterSheet->Proficiencies() + " " + proficiencies;
+    _threads.emplace_back(thread([]()
+                                 { cout << "test"; }));
 }
 
 short creator::GetScore(abilityType abilityType)
@@ -256,11 +264,11 @@ short creator::GetSpeed()
     getline(cin, speed, '\n');
     try
     {
-        if (stoi(speed) >= 0 && stoi(speed) <= USHRT_MAX)
+        if (stoi(speed) >= 0 && stoi(speed) < USHRT_MAX)
             return stoi(speed);
         else
         {
-            DelayedCout("Please unsure your speed entered is at least 0 and at most " + to_string(USHRT_MAX) + ".");
+            DelayedCout("Please unsure your speed entered is at least 0 and at most " + to_string(USHRT_MAX - 1) + ".");
             DelayedCout("Let's go again.");
             return GetSpeed();
         }

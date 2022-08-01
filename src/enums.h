@@ -139,6 +139,8 @@ string EnumToString(alignment alignment);
 
 string EnumToString(abilityType abilityType);
 
+string EnumToString(sizeType sizeType);
+
 string EnumToString(die die);
 
 string EnumToString(saveType saveType);

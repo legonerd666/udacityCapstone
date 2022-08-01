@@ -50,6 +50,33 @@ string EnumToString(abilityType abilityType)
     }
 }
 
+string EnumToString(sizeType sizeType)
+{
+    switch (sizeType)
+    {
+    case colossal:
+        return "Colossal";
+    case gargantuan:
+        return "Gargantuan";
+    case huge:
+        return "Huge";
+    case large:
+        return "Large";
+    case medium:
+        return "Medium";
+    case small:
+        return "Small";
+    case tiny:
+        return "Tiny";
+    case diminutive:
+        return "Diminutive";
+    case fine:
+        return "Fine";
+    default:
+        return "Invalid Size Enum";
+    }
+}
+
 string EnumToString(die die)
 {
     switch (die)

@@ -124,6 +124,10 @@ string character::ToStringForConsole()
     character += _race->Name();
     character += "\n";
 
+    character += "|     Size:                          ";
+    character += EnumToString(_size);
+    character += "\n";
+
     character += "|     Gender:                        ";
     character += _gender;
     character += "\n";
@@ -1243,7 +1247,14 @@ string character::ToStringForConsole()
 
 short character::AbilityMod(abilityType abilityType)
 {
+    unique_lock<mutex> lock(_mutex);
     return _abilityScores[EnumToIndex(abilityType)]->AdjustedModifier();
+}
+
+string character::Proficiencies()
+{
+    unique_lock<mutex> lock(_mutex);
+    return _proficiencies;
 }
 
 void character::AbilityScores(short newAbilityScores[6])
