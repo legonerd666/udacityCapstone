@@ -146,7 +146,7 @@ void creator::Role(shared_ptr<character> &&characterSheet)
     string proficiencies;
     getline(cin, proficiencies, '\n');
     proficiencies = characterSheet->Proficiencies() + " " + proficiencies;
-    characterSheet->Proficiencies(proficiencies);
+    characterSheet->Proficiencies(move(proficiencies));
 }
 
 short creator::GetScore(abilityType abilityType)
