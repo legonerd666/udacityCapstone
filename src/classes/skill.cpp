@@ -2,7 +2,8 @@
 
 #include "../enums.h"
 
-skill::skill(skillType skillType): _skillType(skillType) {
+skill::skill(skillType skillType) : _skillType(skillType)
+{
     _abilityType = EnumToAbilityType(skillType);
     _ranks = 0;
     _miscMod = 0;
@@ -10,30 +11,44 @@ skill::skill(skillType skillType): _skillType(skillType) {
     _isTrainedOnly = false;
 }
 
-short skill::Total(short abilityMod){
-    if (_isClassSkill && _ranks > 0){
+short skill::Total(short abilityMod)
+{
+    if (_isClassSkill && _ranks > 0)
+    {
         return abilityMod + _ranks + _miscMod + 3;
-    } else {
+    }
+    else
+    {
         return abilityMod + _ranks + _miscMod;
     }
 }
 
-skillType skill::SkillType() {
+skillType skill::SkillType()
+{
     return _skillType;
 }
 
-abilityType skill::AbilityType() {
+abilityType skill::AbilityType()
+{
     return _abilityType;
 }
 
-short skill::Ranks() {
+short skill::Ranks()
+{
     return _ranks;
 }
 
-short skill::MiscMod() {
+short skill::MiscMod()
+{
     return _miscMod;
 }
 
-bool skill::IsClassSkill() {
+bool skill::IsClassSkill()
+{
     return _isClassSkill;
+}
+
+void skill::IsClassSkill(bool isClassSkill)
+{
+    _isClassSkill = isClassSkill;
 }

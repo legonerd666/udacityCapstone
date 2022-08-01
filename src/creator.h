@@ -14,7 +14,7 @@ public:
     creator();
     ~creator();
 
-    void Intro(shared_ptr<character> &&character);
+    void Intro(shared_ptr<character> character);
 
     void DelayedCout(string &&string);
     void DelayedCout(string &&string, bool doNewLine);
@@ -31,6 +31,8 @@ private:
     void RacialTraits(shared_ptr<character> character);
     void ExtraLanguages(shared_ptr<character> character, string languages);
     die GetHitDie();
+    void SetClassSkills(shared_ptr<character> character);
+    void CheckClassSkills(shared_ptr<character> character, vector<skillType> skillTypes);
 
     vector<thread> _threads;
 };

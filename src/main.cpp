@@ -9,6 +9,7 @@ int main()
 {
     std::shared_ptr<character> testCharacter = make_shared<character>();
     creator Creator = creator();
-    Creator.Intro(std::move(testCharacter));
+    Creator.Intro(testCharacter);
+    std::cout << testCharacter->ToStringForConsole();
     return 0;
 }

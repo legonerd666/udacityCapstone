@@ -18,6 +18,9 @@ public:
     short MiscMod();
     bool IsClassSkill();
 
+    // Setters
+    void IsClassSkill(bool isClassSkill);
+
 private:
     skillType _skillType;
     abilityType _abilityType;

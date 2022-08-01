@@ -81,6 +81,7 @@ public:
     // Adders
     void AddRacialTrait(shared_ptr<feat> &&racialTrait);
     void AddRole(string name);
+    void AddClassSkill(skillType skillType);
 
 private:
     string _name;

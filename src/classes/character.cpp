@@ -1257,6 +1257,7 @@ void character::AbilityScores(short newAbilityScores[6])
 
 void character::Race(string name)
 {
+    unique_lock<mutex> lock(_mutex);
     _race = make_unique<race>(name);
 }
 
@@ -1274,16 +1275,19 @@ void character::Speed(short baseSpeed)
 
 void character::Proficiencies(string proficiencies)
 {
+    unique_lock<mutex> lock(_mutex);
     _proficiencies = proficiencies;
 }
 
 void character::Languages(string languages)
 {
+    unique_lock<mutex> lock(_mutex);
     _languages = languages;
 }
 
 void character::HitPoints(die hitdie)
 {
+    unique_lock<mutex> lock(_mutex);
     _hitpoints = make_unique<hitPoints>(hitdie);
 }
 
@@ -1297,6 +1301,18 @@ void character::AddRole(string name)
 {
     unique_lock<mutex> lock(_mutex);
     _roles.emplace_back(make_unique<role>(name));
+}
+
+void character::AddClassSkill(skillType skillType)
+{
+    unique_lock<mutex> lock(_mutex);
+    for (auto &&skill : _skills)
+    {
+        if (skill->SkillType() == skillType)
+        {
+            skill->IsClassSkill(true);
+        }
+    }
 }
 
 short character::CMB()

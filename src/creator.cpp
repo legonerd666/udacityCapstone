@@ -19,7 +19,7 @@ creator::~creator()
     }
 }
 
-void creator::Intro(shared_ptr<character> &&characterSheet)
+void creator::Intro(shared_ptr<character> characterSheet)
 {
     DelayedCout("Welcome to the character creator, I will walk you through creating a character in Pathfinder 1e right here in the console!");
     DelayedCout("What will happen is as follows: I will ask you questions about the next section in the character sheet, and you will type an appropriate response in the console. Then we repeat this step for the next field.");
@@ -350,8 +350,199 @@ die creator::GetHitDie()
     }
 }
 
-void SetClassSkills(shared_ptr<character> characterSheet)
+void creator::SetClassSkills(shared_ptr<character> characterSheet)
 {
+    DelayedCout("Please enter all skills which are class skills for you: ", false);
+    string skills;
+    getline(cin, skills, '\n');
+    vector<skillType> skillTypes;
+    for (short i = 0; i < skills.size(); i++)
+    {
+        skills[i] = tolower(skills[i]);
+    }
+    if (skills.find("acrobatics") != string::npos)
+    {
+        skillTypes.emplace_back(acrobatics);
+    }
+    if (skills.find("appraise") != string::npos)
+    {
+        skillTypes.emplace_back(appraise);
+    }
+    if (skills.find("bluff") != string::npos)
+    {
+        skillTypes.emplace_back(bluff);
+    }
+    if (skills.find("climb") != string::npos)
+    {
+        skillTypes.emplace_back(climb);
+    }
+    if (skills.find("craft") != string::npos)
+    {
+        skillTypes.emplace_back(craft);
+    }
+    if (skills.find("diplomacy") != string::npos)
+    {
+        skillTypes.emplace_back(diplomacy);
+    }
+    if (skills.find("disable device") != string::npos)
+    {
+        skillTypes.emplace_back(disableDevice);
+    }
+    if (skills.find("disguise") != string::npos)
+    {
+        skillTypes.emplace_back(disguise);
+    }
+    if (skills.find("escape artist") != string::npos)
+    {
+        skillTypes.emplace_back(escapeArtist);
+    }
+    if (skills.find("fly") != string::npos)
+    {
+        skillTypes.emplace_back(fly);
+    }
+    if (skills.find("handle animal") != string::npos)
+    {
+        skillTypes.emplace_back(handleAnimal);
+    }
+    if (skills.find("heal") != string::npos)
+    {
+        skillTypes.emplace_back(heal);
+    }
+    if (skills.find("intimidate") != string::npos)
+    {
+        skillTypes.emplace_back(intimidate);
+    }
+    if (skills.find("knowledge (arcana)") != string::npos)
+    {
+        skillTypes.emplace_back(knowArcana);
+    }
+    if (skills.find("knowledge (dungeoneering)") != string::npos)
+    {
+        skillTypes.emplace_back(knowDungeoneering);
+    }
+    if (skills.find("knowledge (engineering)") != string::npos)
+    {
+        skillTypes.emplace_back(knowEngineering);
+    }
+    if (skills.find("knowledge (geography)") != string::npos)
+    {
+        skillTypes.emplace_back(knowGeography);
+    }
+    if (skills.find("knowledge (history)") != string::npos)
+    {
+        skillTypes.emplace_back(knowHistory);
+    }
+    if (skills.find("knowledge (local)") != string::npos)
+    {
+        skillTypes.emplace_back(knowLocal);
+    }
+    if (skills.find("knowledge (nature)") != string::npos)
+    {
+        skillTypes.emplace_back(knowNature);
+    }
+    if (skills.find("knowledge (nobility)") != string::npos)
+    {
+        skillTypes.emplace_back(knowNobility);
+    }
+    if (skills.find("knowledge (planes)") != string::npos)
+    {
+        skillTypes.emplace_back(knowPlanes);
+    }
+    if (skills.find("knowledge (religion)") != string::npos)
+    {
+        skillTypes.emplace_back(knowReligion);
+    }
+    if (skills.find("knowledge (all)") != string::npos)
+    {
+        skillTypes.emplace_back(knowArcana);
+        skillTypes.emplace_back(knowDungeoneering);
+        skillTypes.emplace_back(knowEngineering);
+        skillTypes.emplace_back(knowGeography);
+        skillTypes.emplace_back(knowHistory);
+        skillTypes.emplace_back(knowLocal);
+        skillTypes.emplace_back(knowNature);
+        skillTypes.emplace_back(knowNobility);
+        skillTypes.emplace_back(knowPlanes);
+        skillTypes.emplace_back(knowReligion);
+    }
+    if (skills.find("linguistics") != string::npos)
+    {
+        skillTypes.emplace_back(linguistics);
+    }
+    if (skills.find("perception") != string::npos)
+    {
+        skillTypes.emplace_back(perception);
+    }
+    if (skills.find("perform") != string::npos)
+    {
+        skillTypes.emplace_back(perform);
+    }
+    if (skills.find("profession") != string::npos)
+    {
+        skillTypes.emplace_back(profession);
+    }
+    if (skills.find("ride") != string::npos)
+    {
+        skillTypes.emplace_back(ride);
+    }
+    if (skills.find("sense motive") != string::npos)
+    {
+        skillTypes.emplace_back(senseMotive);
+    }
+    if (skills.find("sleight of hand") != string::npos)
+    {
+        skillTypes.emplace_back(sleightOfHand);
+    }
+    if (skills.find("spellcraft") != string::npos)
+    {
+        skillTypes.emplace_back(spellcraft);
+    }
+    if (skills.find("stealth") != string::npos)
+    {
+        skillTypes.emplace_back(stealth);
+    }
+    if (skills.find("survival") != string::npos)
+    {
+        skillTypes.emplace_back(survival);
+    }
+    if (skills.find("swim") != string::npos)
+    {
+        skillTypes.emplace_back(swim);
+    }
+    if (skills.find("use magic device") != string::npos)
+    {
+        skillTypes.emplace_back(useMagicDevice);
+    }
+    CheckClassSkills(move(characterSheet), move(skillTypes));
+}
+
+void creator::CheckClassSkills(shared_ptr<character> characterSheet, vector<skillType> skillTypes)
+{
+    DelayedCout("To confirm, are these all the skills that are your class skills?");
+    for (auto &&skillT : skillTypes)
+    {
+        DelayedCout(EnumToString(skillT));
+    }
+    DelayedCout("Y/n: ", false);
+    string isCorrect;
+    getline(cin, isCorrect, '\n');
+    if (tolower(isCorrect[0]) == 'y')
+    {
+        for (auto &&skillT : skillTypes)
+        {
+            _threads.emplace_back(thread(&character::AddClassSkill, characterSheet, skillT));
+        }
+    }
+    else if (tolower(isCorrect[0]) == 'n')
+    {
+        DelayedCout("Ok, I'll let you enter them again, make sure this time that they are all spelled correctly and that knowledge skills are written \"knowledge (category)\" (eg. \"knowledge (arcana) or knowledge (all)\")");
+        SetClassSkills(move(characterSheet));
+    }
+    else
+    {
+        DelayedCout("Not sure what you mean by that, let's try again.");
+        CheckClassSkills(move(characterSheet), move(skillTypes));
+    }
 }
 
 void creator::DelayedCout(string &&string)
