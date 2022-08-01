@@ -1309,10 +1309,22 @@ void character::AddClassSkill(skillType skillType)
     for (auto &&skill : _skills)
     {
         if (skill->SkillType() == skillType)
-        {
             skill->IsClassSkill(true);
+    }
+}
+
+short character::AddSkillRankToSkill(skillType skillType)
+{
+    unique_lock<mutex> lock(_mutex);
+    for (auto &&skill : _skills)
+    {
+        if (skill->SkillType() == skillType && skill->Ranks() < 1)
+        {
+            skill->Ranks(skill->Ranks() + 1);
+            return 0;
         }
     }
+    return -1;
 }
 
 short character::CMB()

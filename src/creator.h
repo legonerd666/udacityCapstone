@@ -33,6 +33,8 @@ private:
     die GetHitDie();
     void SetClassSkills(shared_ptr<character> character);
     void CheckClassSkills(shared_ptr<character> character, vector<skillType> skillTypes);
+    void SetSkillRanks(shared_ptr<character> character);
+    void AddSkillRankToSkill(shared_ptr<character> character, short ranks);
 
     vector<thread> _threads;
 };

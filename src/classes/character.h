@@ -82,6 +82,7 @@ public:
     void AddRacialTrait(shared_ptr<feat> &&racialTrait);
     void AddRole(string name);
     void AddClassSkill(skillType skillType);
+    short AddSkillRankToSkill(skillType skillType);
 
 private:
     string _name;

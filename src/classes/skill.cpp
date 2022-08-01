@@ -48,6 +48,11 @@ bool skill::IsClassSkill()
     return _isClassSkill;
 }
 
+void skill::Ranks(short ranks)
+{
+    _ranks = ranks;
+}
+
 void skill::IsClassSkill(bool isClassSkill)
 {
     _isClassSkill = isClassSkill;

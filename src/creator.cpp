@@ -139,6 +139,7 @@ void creator::Role(shared_ptr<character> &&characterSheet)
     _threads.emplace_back(thread(&character::HitPoints, characterSheet, move(GetHitDie())));
     DelayedCout("Now I need the skills that are class skills for you.");
     SetClassSkills(characterSheet);
+    SetSkillRanks(characterSheet);
 }
 
 short creator::GetScore(abilityType abilityType)
@@ -355,104 +356,105 @@ void creator::SetClassSkills(shared_ptr<character> characterSheet)
     DelayedCout("Please enter all skills which are class skills for you: ", false);
     string skills;
     getline(cin, skills, '\n');
+    skills = " " + skills;
     vector<skillType> skillTypes;
     for (short i = 0; i < skills.size(); i++)
     {
         skills[i] = tolower(skills[i]);
     }
-    if (skills.find("acrobatics") != string::npos)
+    if (skills.find(" acrobatics") != string::npos)
     {
         skillTypes.emplace_back(acrobatics);
     }
-    if (skills.find("appraise") != string::npos)
+    if (skills.find(" appraise") != string::npos)
     {
         skillTypes.emplace_back(appraise);
     }
-    if (skills.find("bluff") != string::npos)
+    if (skills.find(" bluff") != string::npos)
     {
         skillTypes.emplace_back(bluff);
     }
-    if (skills.find("climb") != string::npos)
+    if (skills.find(" climb") != string::npos)
     {
         skillTypes.emplace_back(climb);
     }
-    if (skills.find("craft") != string::npos)
+    if (skills.find(" craft") != string::npos)
     {
         skillTypes.emplace_back(craft);
     }
-    if (skills.find("diplomacy") != string::npos)
+    if (skills.find(" diplomacy") != string::npos)
     {
         skillTypes.emplace_back(diplomacy);
     }
-    if (skills.find("disable device") != string::npos)
+    if (skills.find(" disable device") != string::npos)
     {
         skillTypes.emplace_back(disableDevice);
     }
-    if (skills.find("disguise") != string::npos)
+    if (skills.find(" disguise") != string::npos)
     {
         skillTypes.emplace_back(disguise);
     }
-    if (skills.find("escape artist") != string::npos)
+    if (skills.find(" escape artist") != string::npos)
     {
         skillTypes.emplace_back(escapeArtist);
     }
-    if (skills.find("fly") != string::npos)
+    if (skills.find(" fly") != string::npos)
     {
         skillTypes.emplace_back(fly);
     }
-    if (skills.find("handle animal") != string::npos)
+    if (skills.find(" handle animal") != string::npos)
     {
         skillTypes.emplace_back(handleAnimal);
     }
-    if (skills.find("heal") != string::npos)
+    if (skills.find(" heal") != string::npos)
     {
         skillTypes.emplace_back(heal);
     }
-    if (skills.find("intimidate") != string::npos)
+    if (skills.find(" intimidate") != string::npos)
     {
         skillTypes.emplace_back(intimidate);
     }
-    if (skills.find("knowledge (arcana)") != string::npos)
+    if (skills.find(" knowledge (arcana)") != string::npos)
     {
         skillTypes.emplace_back(knowArcana);
     }
-    if (skills.find("knowledge (dungeoneering)") != string::npos)
+    if (skills.find(" knowledge (dungeoneering)") != string::npos)
     {
         skillTypes.emplace_back(knowDungeoneering);
     }
-    if (skills.find("knowledge (engineering)") != string::npos)
+    if (skills.find(" knowledge (engineering)") != string::npos)
     {
         skillTypes.emplace_back(knowEngineering);
     }
-    if (skills.find("knowledge (geography)") != string::npos)
+    if (skills.find(" knowledge (geography)") != string::npos)
     {
         skillTypes.emplace_back(knowGeography);
     }
-    if (skills.find("knowledge (history)") != string::npos)
+    if (skills.find(" knowledge (history)") != string::npos)
     {
         skillTypes.emplace_back(knowHistory);
     }
-    if (skills.find("knowledge (local)") != string::npos)
+    if (skills.find(" knowledge (local)") != string::npos)
     {
         skillTypes.emplace_back(knowLocal);
     }
-    if (skills.find("knowledge (nature)") != string::npos)
+    if (skills.find(" knowledge (nature)") != string::npos)
     {
         skillTypes.emplace_back(knowNature);
     }
-    if (skills.find("knowledge (nobility)") != string::npos)
+    if (skills.find(" knowledge (nobility)") != string::npos)
     {
         skillTypes.emplace_back(knowNobility);
     }
-    if (skills.find("knowledge (planes)") != string::npos)
+    if (skills.find(" knowledge (planes)") != string::npos)
     {
         skillTypes.emplace_back(knowPlanes);
     }
-    if (skills.find("knowledge (religion)") != string::npos)
+    if (skills.find(" knowledge (religion)") != string::npos)
     {
         skillTypes.emplace_back(knowReligion);
     }
-    if (skills.find("knowledge (all)") != string::npos)
+    if (skills.find(" knowledge (all)") != string::npos)
     {
         skillTypes.emplace_back(knowArcana);
         skillTypes.emplace_back(knowDungeoneering);
@@ -465,51 +467,51 @@ void creator::SetClassSkills(shared_ptr<character> characterSheet)
         skillTypes.emplace_back(knowPlanes);
         skillTypes.emplace_back(knowReligion);
     }
-    if (skills.find("linguistics") != string::npos)
+    if (skills.find(" linguistics") != string::npos)
     {
         skillTypes.emplace_back(linguistics);
     }
-    if (skills.find("perception") != string::npos)
+    if (skills.find(" perception") != string::npos)
     {
         skillTypes.emplace_back(perception);
     }
-    if (skills.find("perform") != string::npos)
+    if (skills.find(" perform") != string::npos)
     {
         skillTypes.emplace_back(perform);
     }
-    if (skills.find("profession") != string::npos)
+    if (skills.find(" profession") != string::npos)
     {
         skillTypes.emplace_back(profession);
     }
-    if (skills.find("ride") != string::npos)
+    if (skills.find(" ride") != string::npos)
     {
         skillTypes.emplace_back(ride);
     }
-    if (skills.find("sense motive") != string::npos)
+    if (skills.find(" sense motive") != string::npos)
     {
         skillTypes.emplace_back(senseMotive);
     }
-    if (skills.find("sleight of hand") != string::npos)
+    if (skills.find(" sleight of hand") != string::npos)
     {
         skillTypes.emplace_back(sleightOfHand);
     }
-    if (skills.find("spellcraft") != string::npos)
+    if (skills.find(" spellcraft") != string::npos)
     {
         skillTypes.emplace_back(spellcraft);
     }
-    if (skills.find("stealth") != string::npos)
+    if (skills.find(" stealth") != string::npos)
     {
         skillTypes.emplace_back(stealth);
     }
-    if (skills.find("survival") != string::npos)
+    if (skills.find(" survival") != string::npos)
     {
         skillTypes.emplace_back(survival);
     }
-    if (skills.find("swim") != string::npos)
+    if (skills.find(" swim") != string::npos)
     {
         skillTypes.emplace_back(swim);
     }
-    if (skills.find("use magic device") != string::npos)
+    if (skills.find(" use magic device") != string::npos)
     {
         skillTypes.emplace_back(useMagicDevice);
     }
@@ -542,6 +544,365 @@ void creator::CheckClassSkills(shared_ptr<character> characterSheet, vector<skil
     {
         DelayedCout("Not sure what you mean by that, let's try again.");
         CheckClassSkills(move(characterSheet), move(skillTypes));
+    }
+}
+
+void creator::SetSkillRanks(shared_ptr<character> characterSheet)
+{
+    DelayedCout("Ok, now you will need to tell me how many skill ranks your class starts with and then put them into your skills");
+    DelayedCout("How many skill ranks does your class start with: ", false);
+    string ranks;
+    getline(cin, ranks, '\n');
+    try
+    {
+        // This if statement ensures they can't have more ranks than skills which would cause the following for loop to be unable to finish due to the fact that only one rank can be put in each skill
+        if (stoi(ranks) + characterSheet->AbilityMod(intelligence) > 35)
+        {
+            ranks = "35";
+        }
+
+        for (int i = stoi(ranks) + characterSheet->AbilityMod(intelligence) - 1; i >= 0; i--)
+        {
+            AddSkillRankToSkill(characterSheet, i + 1);
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("So, FYI, usually when someone asks for an amount, they are asking for a number.");
+        DelayedCout("It's fine, I'll let you enter it again, but this time, please give me the number of skill ranks your class starts with.");
+        SetSkillRanks(move(characterSheet));
+    }
+}
+
+void creator::AddSkillRankToSkill(shared_ptr<character> characterSheet, short ranks)
+{
+    DelayedCout("You have " + to_string(ranks) + " ranks. Please enter a skill in which you'd like to put a rank: ", false);
+    string skill;
+    getline(cin, skill, '\n');
+    skill = " " + skill;
+    for (short i = 0; i < skill.size(); i++)
+    {
+        skill[i] = tolower(skill[i]);
+    }
+    if (skill.find(" acrobatics") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(acrobatics) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" appraise") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(appraise) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" bluff") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(bluff) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" climb") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(climb) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" craft") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(craft) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" diplomacy") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(diplomacy) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" disable device") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(disableDevice) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" disguise") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(disguise) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" escape artist") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(escapeArtist) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" fly") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(fly) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" handle animal") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(handleAnimal) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" heal") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(heal) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" intimidate") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(intimidate) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" knowledge (arcana)") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(knowArcana) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" knowledge (dungeoneering)") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(knowDungeoneering) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" knowledge (engineering)") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(knowEngineering) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" knowledge (geography)") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(knowGeography) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" knowledge (history)") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(knowHistory) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" knowledge (local)") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(knowLocal) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" knowledge (nature)") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(knowNature) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" knowledge (nobility)") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(knowNobility) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" knowledge (planes)") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(knowPlanes) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" knowledge (religion)") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(knowReligion) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" linguistics") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(linguistics) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" perception") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(perception) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" perform") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(perform) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" profession") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(profession) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" ride") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(ride) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" sense motive") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(senseMotive) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" sleight of hand") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(sleightOfHand) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" spellcraft") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(spellcraft) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" stealth") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(stealth) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" survival") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(survival) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" swim") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(swim) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else if (skill.find(" use magic device") != string::npos)
+    {
+        if (characterSheet->AddSkillRankToSkill(useMagicDevice) == -1)
+        {
+            DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
+            DelayedCout("You'll have to pick a different skill.");
+            AddSkillRankToSkill(move(characterSheet), ranks);
+        }
+    }
+    else
+    {
+        DelayedCout("I don't know what skill you mean, could you enter it again please and make sure you spelled it properly? (knowledge skills should be written as such: knowledge (category) eg. knowledge (nature))");
+        AddSkillRankToSkill(move(characterSheet), ranks);
     }
 }
 

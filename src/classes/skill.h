@@ -19,6 +19,7 @@ public:
     bool IsClassSkill();
 
     // Setters
+    void Ranks(short ranks);
     void IsClassSkill(bool isClassSkill);
 
 private:
