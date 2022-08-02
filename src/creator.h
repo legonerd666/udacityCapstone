@@ -35,6 +35,8 @@ private:
     void CheckClassSkills(shared_ptr<character> character, vector<skillType> skillTypes);
     void SetSkillRanks(shared_ptr<character> character);
     void AddSkillRankToSkill(shared_ptr<character> character, short ranks);
+    void IsCastingClass(shared_ptr<character> character);
+    abilityType GetCastingAbility(shared_ptr<character> character);
 
     vector<thread> _threads;
 };

@@ -39,3 +39,43 @@ bool role::IsCastingClass()
 {
     return _isCastingClass;
 }
+
+void role::SetToCastingClass(abilityType castingAbility, short castingAbilityMod)
+{
+    _isCastingClass = true;
+    short bonusSpells[10];
+    bonusSpells[0] = 0;
+    short bonusSpellBase;
+    if (castingAbilityMod < 1)
+    {
+        for (auto &&spells : bonusSpells)
+        {
+            spells = 0;
+        }
+    }
+    else
+    {
+        for (short i = 0; i < 9; i++)
+        {
+            bonusSpellBase = castingAbilityMod - i;
+            if (bonusSpellBase > 0)
+            {
+                if (bonusSpellBase % 4 == 1)
+                    bonusSpellBase += 3;
+                else if (bonusSpellBase % 4 == 2)
+                    bonusSpellBase += 2;
+                else if (bonusSpellBase % 4 == 3)
+                    bonusSpellBase += 1;
+                bonusSpells[i + 1] = bonusSpellBase / 4;
+            }
+            else
+            {
+                bonusSpells[i + 1] = 0;
+            }
+        }
+    }
+    for (short i = 0; i < 10; i++)
+    {
+        _spellStats[i] = make_shared<spellStat>(i, 0, castingAbility, 0, bonusSpells[i]);
+    }
+}

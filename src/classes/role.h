@@ -25,6 +25,9 @@ public:
     vector<shared_ptr<spell>> Spells();
     bool IsCastingClass();
 
+    // Setters
+    void SetToCastingClass(abilityType castingAbility, short castingAbilityMod);
+
 private:
     string _name;
     unsigned short _level;

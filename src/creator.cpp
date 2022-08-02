@@ -145,8 +145,10 @@ void creator::Role(shared_ptr<character> &&characterSheet)
     DelayedCout("Proficiencies: ", false);
     string proficiencies;
     getline(cin, proficiencies, '\n');
-    proficiencies = characterSheet->Proficiencies() + " " + proficiencies;
-    characterSheet->Proficiencies(move(proficiencies));
+    _threads.emplace_back(thread([characterSheet, proficiencies]()
+                                 { characterSheet->Proficiencies(characterSheet->Proficiencies() + " " + proficiencies); }));
+    IsCastingClass(characterSheet);
+    this_thread::sleep_for(chrono::milliseconds(1));
 }
 
 short creator::GetScore(abilityType abilityType)
@@ -910,6 +912,51 @@ void creator::AddSkillRankToSkill(shared_ptr<character> characterSheet, short ra
     {
         DelayedCout("I don't know what skill you mean, could you enter it again please and make sure you spelled it properly? (knowledge skills should be written as such: knowledge (category) eg. knowledge (nature))");
         AddSkillRankToSkill(move(characterSheet), ranks);
+    }
+}
+
+void creator::IsCastingClass(shared_ptr<character> characterSheet)
+{
+    DelayedCout("Ok, now I need to know if your class is a casting class.");
+    DelayedCout("Is this a casting class? Y/n: ", false);
+    string isCastingClass;
+    getline(cin, isCastingClass, '\n');
+    if (tolower(isCastingClass[0]) == 'y')
+    {
+        _threads.emplace_back(thread(&character::SetRoleToCastingClass, characterSheet, 0, GetCastingAbility(characterSheet)));
+    }
+    else if (tolower(isCastingClass[0]) != 'n')
+    {
+        DelayedCout("I don't understand. Please answer Y or n.");
+        IsCastingClass(move(characterSheet));
+    }
+}
+
+abilityType creator::GetCastingAbility(shared_ptr<character> characterSheet)
+{
+    DelayedCout("What ability score is your class's casting tied to?");
+    DelayedCout("1. Intelligence\n2. Wisdom\n3. Charisma");
+    DelayedCout("Please enter the number corrensponding to the ability score: ", false);
+    string castingAbility;
+    getline(cin, castingAbility, '\n');
+    try
+    {
+        if (stoi(castingAbility) == 1)
+            return intelligence;
+        else if (stoi(castingAbility) == 2)
+            return wisdom;
+        else if (stoi(castingAbility) == 3)
+            return charisma;
+        else
+        {
+            DelayedCout("That wasn't one of the options.");
+            return GetCastingAbility(move(characterSheet));
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("I need a number.");
+        return GetCastingAbility(move(characterSheet));
     }
 }
 
