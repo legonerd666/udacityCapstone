@@ -148,6 +148,10 @@ void creator::Role(shared_ptr<character> &&characterSheet)
     _threads.emplace_back(thread([characterSheet, proficiencies]()
                                  { characterSheet->Proficiencies(characterSheet->Proficiencies() + " " + proficiencies); }));
     IsCastingClass(characterSheet);
+    _threads.emplace_back(thread(&character::BaB, characterSheet, GetBaB()));
+    //_threads.emplace_back(thread(&character::Save, characterSheet, fortitude, GetSave(fortitude)));
+    //_threads.emplace_back(thread(&character::Save, characterSheet, reflex, GetSave(reflex)));
+    //_threads.emplace_back(thread(&character::Save, characterSheet, will, GetSave(will)));
     this_thread::sleep_for(chrono::milliseconds(1));
 }
 
@@ -1041,6 +1045,30 @@ void creator::SetSpellsPerDay(shared_ptr<character> characterSheet, short spellL
         DelayedCout("I'm gonna need the number of spells per day, please.");
         DelayedCout("Let's try that again.");
         SetSpellsPerDay(move(characterSheet), move(spellLevel));
+    }
+}
+
+unsigned short creator::GetBaB()
+{
+    DelayedCout("Now I need your base attack bonus.");
+    DelayedCout("What is your class's base attack bonus: ", false);
+    string BaB;
+    getline(cin, BaB, '\n');
+    try
+    {
+        if (stoi(BaB) >= 0 && stoi(BaB) < USHRT_MAX)
+            return stoi(BaB);
+        else
+        {
+            DelayedCout("You aren't allowed a negative or exceptionally large Base Attack Bonus.");
+            DelayedCout("Please give me a positive value.");
+            return GetBaB();
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("I need a number.");
+        return GetBaB();
     }
 }
 

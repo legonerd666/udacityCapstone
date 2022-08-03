@@ -39,6 +39,8 @@ private:
     abilityType GetCastingAbility(shared_ptr<character> character);
     void SetSpellsKnown(shared_ptr<character> character, short spellLevel);
     void SetSpellsPerDay(shared_ptr<character> character, short spellLevel);
+    unsigned short GetBaB();
+    unsigned short GetSave(saveType saveType);
 
     vector<thread> _threads;
 };

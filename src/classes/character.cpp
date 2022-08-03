@@ -62,7 +62,6 @@ character::character()
     _skills.emplace_back(make_unique<skill>(survival));
     _skills.emplace_back(make_unique<skill>(swim));
     _skills.emplace_back(make_unique<skill>(useMagicDevice));
-    _baseAttackBonuses.emplace_back(0);
     _spellResistance = 0;
 
     _currency[0] = make_unique<currency>(copper, 0);
@@ -1378,6 +1377,18 @@ void character::SetSpellsPerDay(short roleIndex, short spellLevel, short spellsP
 {
     unique_lock<mutex> lock(_mutex);
     _roles[roleIndex]->SpellStats()[spellLevel]->SpellsPerDay(spellsPerDay);
+}
+
+void character::BaB(unsigned short BaB)
+{
+    unique_lock<mutex> lock(_mutex);
+    _baseAttackBonuses.clear();
+    _baseAttackBonuses.emplace_back(BaB);
+    while (BaB > 5)
+    {
+        BaB -= 5;
+        _baseAttackBonuses.emplace_back(BaB);
+    }
 }
 
 void character::AddRacialTrait(shared_ptr<feat> &&racialTrait)
