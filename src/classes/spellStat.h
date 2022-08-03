@@ -22,6 +22,7 @@ public:
 
     // Setters
     void SpellsKnown(short spellsKnown);
+    void SpellsPerDay(short spellsPerDay);
 
 private:
     unsigned short _spellLevel;

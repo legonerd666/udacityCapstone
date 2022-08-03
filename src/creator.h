@@ -38,6 +38,7 @@ private:
     void IsCastingClass(shared_ptr<character> character);
     abilityType GetCastingAbility(shared_ptr<character> character);
     void SetSpellsKnown(shared_ptr<character> character, short spellLevel);
+    void SetSpellsPerDay(shared_ptr<character> character, short spellLevel);
 
     vector<thread> _threads;
 };

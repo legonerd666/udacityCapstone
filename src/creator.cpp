@@ -932,7 +932,8 @@ void creator::IsCastingClass(shared_ptr<character> characterSheet)
         _threads.emplace_back(thread(&character::AddClassFeature, characterSheet, 0, "Spells", move(spellsDesc)));
         SetSpellsKnown(characterSheet, 0);
         SetSpellsKnown(characterSheet, 1);
-        this_thread::sleep_for(chrono::milliseconds(1));
+        SetSpellsPerDay(characterSheet, 0);
+        SetSpellsPerDay(characterSheet, 1);
     }
     else if (tolower(isCastingClass[0]) != 'n')
     {
@@ -1007,6 +1008,39 @@ void creator::SetSpellsKnown(shared_ptr<character> characterSheet, short spellLe
         DelayedCout("I'm sorry, but the options are: A number, \"all\", \"N/A\", and \"Prepare\". Not whatever you just said.");
         DelayedCout("Please try that again.");
         SetSpellsKnown(move(characterSheet), move(spellLevel));
+    }
+}
+
+void creator::SetSpellsPerDay(shared_ptr<character> characterSheet, short spellLevel)
+{
+    DelayedCout("Now I'll be asking you how many level " + to_string(spellLevel) + " spells you can cast per day.");
+    DelayedCout("All casting classes have their spells per day written in a table with all their other info.");
+    DelayedCout("However, some casting classes do not gain the ability to cast spells at level 1.");
+    DelayedCout("If your class is one of them then just answer \"0\"");
+    DelayedCout("Casting classes also get bonus spells per day based on their casting ability score, don't worry about that as I will handle that for you.");
+    DelayedCout("Level " + to_string(spellLevel) + " spells per day: ", false);
+    string spellsPerDay;
+    getline(cin, spellsPerDay, '\n');
+    for (auto &&c : spellsPerDay)
+    {
+        c = tolower(c);
+    }
+    try
+    {
+        if (stoi(spellsPerDay) >= 0)
+            _threads.emplace_back(thread(&character::SetSpellsPerDay, characterSheet, 0, move(spellLevel), stoi(spellsPerDay)));
+        else if (stoi(spellsPerDay) < 0)
+        {
+            DelayedCout("Your class should either be able to cast a positive number or 0 spells per day. Check to make sure you read it correctly.");
+            DelayedCout("We'll go again, and this time, give my a positive number.");
+            SetSpellsPerDay(move(characterSheet), move(spellLevel));
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("I'm gonna need the number of spells per day, please.");
+        DelayedCout("Let's try that again.");
+        SetSpellsPerDay(move(characterSheet), move(spellLevel));
     }
 }
 

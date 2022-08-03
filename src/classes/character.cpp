@@ -1374,6 +1374,12 @@ void character::SetSpellsKnown(short roleIndex, short spellLevel, short spellsKn
     _roles[roleIndex]->SpellStats()[spellLevel]->SpellsKnown(spellsKnown);
 }
 
+void character::SetSpellsPerDay(short roleIndex, short spellLevel, short spellsPerDay)
+{
+    unique_lock<mutex> lock(_mutex);
+    _roles[roleIndex]->SpellStats()[spellLevel]->SpellsPerDay(spellsPerDay);
+}
+
 void character::AddRacialTrait(shared_ptr<feat> &&racialTrait)
 {
     unique_lock<mutex> lock(_mutex);

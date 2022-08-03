@@ -60,6 +60,7 @@ public:
     void HitPoints(die hitdie);
     void SetRoleToCastingClass(short index, abilityType castingAbility);
     void SetSpellsKnown(short roleIndex, short spellLevel, short spellsKnown);
+    void SetSpellsPerDay(short roleIndex, short spellLevel, short spellsPerDay);
     // void HitPoints(unique_ptr<hitPoints> newHitPoints);
     // void Speed(unique_ptr<speed> newSpeed);
     // void ArmorClass(unique_ptr<armorClass> newArmorClass);

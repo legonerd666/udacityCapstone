@@ -43,3 +43,8 @@ void spellStat::SpellsKnown(short spellsKnown)
 {
     _spellsKnown = spellsKnown;
 }
+
+void spellStat::SpellsPerDay(short spellsPerDay)
+{
+    _spellsPerDay = spellsPerDay;
+}
