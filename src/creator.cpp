@@ -924,6 +924,12 @@ void creator::IsCastingClass(shared_ptr<character> characterSheet)
     if (tolower(isCastingClass[0]) == 'y')
     {
         _threads.emplace_back(thread(&character::SetRoleToCastingClass, characterSheet, 0, GetCastingAbility(characterSheet)));
+        DelayedCout("Each spell casting class has a description of how spells work for that class under a class feature named \"Spells\".");
+        DelayedCout("So, please give me the description (or a shortened version if you'd prefer) of how spells work in your class and I'll write them down in a class feature named spells.");
+        DelayedCout("Spells Description: ", false);
+        string spellsDesc;
+        getline(cin, spellsDesc, '\n');
+        _threads.emplace_back(thread(&character::AddClassFeature, characterSheet, 0, "Spells", spellsDesc));
     }
     else if (tolower(isCastingClass[0]) != 'n')
     {

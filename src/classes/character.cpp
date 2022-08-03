@@ -1387,6 +1387,12 @@ short character::AddSkillRankToSkill(skillType skillType)
     return -1;
 }
 
+void character::AddClassFeature(short roleIndex, string name, string description)
+{
+    unique_lock<mutex> lock(_mutex);
+    _roles[roleIndex]->AddClassFeature(name, description);
+}
+
 short character::CMB()
 {
     return _baseAttackBonuses.front() + _abilityScores[0]->AdjustedModifier() + (EnumToBonus(_size) * -1);

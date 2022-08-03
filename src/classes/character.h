@@ -85,6 +85,7 @@ public:
     void AddRole(string name);
     void AddClassSkill(skillType skillType);
     short AddSkillRankToSkill(skillType skillType);
+    void AddClassFeature(short roleIndex, string name, string description);
 
 private:
     string _name;

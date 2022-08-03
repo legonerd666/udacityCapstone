@@ -28,6 +28,9 @@ public:
     // Setters
     void SetToCastingClass(abilityType castingAbility, short castingAbilityMod);
 
+    // Adders (not the snake kind)
+    void AddClassFeature(string name, string description);
+
 private:
     string _name;
     unsigned short _level;
