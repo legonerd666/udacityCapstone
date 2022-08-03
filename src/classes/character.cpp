@@ -1368,6 +1368,12 @@ void character::SetRoleToCastingClass(short index, abilityType castingAbility)
     _roles[index]->SetToCastingClass(castingAbility, _abilityScores[EnumToIndex(castingAbility)]->AdjustedModifier());
 }
 
+void character::SetSpellsKnown(short roleIndex, short spellLevel, short spellsKnown)
+{
+    unique_lock<mutex> lock(_mutex);
+    _roles[roleIndex]->SpellStats()[spellLevel]->SpellsKnown(spellsKnown);
+}
+
 void character::AddRacialTrait(shared_ptr<feat> &&racialTrait)
 {
     unique_lock<mutex> lock(_mutex);

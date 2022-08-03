@@ -20,6 +20,9 @@ public:
     short BonusSpells();
     short SpellDC(short abilityMod);
 
+    // Setters
+    void SpellsKnown(short spellsKnown);
+
 private:
     unsigned short _spellLevel;
     short _spellsKnown;

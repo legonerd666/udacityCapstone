@@ -929,7 +929,10 @@ void creator::IsCastingClass(shared_ptr<character> characterSheet)
         DelayedCout("Spells Description: ", false);
         string spellsDesc;
         getline(cin, spellsDesc, '\n');
-        _threads.emplace_back(thread(&character::AddClassFeature, characterSheet, 0, "Spells", spellsDesc));
+        _threads.emplace_back(thread(&character::AddClassFeature, characterSheet, 0, "Spells", move(spellsDesc)));
+        SetSpellsKnown(characterSheet, 0);
+        SetSpellsKnown(characterSheet, 1);
+        this_thread::sleep_for(chrono::milliseconds(1));
     }
     else if (tolower(isCastingClass[0]) != 'n')
     {
@@ -963,6 +966,47 @@ abilityType creator::GetCastingAbility(shared_ptr<character> characterSheet)
     {
         DelayedCout("I need a number.");
         return GetCastingAbility(move(characterSheet));
+    }
+}
+
+void creator::SetSpellsKnown(shared_ptr<character> characterSheet, short spellLevel)
+{
+    DelayedCout("Now I'll be asking you how many level " + to_string(spellLevel) + " spells you know.");
+    DelayedCout("If your class knows all spells of this level please answer \"all\".");
+    DelayedCout("If your class doesn't know any spells of this level just answer \"0\".");
+    DelayedCout("Some classes (like the wizard) don't have a chart in which you can find your spells known but instead they are written somewhere else (for the wizard it's written in the spellbook section).");
+    DelayedCout("Still others do not have spells known and can simply prepare any spell in their spell list (eg. the cleric).");
+    DelayedCout("For those just answer \"N/A\" or \"Prepare\".");
+    DelayedCout("Lastly some classes (like the wizard) gain extra spells known if the ability they use to cast has a positive modifier.");
+    DelayedCout("Make sure to add that number when entering your spells known (never add it if it is a negative modifier).");
+    DelayedCout("Keep in mind that this is different from bonus spells which are bonus spells per day not bonus spells known. Those you don't need to worry about as I will enter those for you.");
+    DelayedCout("Level " + to_string(spellLevel) + " spells known: ", false);
+    string spellsKnown;
+    getline(cin, spellsKnown, '\n');
+    for (auto &&c : spellsKnown)
+    {
+        c = tolower(c);
+    }
+    try
+    {
+        if (spellsKnown == "n/a" || spellsKnown == "prepare")
+            _threads.emplace_back(thread(&character::SetSpellsKnown, characterSheet, 0, move(spellLevel), -2));
+        else if (spellsKnown == "all")
+            _threads.emplace_back(thread(&character::SetSpellsKnown, characterSheet, 0, move(spellLevel), -1));
+        else if (stoi(spellsKnown) >= 0)
+            _threads.emplace_back(thread(&character::SetSpellsKnown, characterSheet, 0, move(spellLevel), stoi(spellsKnown)));
+        else if (stoi(spellsKnown) < 0)
+        {
+            DelayedCout("Dude, you can't know negative spells. How would that even work?");
+            DelayedCout("We'll go again, and this time, give my a positive number or one of the words I gave you.");
+            SetSpellsKnown(move(characterSheet), move(spellLevel));
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("I'm sorry, but the options are: A number, \"all\", \"N/A\", and \"Prepare\". Not whatever you just said.");
+        DelayedCout("Please try that again.");
+        SetSpellsKnown(move(characterSheet), move(spellLevel));
     }
 }
 

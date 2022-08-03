@@ -37,6 +37,7 @@ private:
     void AddSkillRankToSkill(shared_ptr<character> character, short ranks);
     void IsCastingClass(shared_ptr<character> character);
     abilityType GetCastingAbility(shared_ptr<character> character);
+    void SetSpellsKnown(shared_ptr<character> character, short spellLevel);
 
     vector<thread> _threads;
 };

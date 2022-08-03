@@ -59,6 +59,7 @@ public:
     void Languages(string languages);
     void HitPoints(die hitdie);
     void SetRoleToCastingClass(short index, abilityType castingAbility);
+    void SetSpellsKnown(short roleIndex, short spellLevel, short spellsKnown);
     // void HitPoints(unique_ptr<hitPoints> newHitPoints);
     // void Speed(unique_ptr<speed> newSpeed);
     // void ArmorClass(unique_ptr<armorClass> newArmorClass);

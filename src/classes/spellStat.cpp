@@ -38,3 +38,8 @@ short spellStat::SpellDC(short abilityMod)
 {
     return 10 + _spellLevel + abilityMod;
 }
+
+void spellStat::SpellsKnown(short spellsKnown)
+{
+    _spellsKnown = spellsKnown;
+}
