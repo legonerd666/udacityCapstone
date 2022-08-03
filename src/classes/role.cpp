@@ -76,6 +76,6 @@ void role::SetToCastingClass(abilityType castingAbility, short castingAbilityMod
     }
     for (short i = 0; i < 10; i++)
     {
-        _spellStats[i] = make_shared<spellStat>(i, 0, castingAbility, 0, bonusSpells[i]);
+        _spellStats[i] = make_shared<spellStat>(i, 1, castingAbility, 0, bonusSpells[i]);
     }
 }

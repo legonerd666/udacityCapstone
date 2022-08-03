@@ -1149,44 +1149,72 @@ string character::ToStringForConsole()
             character += "\n";
             character += "|";
             character += "\n";
-            if (_abilityScores[EnumToIndex(role->SpellStats()[0]->AbilityType())]->AdjustedScore() < 10)
+            for (short i = 0; i < 10; i++)
             {
-
-                character += "|             You are unable to cast spells from this class.";
-                character += "\n";
-                character += "|             You need at least 10 in ";
-                character += EnumToString(role->SpellStats()[0]->AbilityType());
-                character += " to cast spells from this class.";
-                character += "\n";
-                character += "|";
-                character += "\n";
-            }
-            else
-            {
-                for (short i = 0; i < 10; i++)
+                if (_abilityScores[EnumToIndex(role->SpellStats()[i]->AbilityType())]->AdjustedScore() < 10 + role->SpellStats()[i]->SpellLevel())
                 {
-                    if (role->SpellStats()[i]->SpellsKnown() > 0)
-                    {
-                        character += "|             Spell Level:           ";
-                        character += to_string(role->SpellStats()[i]->SpellLevel());
-                        character += "\n";
-                        character += "|";
-                        character += "\n";
-                        character += "|                 Spells Known:      ";
-                        character += to_string(role->SpellStats()[i]->SpellsKnown());
-                        character += "\n";
-                        character += "|                 Spell Save DC:     ";
-                        character += to_string(role->SpellStats()[i]->SpellDC(_abilityScores[EnumToIndex(role->SpellStats()[i]->AbilityType())]->AdjustedModifier()));
-                        character += "\n";
-                        character += "|                 Spells Per Day:    ";
-                        character += to_string(role->SpellStats()[i]->SpellsPerDay());
-                        character += "\n";
-                        character += "|                 Bonus Spells:      ";
-                        character += to_string(role->SpellStats()[i]->BonusSpells());
-                        character += "\n";
-                        character += "|";
-                        character += "\n";
-                    }
+
+                    character += "|             Spell Level:           ";
+                    character += to_string(role->SpellStats()[i]->SpellLevel());
+                    character += "\n";
+                    character += "|";
+                    character += "\n";
+                    character += "|                 Spells Known:      ";
+                    character += to_string(role->SpellStats()[i]->SpellsKnown());
+                    character += "\n";
+                    character += "|                 Spell Save DC:     ";
+                    character += to_string(role->SpellStats()[i]->SpellDC(_abilityScores[EnumToIndex(role->SpellStats()[i]->AbilityType())]->AdjustedModifier()));
+                    character += "\n";
+                    character += "|";
+                    character += "\n";
+                    character += "|                 You are unable to cast level ";
+                    character += to_string(role->SpellStats()[i]->SpellLevel());
+                    character += " spells.";
+                    character += "\n";
+                    character += "|                 You need at least a";
+                    if (10 + role->SpellStats()[i]->SpellLevel() == 11 || 10 + role->SpellStats()[i]->SpellLevel() == 18)
+                        character += "n";
+                    character += " ";
+                    character += to_string(10 + role->SpellStats()[i]->SpellLevel());
+                    character += " in ";
+                    character += EnumToString(role->SpellStats()[i]->AbilityType());
+                    character += " to cast level ";
+                    character += to_string(role->SpellStats()[i]->SpellLevel());
+                    character += " spells as a";
+                    if (tolower(role->Name()[0]) == 'a' || tolower(role->Name()[0]) == 'e' || tolower(role->Name()[0]) == 'i' || tolower(role->Name()[0]) == 'o' || tolower(role->Name()[0]) == 'u')
+                        character += "n";
+                    character += " ";
+                    character += role->Name();
+                    character += ".";
+                    character += "\n";
+                    character += "|";
+                    character += "\n";
+                    character += "|";
+                    character += "\n";
+                }
+                else if (role->SpellStats()[i]->SpellsKnown() > 0)
+                {
+                    character += "|             Spell Level:           ";
+                    character += to_string(role->SpellStats()[i]->SpellLevel());
+                    character += "\n";
+                    character += "|";
+                    character += "\n";
+                    character += "|                 Spells Known:      ";
+                    character += to_string(role->SpellStats()[i]->SpellsKnown());
+                    character += "\n";
+                    character += "|                 Spell Save DC:     ";
+                    character += to_string(role->SpellStats()[i]->SpellDC(_abilityScores[EnumToIndex(role->SpellStats()[i]->AbilityType())]->AdjustedModifier()));
+                    character += "\n";
+                    character += "|                 Spells Per Day:    ";
+                    character += to_string(role->SpellStats()[i]->SpellsPerDay());
+                    character += "\n";
+                    character += "|                 Bonus Spells:      ";
+                    character += to_string(role->SpellStats()[i]->BonusSpells());
+                    character += "\n";
+                    character += "|";
+                    character += "\n";
+                    character += "|";
+                    character += "\n";
                 }
             }
 

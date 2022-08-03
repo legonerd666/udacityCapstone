@@ -332,7 +332,7 @@ die creator::GetHitDie()
     DelayedCout("And then the number which is the highest the die can roll.");
     DelayedCout("For example d4 is a 4-sided die.");
     DelayedCout("1. d6\n2. d8\n3. d10\n4. d12");
-    DelayedCout("What is your class's hitdie:", false);
+    DelayedCout("What is your class's hitdie: ", false);
     string hitdie;
     getline(cin, hitdie, '\n');
     try
