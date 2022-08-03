@@ -32,7 +32,7 @@ void creator::AbilityScores(shared_ptr<character> &&characterSheet)
     short abilityScores[6];
     DelayedCout("First up: ability scores!");
     DelayedCout("Roll 4 six-sided dice and take away the lowest die, then add up the remaining 3 dice to get an ability score!");
-    DelayedCout("Write that ability score on a piece of paper and repeat 5 more times so that you have 6 ability scores written down, ranging from 3 to 18 ion value.");
+    DelayedCout("Write that ability score on a piece of paper and repeat 5 more times so that you have 6 ability scores written down, ranging from 3 to 18 in value.");
     DelayedCout("Figure out which scores you want to use each number for (strength, dexterity, constitution, intelligence, wisdom, and charisma) or you can do them in the order you rolled them.");
     DelayedCout("Now that you've chosen the order to use them in:");
     abilityScores[0] = GetScore(strength);
