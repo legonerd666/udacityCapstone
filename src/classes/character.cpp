@@ -1151,7 +1151,31 @@ string character::ToStringForConsole()
             character += "\n";
             for (short i = 0; i < 10; i++)
             {
-                if (_abilityScores[EnumToIndex(role->SpellStats()[i]->AbilityType())]->AdjustedScore() < 10 + role->SpellStats()[i]->SpellLevel())
+                if (role->SpellStats()[i]->SpellsKnown() > 0 && _abilityScores[EnumToIndex(role->SpellStats()[i]->AbilityType())]->AdjustedScore() >= 10 + role->SpellStats()[i]->SpellLevel())
+                {
+                    character += "|             Spell Level:           ";
+                    character += to_string(role->SpellStats()[i]->SpellLevel());
+                    character += "\n";
+                    character += "|";
+                    character += "\n";
+                    character += "|                 Spells Known:      ";
+                    character += to_string(role->SpellStats()[i]->SpellsKnown());
+                    character += "\n";
+                    character += "|                 Spell Save DC:     ";
+                    character += to_string(role->SpellStats()[i]->SpellDC(_abilityScores[EnumToIndex(role->SpellStats()[i]->AbilityType())]->AdjustedModifier()));
+                    character += "\n";
+                    character += "|                 Spells Per Day:    ";
+                    character += to_string(role->SpellStats()[i]->SpellsPerDay());
+                    character += "\n";
+                    character += "|                 Bonus Spells:      ";
+                    character += to_string(role->SpellStats()[i]->BonusSpells());
+                    character += "\n";
+                    character += "|";
+                    character += "\n";
+                    character += "|";
+                    character += "\n";
+                }
+                else if (role->SpellStats()[i]->SpellsKnown() > 0 && _abilityScores[EnumToIndex(role->SpellStats()[i]->AbilityType())]->AdjustedScore() < 10 + role->SpellStats()[i]->SpellLevel())
                 {
 
                     character += "|             Spell Level:           ";
@@ -1186,30 +1210,6 @@ string character::ToStringForConsole()
                     character += " ";
                     character += role->Name();
                     character += ".";
-                    character += "\n";
-                    character += "|";
-                    character += "\n";
-                    character += "|";
-                    character += "\n";
-                }
-                else if (role->SpellStats()[i]->SpellsKnown() > 0)
-                {
-                    character += "|             Spell Level:           ";
-                    character += to_string(role->SpellStats()[i]->SpellLevel());
-                    character += "\n";
-                    character += "|";
-                    character += "\n";
-                    character += "|                 Spells Known:      ";
-                    character += to_string(role->SpellStats()[i]->SpellsKnown());
-                    character += "\n";
-                    character += "|                 Spell Save DC:     ";
-                    character += to_string(role->SpellStats()[i]->SpellDC(_abilityScores[EnumToIndex(role->SpellStats()[i]->AbilityType())]->AdjustedModifier()));
-                    character += "\n";
-                    character += "|                 Spells Per Day:    ";
-                    character += to_string(role->SpellStats()[i]->SpellsPerDay());
-                    character += "\n";
-                    character += "|                 Bonus Spells:      ";
-                    character += to_string(role->SpellStats()[i]->BonusSpells());
                     character += "\n";
                     character += "|";
                     character += "\n";
