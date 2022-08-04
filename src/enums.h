@@ -124,6 +124,7 @@ enum casterType
     cleric,
     druid,
     paladin,
+    ranger,
     sorcererWizard
 };
 

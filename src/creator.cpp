@@ -1051,9 +1051,10 @@ void creator::SetSpellsPerDay(shared_ptr<character> characterSheet, short spellL
 
 void creator::AddSpell(shared_ptr<character> characterSheet)
 {
-    DelayedCout("Let's add all your known spells!");
+    DelayedCout("Let's add all your known spells! (For the sake of brevity I won't be explaining much about each field, I'll simply ask for what you'd like it to be.)");
+    DelayedCout("All the fields are explained in the Pathfinder 1e Core Rulebook in the chapter on spells.");
     DelayedCout("Would you like to add a spell?");
-    DelayedCout("Y/n", false);
+    DelayedCout("Y/n: ", false);
     string addSpell;
     getline(cin, addSpell, '\n');
     if (tolower(addSpell[0]) == 'y')
@@ -1062,7 +1063,13 @@ void creator::AddSpell(shared_ptr<character> characterSheet)
         string name;
         getline(cin, name, '\n');
         magicSchool school = GetSchool();
-        vector<shared_ptr<classSpellListItem>> roles = GetRoles();
+        DelayedCout("Ok, now I need you to tell me which classes can utilize this spell and what level spell it is for that class.");
+        vector<shared_ptr<classSpellListItem>> roles;
+        GetRoles(roles);
+        if (roles.size() == 0)
+        {
+            roles.emplace_back(make_shared<classSpellListItem>());
+        }
         DelayedCout("What is the spells casting time: ", false);
         string castingTime;
         getline(cin, castingTime, '\n');
@@ -1098,7 +1105,7 @@ void creator::AddSpell(shared_ptr<character> characterSheet)
 magicSchool creator::GetSchool()
 {
     DelayedCout("What is the magic school of this spell?");
-    DelayedCout("1. Abjuration\n2. Conjuration\n3. Divination\n4. Enchantment\n5. Evocation\n6. Illusion\n7. Necromancy\n8. Transmutation\n 9. Universal");
+    DelayedCout("1. Abjuration\n2. Conjuration\n3. Divination\n4. Enchantment\n5. Evocation\n6. Illusion\n7. Necromancy\n8. Transmutation\n9. Universal");
     DelayedCout("Please enter the number corresponding to the spells magic school: ", false);
     string school;
     getline(cin, school, '\n');
@@ -1133,6 +1140,102 @@ magicSchool creator::GetSchool()
     {
         DelayedCout("I need you to enter a number.");
         return GetSchool();
+    }
+}
+
+void creator::GetRoles(vector<shared_ptr<classSpellListItem>> &roles)
+{
+    DelayedCout("Would you like to add a class?");
+    DelayedCout("Y/n: ", false);
+    string addRole;
+    getline(cin, addRole, '\n');
+    if (tolower(addRole[0]) == 'y')
+    {
+        casterType casterType = GetCasterType();
+        unsigned short level = GetLevel();
+        auto role = make_shared<classSpellListItem>(move(casterType), move(level));
+        roles.emplace_back(move(role));
+        GetRoles(roles);
+    }
+    else if (tolower(addRole[0]) != 'n')
+    {
+        DelayedCout("I don't know what you want me to do.");
+        GetRoles(roles);
+    }
+}
+
+casterType creator::GetCasterType()
+{
+    DelayedCout("What is the casting class spell list that you would like to enter?");
+    DelayedCout("1. Bard\n2. Cleric\n3. Druid\n4. Paladin\n5. Ranger\n6. Sorcerer/Wizard");
+    DelayedCout("Please enter the number corresponding to the casting class spell list: ", false);
+    string castingClass;
+    getline(cin, castingClass, '\n');
+    try
+    {
+        switch (stoi(castingClass))
+        {
+        case 1:
+            return bard;
+        case 2:
+            return cleric;
+        case 3:
+            return druid;
+        case 4:
+            return paladin;
+        case 5:
+            return ranger;
+        case 6:
+            return sorcererWizard;
+        default:
+            DelayedCout("I need one of the numbers listed above.");
+            return GetCasterType();
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("I need you to enter a number.");
+        return GetCasterType();
+    }
+}
+
+unsigned short creator::GetLevel()
+{
+
+    DelayedCout("What is the level of the spell in the spell list of the class you just entered: ", false);
+    string level;
+    getline(cin, level, '\n');
+    try
+    {
+        if (stoi(level) >= 0 && stoi(level) <= 9)
+            return stoi(level);
+        else
+        {
+            DelayedCout("You can't enter a negative level or a level above 9.");
+            return GetLevel();
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("I need you to enter a number.");
+        return GetLevel();
+    }
+}
+
+bool creator::GetSpellResistance()
+{
+    DelayedCout("Is this spell affected by spell resistance?");
+    DelayedCout("Y/n: ", false);
+    string spellResistance;
+    getline(cin, spellResistance, '\n');
+    if (tolower(spellResistance[0]) == 'y')
+        return true;
+    else if (tolower(spellResistance[0]) == 'n')
+        return false;
+    else
+    {
+        DelayedCout("Please answer Y or n.");
+        return GetSpellResistance();
     }
 }
 
