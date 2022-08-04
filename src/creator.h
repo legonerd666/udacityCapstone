@@ -52,6 +52,7 @@ private:
     void AddClassFeatures(shared_ptr<character> character);
     void AddFeat(shared_ptr<character> character);
     void SetGold(shared_ptr<character> character);
+    string FormattedCurrencies(shared_ptr<character> character);
     void AddWeapon(shared_ptr<character> character);
     void AddArmor(shared_ptr<character> character);
     void AddGear(shared_ptr<character> character);

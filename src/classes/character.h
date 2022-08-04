@@ -35,6 +35,7 @@ public:
     short AbilityMod(abilityType abilityType);
     string Proficiencies();
     int Currency(currencyType currency);
+    currencyType CurrencyType(short index);
 
     // Setters
     void AbilityScores(short newAbilityScores[6]);

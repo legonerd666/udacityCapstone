@@ -1318,6 +1318,13 @@ int character::Currency(currencyType currency)
     return _currency[EnumToIndex(currency)]->Amount();
 }
 
+currencyType character::CurrencyType(short index)
+{
+
+    unique_lock<mutex> lock(_mutex);
+    return _currency[index]->Type();
+}
+
 void character::AbilityScores(short newAbilityScores[6])
 {
     unique_lock<mutex> lock(_mutex);

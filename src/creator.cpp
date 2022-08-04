@@ -169,7 +169,7 @@ void creator::Equipment(shared_ptr<character> &&characterSheet)
     DelayedCout("Great, we are nearing the finish line!");
     DelayedCout("Time to choose your starting equipment!");
     SetGold(characterSheet);
-    // AddWeapon(characterSheet);
+    AddWeapon(characterSheet);
     // AddArmor(characterSheet);
     // AddGear(characterSheet);
     this_thread::sleep_for(chrono::milliseconds(1));
@@ -1379,6 +1379,31 @@ void creator::SetGold(shared_ptr<character> characterSheet)
         DelayedCout("Please give me the amount of gold as a number.");
         SetGold(move(characterSheet));
     }
+}
+
+string creator::FormattedCurrencies(shared_ptr<character> characterSheet)
+{
+    string currencies = "You currently have: ";
+    for (short i = 0; i < 4; i++)
+    {
+        currencies += to_string(characterSheet->Currency(characterSheet->CurrencyType(i)));
+        currencies += " ";
+        currencies += EnumToString(characterSheet->CurrencyType(i));
+        currencies += " piece";
+        if (characterSheet->Currency(characterSheet->CurrencyType(i)) != 1)
+            currencies += "s";
+        if (i < 3)
+            currencies += ", ";
+        else
+            currencies += ".";
+    }
+    return currencies;
+}
+
+void creator::AddWeapon(shared_ptr<character> characterSheet)
+{
+    DelayedCout("Great! Now that you have all your money set up lets purchase some weaponry!");
+    DelayedCout(FormattedCurrencies(characterSheet));
 }
 
 void creator::DelayedCout(string &&string)
