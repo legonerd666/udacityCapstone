@@ -40,6 +40,11 @@ bool role::IsCastingClass()
     return _isCastingClass;
 }
 
+void role::AddSpell(shared_ptr<spell> &&spell)
+{
+    _spells.emplace_back(move(spell));
+}
+
 void role::SetToCastingClass(abilityType castingAbility, short castingAbilityMod)
 {
     _isCastingClass = true;

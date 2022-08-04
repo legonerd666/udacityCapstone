@@ -1433,6 +1433,13 @@ void character::AddClassFeature(short roleIndex, string name, string description
     _roles[roleIndex]->AddClassFeature(name, description);
 }
 
+void character::AddSpell(short roleIndex, shared_ptr<spell> &&spell)
+{
+
+    unique_lock<mutex> lock(_mutex);
+    _roles[roleIndex]->AddSpell(move(spell));
+}
+
 short character::CMB()
 {
     return _baseAttackBonuses.front() + _abilityScores[0]->AdjustedModifier() + (EnumToBonus(_size) * -1);

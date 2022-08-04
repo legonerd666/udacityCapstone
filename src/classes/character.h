@@ -90,6 +90,7 @@ public:
     void AddClassSkill(skillType skillType);
     short AddSkillRankToSkill(skillType skillType);
     void AddClassFeature(short roleIndex, string name, string description);
+    void AddSpell(short roleIndex, shared_ptr<spell> &&spell);
 
 private:
     string _name;

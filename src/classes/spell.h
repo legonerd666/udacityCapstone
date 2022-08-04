@@ -13,6 +13,7 @@ class spell
 {
 public:
     spell();
+    spell(string name, magicSchool magicSchool, vector<shared_ptr<classSpellListItem>> roles, string castingTime, string components, string range, string target, string duration, string savingThrow, bool spellResistance, string description);
 
     // Getters
     string Name();

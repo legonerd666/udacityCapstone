@@ -39,6 +39,10 @@ private:
     abilityType GetCastingAbility(shared_ptr<character> character);
     void SetSpellsKnown(shared_ptr<character> character, short spellLevel);
     void SetSpellsPerDay(shared_ptr<character> character, short spellLevel);
+    void AddSpell(shared_ptr<character> character);
+    magicSchool GetSchool();
+    vector<shared_ptr<classSpellListItem>> GetRoles();
+    bool GetSpellResistance();
     unsigned short GetBaB();
     unsigned short GetSave(saveType saveType);
 

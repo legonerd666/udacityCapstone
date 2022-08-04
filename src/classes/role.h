@@ -30,6 +30,7 @@ public:
 
     // Adders (not the snake kind)
     void AddClassFeature(string name, string description);
+    void AddSpell(shared_ptr<spell> &&spell);
 
 private:
     string _name;

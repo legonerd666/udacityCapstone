@@ -15,6 +15,8 @@ spell::spell()
     _description = "Example Description";
 }
 
+spell::spell(string name, magicSchool magicSchool, vector<shared_ptr<classSpellListItem>> roles, string castingTime, string components, string range, string target, string duration, string savingThrow, bool spellResistance, string description) : _name(name), _school(magicSchool), _roles(roles), _castingTime(castingTime), _components(components), _range(range), _target(target), _duration(duration), _savingThrow(savingThrow), _spellResistance(spellResistance), _description(description) {}
+
 string spell::Name()
 {
     return _name;

@@ -938,6 +938,7 @@ void creator::IsCastingClass(shared_ptr<character> characterSheet)
         SetSpellsKnown(characterSheet, 1);
         SetSpellsPerDay(characterSheet, 0);
         SetSpellsPerDay(characterSheet, 1);
+        AddSpell(move(characterSheet));
     }
     else if (tolower(isCastingClass[0]) != 'n')
     {
@@ -1045,6 +1046,93 @@ void creator::SetSpellsPerDay(shared_ptr<character> characterSheet, short spellL
         DelayedCout("I'm gonna need the number of spells per day, please.");
         DelayedCout("Let's try that again.");
         SetSpellsPerDay(move(characterSheet), move(spellLevel));
+    }
+}
+
+void creator::AddSpell(shared_ptr<character> characterSheet)
+{
+    DelayedCout("Let's add all your known spells!");
+    DelayedCout("Would you like to add a spell?");
+    DelayedCout("Y/n", false);
+    string addSpell;
+    getline(cin, addSpell, '\n');
+    if (tolower(addSpell[0]) == 'y')
+    {
+        DelayedCout("What is the spell called: ", false);
+        string name;
+        getline(cin, name, '\n');
+        magicSchool school = GetSchool();
+        vector<shared_ptr<classSpellListItem>> roles = GetRoles();
+        DelayedCout("What is the spells casting time: ", false);
+        string castingTime;
+        getline(cin, castingTime, '\n');
+        DelayedCout("What are the spells components: ", false);
+        string components;
+        getline(cin, components, '\n');
+        DelayedCout("What is the spells range: ", false);
+        string range;
+        getline(cin, range, '\n');
+        DelayedCout("What is the spells target: ", false);
+        string target;
+        getline(cin, target, '\n');
+        DelayedCout("What is the spells duration: ", false);
+        string duration;
+        getline(cin, duration, '\n');
+        DelayedCout("What is the spells saving throw: ", false);
+        string savingThrow;
+        getline(cin, savingThrow, '\n');
+        bool spellResistance = GetSpellResistance();
+        DelayedCout("What is the spells description: ", false);
+        string description;
+        getline(cin, description, '\n');
+        _threads.emplace_back(thread(&character::AddSpell, characterSheet, 0, move(make_shared<spell>(move(name), move(school), move(roles), move(castingTime), move(components), move(range), move(target), move(duration), move(savingThrow), move(spellResistance), move(description)))));
+        AddSpell(move(characterSheet));
+    }
+    else if (tolower(addSpell[0] != 'n'))
+    {
+        DelayedCout("I need you to answer Y or n.");
+        AddSpell(move(characterSheet));
+    }
+}
+
+magicSchool creator::GetSchool()
+{
+    DelayedCout("What is the magic school of this spell?");
+    DelayedCout("1. Abjuration\n2. Conjuration\n3. Divination\n4. Enchantment\n5. Evocation\n6. Illusion\n7. Necromancy\n8. Transmutation\n 9. Universal");
+    DelayedCout("Please enter the number corresponding to the spells magic school: ", false);
+    string school;
+    getline(cin, school, '\n');
+    try
+    {
+        switch (stoi(school))
+        {
+        case 1:
+            return abjuration;
+        case 2:
+            return conjuration;
+        case 3:
+            return divination;
+        case 4:
+            return enchantment;
+        case 5:
+            return evocation;
+        case 6:
+            return illusion;
+        case 7:
+            return necromancy;
+        case 8:
+            return transmutation;
+        case 9:
+            return universal;
+        default:
+            DelayedCout("I need one of the numbers listed above.");
+            return GetSchool();
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("I need you to enter a number.");
+        return GetSchool();
     }
 }
 
