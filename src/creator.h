@@ -54,6 +54,13 @@ private:
     void SetGold(shared_ptr<character> character);
     string FormattedCurrencies(shared_ptr<character> character);
     void AddWeapon(shared_ptr<character> character);
+    currencyType GetCurrencyType();
+    int GetCost();
+    int SubtractCost(shared_ptr<character> character, currencyType &&currencyType, int &&cost);
+    short GetNDice();
+    die GetDie();
+    unsigned short GetWeight();
+    abilityType GetAbilityType();
     void AddArmor(shared_ptr<character> character);
     void AddGear(shared_ptr<character> character);
 

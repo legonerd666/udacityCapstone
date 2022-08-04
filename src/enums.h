@@ -43,6 +43,8 @@ enum sizeType
 
 enum die
 {
+    d2,
+    d3,
     d4,
     d6,
     d8,

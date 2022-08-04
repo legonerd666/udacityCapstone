@@ -1404,6 +1404,327 @@ void creator::AddWeapon(shared_ptr<character> characterSheet)
 {
     DelayedCout("Great! Now that you have all your money set up lets purchase some weaponry!");
     DelayedCout(FormattedCurrencies(characterSheet));
+    DelayedCout("Would you like to purchase a weapon?");
+    DelayedCout("Y/n: ", false);
+    string addWeapon;
+    getline(cin, addWeapon, '\n');
+    if (tolower(addWeapon[0]) == 'y')
+    {
+        currencyType costType = GetCurrencyType();
+        int cost = GetCost();
+        if (SubtractCost(characterSheet, move(costType), move(cost)) == -1)
+        {
+            DelayedCout("You can't afford that.");
+            AddWeapon(move(characterSheet));
+        }
+        string name;
+        DelayedCout("Ok, and what's the name of the weapon: ", false);
+        getline(cin, name, '\n');
+        short nOfDice = GetNDice();
+        die damageDie = GetDie();
+        string critRange;
+        DelayedCout("What is the critical range of your weapon: ", false);
+        getline(cin, critRange, '\n');
+        string range;
+        DelayedCout("What is the range increment of your weapon: ", false);
+        getline(cin, range, '\n');
+        unsigned short weight = GetWeight();
+        string damageType;
+        DelayedCout("What is the Damage Type of your weapon: ", false);
+        getline(cin, damageType, '\n');
+        abilityType abilityType = GetAbilityType();
+        string description;
+        DelayedCout("Ok, this is the last thing I'll need you to tell me about your weapon.");
+        DelayedCout("Please write down any special properties and/or a description of the weapon: ", false);
+        getline(cin, description, '\n');
+    }
+    else if (tolower(addWeapon[0]) != 'n')
+    {
+        DelayedCout("Could you run that by me again? Perhaps using one of the response options I asked for?");
+        DelayedCout("Thanks.");
+        AddWeapon(move(characterSheet));
+    }
+}
+
+currencyType creator::GetCurrencyType()
+{
+    DelayedCout("First things first: Does the weapon cost Copper, Silver, Gold, Or Platinum: ", false);
+    string costType;
+    getline(cin, costType, '\n');
+    for (auto &&c : costType)
+    {
+        c = tolower(c);
+    }
+    if (costType == "copper")
+        return copper;
+    else if (costType == "silver")
+        return silver;
+    else if (costType == "gold")
+        return gold;
+    else if (costType == "platinum")
+        return platinum;
+    else
+    {
+        DelayedCout("I don't know that currency, please choose one of those listed above and make sure to spell it properly.");
+        return GetCurrencyType();
+    }
+}
+
+int creator::GetCost()
+{
+    DelayedCout("What's its cost in the aforementioned currency: ", false);
+    string cost;
+    getline(cin, cost, '\n');
+    try
+    {
+        if (stoi(cost) >= 0)
+            return stoi(cost);
+        else
+        {
+            DelayedCout("You can't have an item cost a negative amount.");
+            return GetCost();
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("I'm sorry, but I asked for a number. Not whatever that ridiculousness was.");
+        return GetCost();
+    }
+}
+
+int creator::SubtractCost(shared_ptr<character> characterSheet, currencyType &&currencyType, int &&cost)
+{
+    if (characterSheet->Currency(currencyType) < cost)
+    {
+        int CPs = characterSheet->Currency(copper);
+        int SPs = characterSheet->Currency(silver);
+        int GPs = characterSheet->Currency(gold);
+        int PPs = characterSheet->Currency(platinum);
+
+        switch (currencyType)
+        {
+        case copper:
+            while (CPs < cost)
+            {
+                if (SPs > 0)
+                {
+                    SPs--;
+                    CPs += 10;
+                }
+                else if (GPs > 0)
+                {
+                    GPs--;
+                    SPs += 9;
+                    CPs += 10;
+                }
+                else if (PPs > 0)
+                {
+                    PPs--;
+                    GPs += 9;
+                    SPs += 9;
+                    CPs += 10;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            characterSheet->Currency(copper, CPs - cost);
+            characterSheet->Currency(silver, SPs);
+            characterSheet->Currency(gold, GPs);
+            characterSheet->Currency(platinum, PPs);
+            return 0;
+        case silver:
+            while (SPs < cost)
+            {
+                if (CPs >= 10)
+                {
+                    CPs -= 10;
+                    SPs++;
+                }
+                else if (GPs > 0)
+                {
+                    GPs--;
+                    SPs += 10;
+                }
+                else if (PPs > 0)
+                {
+                    PPs--;
+                    GPs += 9;
+                    SPs += 10;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            characterSheet->Currency(copper, CPs);
+            characterSheet->Currency(silver, SPs - cost);
+            characterSheet->Currency(gold, GPs);
+            characterSheet->Currency(platinum, PPs);
+            return 0;
+        case gold:
+            while (GPs < cost)
+            {
+                if (CPs >= 100)
+                {
+                    CPs -= 100;
+                    GPs++;
+                }
+                else if (SPs >= 10)
+                {
+                    SPs -= 10;
+                    GPs++;
+                }
+                else if (PPs > 0)
+                {
+                    PPs--;
+                    GPs += 10;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            characterSheet->Currency(copper, CPs);
+            characterSheet->Currency(silver, SPs);
+            characterSheet->Currency(gold, GPs - cost);
+            characterSheet->Currency(platinum, PPs);
+            return 0;
+        case platinum:
+            while (PPs < cost)
+            {
+                if (CPs >= 1000)
+                {
+                    CPs -= 1000;
+                    PPs++;
+                }
+                else if (SPs >= 100)
+                {
+                    SPs -= 100;
+                    PPs++;
+                }
+                else if (GPs >= 10)
+                {
+                    GPs -= 10;
+                    PPs++;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            characterSheet->Currency(copper, CPs);
+            characterSheet->Currency(silver, SPs);
+            characterSheet->Currency(gold, GPs);
+            characterSheet->Currency(platinum, PPs - cost);
+            return 0;
+        default:
+            return -1;
+        }
+    }
+    else
+        characterSheet->Currency(currencyType, characterSheet->Currency(currencyType) - cost);
+}
+
+short creator::GetNDice()
+{
+    DelayedCout("How many damage dice are rolled for the weapon: ", false);
+    string numberOfDice;
+    getline(cin, numberOfDice, '\n');
+    try
+    {
+        if (stoi(numberOfDice) > 0)
+            return stoi(numberOfDice);
+        else
+        {
+            DelayedCout("Your weapon must roll at least 1 damage die.");
+            return GetNDice();
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("Please give me the number of dice.");
+        return GetNDice();
+    }
+}
+
+die creator::GetDie()
+{
+    DelayedCout("What damage die does the weapon use (please give me the number corresponding to the sides the die has): ", false);
+    string damageDie;
+    getline(cin, damageDie, '\n');
+    try
+    {
+        switch (stoi(damageDie))
+        {
+        case 2:
+            return d2;
+        case 3:
+            return d3;
+        case 4:
+            return d4;
+        case 6:
+            return d6;
+        case 8:
+            return d8;
+        case 10:
+            return d10;
+        case 12:
+            return d12;
+        case 20:
+            return d20;
+        default:
+            DelayedCout("Please give me a damage die of 2, 3, 4, 6, 8, 10, 12, or 20. (I don't think there are any d20 weapons, but who am I to stop you?).");
+            return GetDie();
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("Sir/Ma'am, I need the number of sides on the damage die your weapon uses.");
+        return GetDie();
+    }
+}
+
+unsigned short creator::GetWeight()
+{
+    DelayedCout("How much does your weapon weigh in pounds: ", false);
+    string weight;
+    getline(cin, weight, '\n');
+    try
+    {
+        if (stoi(weight) >= 0 && stoi(weight) <= USHRT_MAX)
+            return stoi(weight);
+        else
+        {
+            DelayedCout("Please don't give my a negative weight or a weight above 65535.");
+            return GetWeight();
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("Number!");
+        return GetWeight();
+    }
+}
+
+abilityType creator::GetAbilityType()
+{
+    DelayedCout("Does this weapon add your strength modifier to its damage? (Most melee weapons do)");
+    DelayedCout("Y/n: ", false);
+    string addStrength;
+    getline(cin, addStrength, '\n');
+    if (tolower(addStrength[0]) == 'y')
+        return strength;
+    else if (tolower(addStrength[0]) == 'n')
+        return constitution;
+    else
+    {
+        DelayedCout("...");
+        DelayedCout("...");
+        DelayedCout("...");
+        return GetAbilityType();
+    }
 }
 
 void creator::DelayedCout(string &&string)

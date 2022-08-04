@@ -81,6 +81,10 @@ string EnumToString(die die)
 {
     switch (die)
     {
+    case d2:
+        return "d2";
+    case d3:
+        return "d3";
     case d4:
         return "d4";
     case d6:
@@ -269,6 +273,10 @@ short EnumToMax(die die)
     {
         switch (die)
         {
+        case d2:
+            return 2;
+        case d3:
+            return 3;
         case d4:
             return 4;
 
