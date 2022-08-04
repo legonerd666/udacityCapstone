@@ -23,10 +23,6 @@ character::character()
     _initiative = make_unique<initiative>();
     _armorClass = make_unique<armorClass>();
 
-    _saves[0] = make_unique<save>(fortitude);
-    _saves[1] = make_unique<save>(reflex);
-    _saves[2] = make_unique<save>(will);
-
     _skills.emplace_back(make_unique<skill>(acrobatics));
     _skills.emplace_back(make_unique<skill>(appraise));
     _skills.emplace_back(make_unique<skill>(bluff));
@@ -1389,6 +1385,12 @@ void character::BaB(unsigned short BaB)
         BaB -= 5;
         _baseAttackBonuses.emplace_back(BaB);
     }
+}
+
+void character::Save(saveType saveType, unsigned short saveValue)
+{
+    unique_lock<mutex> lock(_mutex);
+    _saves[EnumToIndex(saveType)] = make_unique<save>(saveType, saveValue);
 }
 
 void character::AddRacialTrait(shared_ptr<feat> &&racialTrait)

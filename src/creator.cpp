@@ -149,9 +149,9 @@ void creator::Role(shared_ptr<character> &&characterSheet)
                                  { characterSheet->Proficiencies(characterSheet->Proficiencies() + " " + proficiencies); }));
     IsCastingClass(characterSheet);
     _threads.emplace_back(thread(&character::BaB, characterSheet, GetBaB()));
-    //_threads.emplace_back(thread(&character::Save, characterSheet, fortitude, GetSave(fortitude)));
-    //_threads.emplace_back(thread(&character::Save, characterSheet, reflex, GetSave(reflex)));
-    //_threads.emplace_back(thread(&character::Save, characterSheet, will, GetSave(will)));
+    _threads.emplace_back(thread(&character::Save, characterSheet, fortitude, GetSave(fortitude)));
+    _threads.emplace_back(thread(&character::Save, characterSheet, reflex, GetSave(reflex)));
+    _threads.emplace_back(thread(&character::Save, characterSheet, will, GetSave(will)));
     this_thread::sleep_for(chrono::milliseconds(1));
 }
 
@@ -1260,6 +1260,30 @@ unsigned short creator::GetBaB()
     {
         DelayedCout("I need a number.");
         return GetBaB();
+    }
+}
+
+unsigned short creator::GetSave(saveType saveType)
+{
+    DelayedCout("Now I need your base " + EnumToString(saveType) + " save.");
+    DelayedCout("What is your class's base save: ", false);
+    string save;
+    getline(cin, save, '\n');
+    try
+    {
+        if (stoi(save) >= 0 && stoi(save) < USHRT_MAX)
+            return stoi(save);
+        else
+        {
+            DelayedCout("You aren't allowed a negative or exceptionally large base save.");
+            DelayedCout("Please give me a positive value.");
+            return GetSave(saveType);
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("I need a number.");
+        return GetSave(saveType);
     }
 }
 

@@ -310,6 +310,21 @@ short EnumToIndex(abilityType abilityType)
     }
 }
 
+short EnumToIndex(saveType saveType)
+{
+    switch (saveType)
+    {
+    case fortitude:
+        return 0;
+    case reflex:
+        return 1;
+    case will:
+        return 2;
+    default:
+        return -1;
+    }
+}
+
 abilityType EnumToAbilityType(saveType saveType)
 {
     switch (saveType)

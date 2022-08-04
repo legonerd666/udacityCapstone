@@ -3,30 +3,31 @@
 
 #include "../enums.h"
 
-class save {
+class save
+{
 public:
     save();
-    save(saveType saveType);
+    save(saveType saveType, unsigned short base);
 
-    //Getters
+    // Getters
     short Total(short abilityMod);
     saveType SaveType();
     abilityType AbilityType();
-    short Base();
+    unsigned short Base();
     short MagicMod();
     short MiscMod();
     short TempMod();
 
-    //Setters
-    // void Type(saveType newType);
-    // void Base(short newBase);
-    // void MagicMod(short newMagicMod);
-    // void MiscMod(short newMiscMod);
+    // Setters
+    //  void Type(saveType newType);
+    //  void Base(short newBase);
+    //  void MagicMod(short newMagicMod);
+    //  void MiscMod(short newMiscMod);
 
 private:
     saveType _type;
     abilityType _abilityType;
-    short _base;
+    unsigned short _base;
     short _magicMod;
     short _miscMod;
     short _tempMod;

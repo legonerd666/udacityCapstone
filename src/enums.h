@@ -160,6 +160,8 @@ short EnumToMax(die die);
 
 short EnumToIndex(abilityType abilityType);
 
+short EnumToIndex(saveType saveType);
+
 abilityType EnumToAbilityType(saveType saveType);
 
 abilityType EnumToAbilityType(skillType skillType);
