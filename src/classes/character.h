@@ -36,21 +36,6 @@ public:
     string Proficiencies();
 
     // Setters
-
-    // void Name(string newName);
-    // void Alignment(alignment newAlignment);
-    // void Player(string newPlayer);
-    // void Roles(vector<unique_ptr<role>>&& newRoles);
-    // void Deity(string newDeity);
-    // void Homeland(string newHomeland);
-    // void Race(unique_ptr<race> newRace);
-    // void Gender(string newGender);
-    // void Age(short newAge);
-    // void Height(short newHeight);
-    // void Weight(short newWeight);
-    // void HairColor(string newHairColor);
-    // void EyeColor(string newEyeColor);
-
     void AbilityScores(short newAbilityScores[6]);
     void Race(string name);
     void Size(sizeType sizeType);
@@ -63,26 +48,6 @@ public:
     void SetSpellsPerDay(short roleIndex, short spellLevel, short spellsPerDay);
     void BaB(unsigned short BaB);
     void Save(saveType saveType, unsigned short save);
-    // void HitPoints(unique_ptr<hitPoints> newHitPoints);
-    // void Speed(unique_ptr<speed> newSpeed);
-    // void ArmorClass(unique_ptr<armorClass> newArmorClass);
-    // void saves(unique_ptr<save> newSaves [3]);
-    // void Skills(vector<unique_ptr<skill>>&& newSkills);
-    // void Languages(string newLanguages);
-
-    // void BaseAttackBonus(vector<unsigned short> newBaseAttackBonuses);
-    // void SpellResistance(short newSpellResistance);
-    // void Weapons(vector<unique_ptr<weapon>>&& newWeapons);
-    // void Proficiencies(string newProficiencies);
-
-    // void ArmorClassItems(vector<unique_ptr<armorClassItem>>&& newArmorClassItems);
-    // void Gear(vector<unique_ptr<gear>>&& newGear);
-    // void Currency(vector<unique_ptr<currency>>&& newCurrency);
-
-    // void Feats(vector<unique_ptr<feat>>&& newFeats);
-
-    // void Xp(unsigned int newXp);
-    // void NextLevelXpAmount(unsigned int newNextLevelXpAmount);
 
     // Adders
     void AddRacialTrait(shared_ptr<feat> &&racialTrait);
@@ -91,6 +56,7 @@ public:
     short AddSkillRankToSkill(skillType skillType);
     void AddClassFeature(short roleIndex, string name, string description);
     void AddSpell(short roleIndex, shared_ptr<spell> &&spell);
+    void AddFeat(unique_ptr<feat> &&feat);
 
 private:
     string _name;

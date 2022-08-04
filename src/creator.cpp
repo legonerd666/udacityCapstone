@@ -153,8 +153,14 @@ void creator::Role(shared_ptr<character> &&characterSheet)
     _threads.emplace_back(thread(&character::Save, characterSheet, reflex, GetSave(reflex)));
     _threads.emplace_back(thread(&character::Save, characterSheet, will, GetSave(will)));
     DelayedCout("Ok, time for the final step of choosing your class: Entering in your class features!");
-    AddClassFeatures(move(characterSheet));
-    this_thread::sleep_for(chrono::milliseconds(1));
+    AddClassFeatures(characterSheet);
+    Feats(move(characterSheet));
+}
+
+void creator::Feats(shared_ptr<character> &&characterSheet)
+{
+    DelayedCout("Ok now we are gonna go through and add your feats. All characters start at level 1 with 1 feat. Some races and classes may get extras.");
+    AddFeat(characterSheet);
 }
 
 short creator::GetScore(abilityType abilityType)
@@ -1310,6 +1316,34 @@ void creator::AddClassFeatures(shared_ptr<character> characterSheet)
     {
         DelayedCout("Not sure how to respond to that...");
         AddClassFeatures(move(characterSheet));
+    }
+}
+
+void creator::AddFeat(shared_ptr<character> characterSheet)
+{
+    DelayedCout("Is there a feat you want to add?");
+    DelayedCout("Y/n: ", false);
+    string addFeat;
+    getline(cin, addFeat, '\n');
+    if (tolower(addFeat[0] == 'y'))
+    {
+        string name;
+        string description;
+        DelayedCout("What is the name of the feat: ", false);
+        getline(cin, name, '\n');
+        DelayedCout("What is its description: ", false);
+        getline(cin, description, '\n');
+        _threads.emplace_back(thread(&character::AddFeat, characterSheet, make_unique<feat>(name, description)));
+        AddFeat(move(characterSheet));
+    }
+    else if (tolower(addFeat[0]) != 'n')
+    {
+        DelayedCout("Could. Not. Parse. An-swer.");
+        DelayedCout("Lol, just kidding, its not like I'm some sort of weird robot or smth.");
+        DelayedCout("...");
+        DelayedCout("Aaaaaaaaaaaanyway...");
+        DelayedCout("Ima need you to answer either Y or n.");
+        AddFeat(move(characterSheet));
     }
 }
 

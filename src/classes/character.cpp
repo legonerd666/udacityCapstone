@@ -1437,9 +1437,14 @@ void character::AddClassFeature(short roleIndex, string name, string description
 
 void character::AddSpell(short roleIndex, shared_ptr<spell> &&spell)
 {
-
     unique_lock<mutex> lock(_mutex);
     _roles[roleIndex]->AddSpell(move(spell));
+}
+
+void character::AddFeat(unique_ptr<feat> &&feat)
+{
+    unique_lock<mutex> lock(_mutex);
+    _feats.emplace_back(move(feat));
 }
 
 short character::CMB()
