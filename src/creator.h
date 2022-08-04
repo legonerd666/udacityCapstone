@@ -24,6 +24,7 @@ private:
     void Race(shared_ptr<character> &&character, short abilityScores[6]);
     void Role(shared_ptr<character> &&character);
     void Feats(shared_ptr<character> &&character);
+    void Equipment(shared_ptr<character> &&character);
 
     short GetScore(abilityType abilityType);
     short GetScoreAdj(abilityType abilityType);
@@ -50,6 +51,10 @@ private:
     unsigned short GetSave(saveType saveType);
     void AddClassFeatures(shared_ptr<character> character);
     void AddFeat(shared_ptr<character> character);
+    void SetGold(shared_ptr<character> character);
+    void AddWeapon(shared_ptr<character> character);
+    void AddArmor(shared_ptr<character> character);
+    void AddGear(shared_ptr<character> character);
 
     vector<thread> _threads;
 };

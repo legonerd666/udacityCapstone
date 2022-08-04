@@ -325,6 +325,23 @@ short EnumToIndex(saveType saveType)
     }
 }
 
+short EnumToIndex(currencyType currencyType)
+{
+    switch (currencyType)
+    {
+    case copper:
+        return 0;
+    case silver:
+        return 1;
+    case gold:
+        return 2;
+    case platinum:
+        return 3;
+    default:
+        return -1;
+    }
+}
+
 abilityType EnumToAbilityType(saveType saveType)
 {
     switch (saveType)

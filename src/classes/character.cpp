@@ -1312,6 +1312,12 @@ string character::Proficiencies()
     return _proficiencies;
 }
 
+int character::Currency(currencyType currency)
+{
+    unique_lock<mutex> lock(_mutex);
+    return _currency[EnumToIndex(currency)]->Amount();
+}
+
 void character::AbilityScores(short newAbilityScores[6])
 {
     unique_lock<mutex> lock(_mutex);
@@ -1391,6 +1397,12 @@ void character::Save(saveType saveType, unsigned short saveValue)
 {
     unique_lock<mutex> lock(_mutex);
     _saves[EnumToIndex(saveType)] = make_unique<save>(saveType, saveValue);
+}
+
+void character::Currency(currencyType currency, int amount)
+{
+    unique_lock<mutex> lock(_mutex);
+    _currency[EnumToIndex(currency)]->Amount(amount);
 }
 
 void character::AddRacialTrait(shared_ptr<feat> &&racialTrait)

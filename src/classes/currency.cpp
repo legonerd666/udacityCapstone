@@ -19,3 +19,8 @@ int currency::Amount()
 {
     return _amount;
 }
+
+void currency::Amount(int newAmount)
+{
+    _amount = newAmount;
+}

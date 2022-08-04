@@ -34,6 +34,7 @@ public:
     string ToStringForConsole();
     short AbilityMod(abilityType abilityType);
     string Proficiencies();
+    int Currency(currencyType currency);
 
     // Setters
     void AbilityScores(short newAbilityScores[6]);
@@ -48,6 +49,7 @@ public:
     void SetSpellsPerDay(short roleIndex, short spellLevel, short spellsPerDay);
     void BaB(unsigned short BaB);
     void Save(saveType saveType, unsigned short save);
+    void Currency(currencyType currency, int amount);
 
     // Adders
     void AddRacialTrait(shared_ptr<feat> &&racialTrait);

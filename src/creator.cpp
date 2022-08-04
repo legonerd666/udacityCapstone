@@ -161,6 +161,18 @@ void creator::Feats(shared_ptr<character> &&characterSheet)
 {
     DelayedCout("Ok now we are gonna go through and add your feats. All characters start at level 1 with 1 feat. Some races and classes may get extras.");
     AddFeat(characterSheet);
+    Equipment(move(characterSheet));
+}
+
+void creator::Equipment(shared_ptr<character> &&characterSheet)
+{
+    DelayedCout("Great, we are nearing the finish line!");
+    DelayedCout("Time to choose your starting equipment!");
+    SetGold(characterSheet);
+    // AddWeapon(characterSheet);
+    // AddArmor(characterSheet);
+    // AddGear(characterSheet);
+    this_thread::sleep_for(chrono::milliseconds(1));
 }
 
 short creator::GetScore(abilityType abilityType)
@@ -1344,6 +1356,28 @@ void creator::AddFeat(shared_ptr<character> characterSheet)
         DelayedCout("Aaaaaaaaaaaanyway...");
         DelayedCout("Ima need you to answer either Y or n.");
         AddFeat(move(characterSheet));
+    }
+}
+
+void creator::SetGold(shared_ptr<character> characterSheet)
+{
+    DelayedCout("All characters start out with a random amount of gold to spend based on their class.");
+    DelayedCout("So what you'll do is look in the Pathfinder 1e Core Rulebook and on the first page it will list a number of a specific sided die to roll and then multiply that number by 10.");
+    DelayedCout("That's how many gold pieces you have to spend on equipment!");
+    DelayedCout("So roll those dice and multiply the result by 10 and enter it here and I'll add it to your gold reserves to spend on gear.");
+    DelayedCout("Gold Pieces: ", false);
+    string goldPieces;
+    getline(cin, goldPieces, '\n');
+    try
+    {
+        stoi(goldPieces);
+        _threads.emplace_back(thread([characterSheet, goldPieces]()
+                                     { characterSheet->Currency(gold, stoi(goldPieces)); }));
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("Please give me the amount of gold as a number.");
+        SetGold(move(characterSheet));
     }
 }
 

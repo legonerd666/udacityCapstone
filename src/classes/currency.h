@@ -18,7 +18,7 @@ public:
 
     // Setters
     //  void Type(currencyType newType);
-    //  void Amount(int newAmount);
+    void Amount(int newAmount);
 
 private:
     currencyType _type;

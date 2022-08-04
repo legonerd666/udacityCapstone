@@ -162,6 +162,8 @@ short EnumToIndex(abilityType abilityType);
 
 short EnumToIndex(saveType saveType);
 
+short EnumToIndex(currencyType currencyType);
+
 abilityType EnumToAbilityType(saveType saveType);
 
 abilityType EnumToAbilityType(skillType skillType);
