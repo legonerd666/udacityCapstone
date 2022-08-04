@@ -152,6 +152,8 @@ void creator::Role(shared_ptr<character> &&characterSheet)
     _threads.emplace_back(thread(&character::Save, characterSheet, fortitude, GetSave(fortitude)));
     _threads.emplace_back(thread(&character::Save, characterSheet, reflex, GetSave(reflex)));
     _threads.emplace_back(thread(&character::Save, characterSheet, will, GetSave(will)));
+    DelayedCout("Ok, time for the final step of choosing your class: Entering in your class features!");
+    AddClassFeatures(move(characterSheet));
     this_thread::sleep_for(chrono::milliseconds(1));
 }
 
@@ -1284,6 +1286,30 @@ unsigned short creator::GetSave(saveType saveType)
     {
         DelayedCout("I need a number.");
         return GetSave(saveType);
+    }
+}
+
+void creator::AddClassFeatures(shared_ptr<character> characterSheet)
+{
+    DelayedCout("Would you like to add a class feature?");
+    DelayedCout("Y/n: ", false);
+    string addClassFeature;
+    getline(cin, addClassFeature, '\n');
+    if (tolower(addClassFeature[0]) == 'y')
+    {
+        DelayedCout("Please tell me the name of the class feature: ", false);
+        string name;
+        getline(cin, name, '\n');
+        DelayedCout("Ok, now the description: ", false);
+        string description;
+        getline(cin, description, '\n');
+        _threads.emplace_back(thread(&character::AddClassFeature, characterSheet, 0, move(name), move(description)));
+        AddClassFeatures(move(characterSheet));
+    }
+    else if (tolower(addClassFeature[0]) != 'n')
+    {
+        DelayedCout("Not sure how to respond to that...");
+        AddClassFeatures(move(characterSheet));
     }
 }
 

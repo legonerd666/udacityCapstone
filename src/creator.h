@@ -47,6 +47,7 @@ private:
     bool GetSpellResistance();
     unsigned short GetBaB();
     unsigned short GetSave(saveType saveType);
+    void AddClassFeatures(shared_ptr<character> character);
 
     vector<thread> _threads;
 };
