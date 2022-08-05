@@ -170,7 +170,7 @@ void creator::Equipment(shared_ptr<character> &&characterSheet)
     DelayedCout("Time to choose your starting equipment!");
     SetGold(characterSheet);
     AddWeapon(characterSheet);
-    // AddArmor(characterSheet);
+    AddArmor(characterSheet);
     // AddGear(characterSheet);
     this_thread::sleep_for(chrono::milliseconds(1));
 }
@@ -1451,6 +1451,56 @@ void creator::AddWeapon(shared_ptr<character> characterSheet)
         DelayedCout("Could you run that by me again? Perhaps using one of the response options I asked for?");
         DelayedCout("Thanks.");
         AddWeapon(move(characterSheet));
+    }
+}
+
+void creator::AddArmor(shared_ptr<character> characterSheet)
+{
+    DelayedCout("Great! Now let's purchase the armor you are gonna wear!");
+    DelayedCout("Keep in mind this is just what you'll be wearing, you can purchase more armor that you want to bring with but don't wear immediately later");
+    DelayedCout(FormattedCurrencies(characterSheet));
+    DelayedCout("Would you like to purchase some armor?");
+    DelayedCout("Y/n: ", false);
+    string addArmor;
+    getline(cin, addArmor, '\n');
+    if (tolower(addArmor[0]) == 'y')
+    {
+        currencyType costType = GetCurrencyType();
+        int cost = GetCost();
+        if (SubtractCost(characterSheet, move(costType), move(cost)) == -1)
+        {
+            DelayedCout("You can't afford that.");
+            AddArmor(move(characterSheet));
+        }
+        else
+        {
+            string name;
+            DelayedCout("Ok, and what's the name of the armor: ", false);
+            getline(cin, name, '\n');
+            string type;
+            DelayedCout("Ok, and is it a piece of armor or a shield: ", false);
+            getline(cin, type, '\n');
+            unsigned short aCBonus = GetACBonus();
+            unsigned short maxDex = GetMaxDex();
+            short checkPenalty = GetCheckPenalty();
+            unsigned short spellFailureChance = GetSpellFailureChance();
+            unsigned short baseSpeedAdjustment = GetBaseSpeedAdjustment();
+            unsigned short weight = GetWeight();
+            string description;
+            DelayedCout("Ok, this is the last thing I'll need you to tell me about your armor.");
+            DelayedCout("Please write down any special properties and/or a description of the armor: ", false);
+            getline(cin, description, '\n');
+
+            _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, weight)));
+            _threads.emplace_back(thread(&character::AddArmor, characterSheet, make_unique<armorClassItem>(move(name), move(type), move(aCBonus), move(maxDex), move(checkPenalty), move(spellFailureChance), move(baseSpeedAdjustment), move(weight), move(description))));
+            AddArmor(move(characterSheet));
+        }
+    }
+    else if (tolower(addArmor[0]) != 'n')
+    {
+        DelayedCout("Could you run that by me again? Perhaps using one of the response options I asked for?");
+        DelayedCout("Thanks.");
+        AddArmor(move(characterSheet));
     }
 }
 

@@ -15,7 +15,7 @@ armorClassItem::armorClassItem()
     _properties = "Example Properties";
 }
 
-armorClassItem::armorClassItem(string name, string type, unsigned short bonus, unsigned short maxDexBonus, short checkPenalty, unsigned short spellFailureChance, short baseSpeedAdjustment, unsigned short weight, string properties) : _name(name), _type(type), _bonus(bonus), _maxDexBonus(maxDexBonus), _checkPenalty(checkPenalty), _spellFailureChance(spellFailureChance), _baseSpeedAdjustment(baseSpeedAdjustment), _weight(weight), _properties(properties)
+armorClassItem::armorClassItem(string name, string type, unsigned short bonus, unsigned short maxDexBonus, short checkPenalty, unsigned short spellFailureChance, unsigned short baseSpeedAdjustment, unsigned short weight, string properties) : _name(name), _type(type), _bonus(bonus), _maxDexBonus(maxDexBonus), _checkPenalty(checkPenalty), _spellFailureChance(spellFailureChance), _baseSpeedAdjustment(baseSpeedAdjustment), _weight(weight), _properties(properties)
 {
 }
 
@@ -49,7 +49,7 @@ unsigned short armorClassItem::SpellFailureChance()
     return _spellFailureChance;
 }
 
-short armorClassItem::BaseSpeedAdjustment()
+unsigned short armorClassItem::BaseSpeedAdjustment()
 {
     return _baseSpeedAdjustment;
 }

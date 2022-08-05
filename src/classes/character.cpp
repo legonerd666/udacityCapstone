@@ -1328,6 +1328,12 @@ currencyType character::CurrencyType(short index)
     return _currency[index]->Type();
 }
 
+unsigned short character::ArmoredSpeed()
+{
+    unique_lock<mutex> lock(_mutex);
+    return _speed->Armored();
+}
+
 void character::AbilityScores(short newAbilityScores[6])
 {
     unique_lock<mutex> lock(_mutex);
@@ -1415,6 +1421,15 @@ void character::Currency(currencyType currency, int amount)
     _currency[EnumToIndex(currency)]->Amount(amount);
 }
 
+void character::ArmoredSpeed(unsigned short speed)
+{
+    unique_lock<mutex> lock(_mutex);
+    if (speed < _speed->Armored())
+    {
+        _speed->Armored(speed);
+    }
+}
+
 void character::AddRacialTrait(shared_ptr<feat> &&racialTrait)
 {
     unique_lock<mutex> lock(_mutex);
@@ -1479,6 +1494,12 @@ void character::AddWeapon(unique_ptr<weapon> &&weapon)
 {
     unique_lock<mutex> lock(_mutex);
     _weapons.emplace_back(move(weapon));
+}
+
+void character::AddArmor(unique_ptr<armorClassItem> &&armor)
+{
+    unique_lock<mutex> lock(_mutex);
+    _armorClassItems.emplace_back(move(armor));
 }
 
 short character::CMB()

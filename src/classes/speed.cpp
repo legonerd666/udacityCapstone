@@ -60,3 +60,8 @@ short speed::Burrow()
 {
     return _burrow;
 }
+
+void speed::Armored(unsigned short speed)
+{
+    _armored = speed;
+}

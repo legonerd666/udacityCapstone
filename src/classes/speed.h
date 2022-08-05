@@ -18,7 +18,7 @@ public:
     // Setters
     //  void Base(unsigned short newBase);
     //  void BaseTempMod(unsigned short newBaseTempMod);
-    //  void Armored(unsigned short newArmored);
+    void Armored(unsigned short newArmored);
     //  void ArmoredTempMod(unsigned short newArmoredTempMod);
     //  void Fly(unsigned short newFly);
     //  void FlyTempMod(unsigned short newFlyTempMod);
