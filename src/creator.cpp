@@ -2194,12 +2194,13 @@ short creator::GetCharacterWeight()
 
 void creator::DelayedCout(string &&string)
 {
+    this_thread::sleep_for(chrono::milliseconds(500));
     cout << string << endl;
-    this_thread::sleep_for(chrono::milliseconds(1));
 }
 
 void creator::DelayedCout(string &&string, bool doNewLine)
 {
+    this_thread::sleep_for(chrono::milliseconds(500));
     if (doNewLine)
     {
         cout << string << endl;
@@ -2208,5 +2209,4 @@ void creator::DelayedCout(string &&string, bool doNewLine)
     {
         cout << string;
     }
-    this_thread::sleep_for(chrono::milliseconds(1));
 }
