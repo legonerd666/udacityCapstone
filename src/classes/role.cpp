@@ -48,9 +48,11 @@ void role::AddSpell(shared_ptr<spell> &&spell)
 void role::SetToCastingClass(abilityType castingAbility, short castingAbilityMod)
 {
     _isCastingClass = true;
+
     short bonusSpells[10];
     bonusSpells[0] = 0;
     short bonusSpellBase;
+    // If the ability mod would not afford them any bonus spells it sets all the bonus spells to 0
     if (castingAbilityMod < 1)
     {
         for (auto &&spells : bonusSpells)
@@ -60,17 +62,20 @@ void role::SetToCastingClass(abilityType castingAbility, short castingAbilityMod
     }
     else
     {
+        // For each bonus spell of level 1 to 9 it sets the bonus spells properly based on the casting ability scores' modifier (for a better understanding of the calculation check table 1-3 of the Pathfinder 1e Core Rulebook)
         for (short i = 0; i < 9; i++)
         {
             bonusSpellBase = castingAbilityMod - i;
             if (bonusSpellBase > 0)
             {
+                // Brings the base number of bonus spells to a multiple of 4
                 if (bonusSpellBase % 4 == 1)
                     bonusSpellBase += 3;
                 else if (bonusSpellBase % 4 == 2)
                     bonusSpellBase += 2;
                 else if (bonusSpellBase % 4 == 3)
                     bonusSpellBase += 1;
+                // Sets the bonus spells at the proper level to the base number of bonus spells divided by 4
                 bonusSpells[i + 1] = bonusSpellBase / 4;
             }
             else

@@ -4,18 +4,27 @@
 class speed
 {
 public:
+    // Creates a speeds object with all values set to 0;
     speed();
+    // Creates a speeds object with everything set to 0 except the base and armored speeds
     speed(unsigned short baseSpeed);
 
     // Getters
+    // Returns the base speed
     short Base();
+    // Returns the armored speed
     short Armored();
+    // Returns the fly speed
     short Fly();
+    // Returns the swim speed
     short Swim();
+    // Returns the climb speed
     short Climb();
+    // Returns the burrow speed
     short Burrow();
 
     // Setters
+    // Sets the armored speed
     void Armored(unsigned short newArmored);
 
 private:
