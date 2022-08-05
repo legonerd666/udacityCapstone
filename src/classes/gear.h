@@ -16,11 +16,6 @@ public:
     string Description();
     unsigned short Weight();
 
-    // Setters
-    // void Name(string newName);
-    // void Weight(unsigned short newWeight);
-    // void Description(string newDescription);
-
 private:
     string _name;
     string _description;

@@ -18,12 +18,6 @@ public:
     short MiscMod();
     short TempMod();
 
-    // Setters
-    //  void Type(saveType newType);
-    //  void Base(short newBase);
-    //  void MagicMod(short newMagicMod);
-    //  void MiscMod(short newMiscMod);
-
 private:
     saveType _type;
     abilityType _abilityType;

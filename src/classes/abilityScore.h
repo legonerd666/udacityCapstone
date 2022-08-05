@@ -15,11 +15,6 @@ public:
     short Modifier();
     short AdjustedModifier();
 
-    // Setters
-    //  void Type(abilityType newType);
-    //  void Score(short newScore);
-    //  void AdjustedScore(short newAdjustedScore);
-
 private:
     short _score;
     short _adjustedScore;

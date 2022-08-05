@@ -19,10 +19,6 @@ public:
     string Name();
     vector<shared_ptr<feat>> RacialTraits();
 
-    // Setters
-    // void Name(string newName);
-    // void RacialAblities(vector<unique_ptr<specialAbility>>&& newRacialAbilities);
-
     // Adders
     void AddRacialTrait(shared_ptr<feat> &&racialTrait);
 
