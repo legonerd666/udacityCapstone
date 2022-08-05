@@ -47,6 +47,7 @@ character::character()
     _skills.emplace_back(make_unique<skill>(survival));
     _skills.emplace_back(make_unique<skill>(swim));
     _skills.emplace_back(make_unique<skill>(useMagicDevice));
+
     _spellResistance = 0;
 
     _currency[0] = make_unique<currency>(copper, 0);
@@ -58,11 +59,11 @@ character::character()
     _nextLevelXpAmount = 0;
 }
 
-// Outputs the character data as a nicely formatted string
 string character::ToStringForConsole()
 {
     unique_lock<mutex> lock(_mutex);
 
+// Adds the characters characteristics to the string
 #pragma region Characteristics
 
     string character = "";
@@ -86,6 +87,7 @@ string character::ToStringForConsole()
     character += _player;
     character += "\n";
 
+    // Formats the charcters roles and adds each to the string
     character += "|     Class(es):                     ";
     for (auto &&role : _roles)
     {
@@ -140,6 +142,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Characteristics
 
+// Adds the characters Hit points and hit dice to the string and if their health would affect their condition it adds said condition to the string next to the stat causing the condition
 #pragma region HitPoints
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
@@ -170,10 +173,13 @@ string character::ToStringForConsole()
 
     character += "|     Current HP:                    ";
     character += to_string(_hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()));
+    // If the characters hp is exactly 0 and their non lethal hp doesn't change anything about their condition it displays that this stat is causing them to be disabled
     if (_hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) == 0 && _hitpoints->CurrentNonLethalHP(_abilityScores[2]->AdjustedModifier()) > -1)
         character += "    You are currently Disabled";
+    // Otherwise, if the characters hp is less than 0 but not less than negative their constitution score then it displays that this stat has rendered them unconscious and that they are dying
     else if (_hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) < 0 && _hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) > (_abilityScores[2]->AdjustedScore() * -1))
         character += "    You are Unconscious and Dying";
+    // Lastly, if their hitpoints are less than negative their constitution score it displays that they have died
     else if (_hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) < 0 && _hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) <= (_abilityScores[2]->AdjustedScore() * -1))
         character += "    You are Dead";
 
@@ -181,8 +187,10 @@ string character::ToStringForConsole()
 
     character += "|     Current Non-Lethal HP:         ";
     character += to_string(_hitpoints->CurrentNonLethalHP(_abilityScores[2]->AdjustedModifier()));
+    // If the characters Non lethal hit points are exactly 0 and their lethal hitpoints arent affecting them it displays next to this stat that they are staggered
     if (_hitpoints->CurrentNonLethalHP(_abilityScores[2]->AdjustedModifier()) == 0 && _hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) > 0)
         character += "    You are currently Staggered";
+    // If the characters non lethal hp is less than 0 it displays next to this stat that they have been knocked out
     else if (_hitpoints->CurrentNonLethalHP(_abilityScores[2]->AdjustedModifier()) < 0 && _hitpoints->CurrentHP(_abilityScores[2]->AdjustedModifier()) > -1)
         character += "    You are currently Unconscious";
     character += "\n";
@@ -191,6 +199,7 @@ string character::ToStringForConsole()
 
 #pragma endregion HitPoints
 
+// This adds the characters speeds to the string
 #pragma region Speed
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
@@ -229,6 +238,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Speed
 
+// This adds the characters ability scores to the string and if the score would affect their characters condition how that stat is affecting them
 #pragma region AbilityScores
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
@@ -246,6 +256,7 @@ string character::ToStringForConsole()
     character += "|";
     character += "\n";
 
+    // If either the base or temporary strength score of the character is 0 or less it displays that this stat is rendering them unconscious and unable to move
     character += "|         Score:                     ";
     character += to_string(_abilityScores[0]->Score());
     if (_abilityScores[0]->Score() < 10 && _abilityScores[0]->Score() >= 0)
@@ -279,6 +290,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Strength
 
+// If either the base or temporary dexterity score of the character is 0 or less it displays that this stat is rendering them unable to move
 #pragma region Dexterity
 
     character += "|     Dexterity: ";
@@ -319,6 +331,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Dexterity
 
+// If either the base or temporary constitution score of the character is 0 or less it displays that this stat has rendered them dead
 #pragma region Constitution
 
     character += "|     Constitution: ";
@@ -361,6 +374,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Constitution
 
+// If either the base or temporary intelligence score of the character is 0 or less it displays that this stat is rendering them comatose
 #pragma region Intelligence
 
     character += "|     Intelligence: ";
@@ -403,6 +417,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Intelligence
 
+// If either the base or temporary wisdom score of the character is 0 or less it displays that this stat is rendering them incapable of rational thought and unconscious
 #pragma region Wisdom
 
     character += "|     Wisdom: ";
@@ -445,6 +460,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Wisdom
 
+// If either the base or temporary charisma score of the character is 0 or less it displays that this stat is rendering them unable of exerting themselves in any manner and unconscious
 #pragma region Charisma
 
     character += "|     Charisma: ";
@@ -489,6 +505,7 @@ string character::ToStringForConsole()
 
 #pragma endregion AbilityScores
 
+// Adds the characters saves to the string along with how they are calculated
 #pragma region Saves
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
@@ -529,6 +546,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Saves
 
+// Adds all of the characters skills to the string along with its total bonus, if it is a class skill, and how said bonus is calculated
 #pragma region Skills
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
@@ -578,6 +596,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Skills
 
+// Adds the characters known languages to the string
 #pragma region Language
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
@@ -588,6 +607,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Language
 
+// Adds the characters combat relevant stats to the string (sans hp)
 #pragma region Combat
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
@@ -597,6 +617,7 @@ string character::ToStringForConsole()
     character += "|";
     character += "\n";
 
+// Adds the characters initiative bonus to the string along with how it is calculated
 #pragma region Initiative
 
     character += "|     Initiative:                    ";
@@ -614,6 +635,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Initiative
 
+// Adds the characters armor class to the string along with how it is calculated and each of its subvalues (flat-footed and touch AC)
 #pragma region Armor Class
 
     character += "|     Armor Class:";
@@ -682,8 +704,10 @@ string character::ToStringForConsole()
 
 #pragma endregion ArmorClass
 
+// Adds the characters combat stats to the string
 #pragma region Combat Stats
 
+    // Adds the characters formatted base attack bonuses to the string
     character += "|     Base Attack Bonus:             ";
     if (_baseAttackBonuses.size() == 1)
     {
@@ -705,6 +729,7 @@ string character::ToStringForConsole()
     character += "|";
     character += "\n";
 
+    // Adds the characters spell resistance
     character += "|     Spell Resistance:              ";
     character += to_string(_spellResistance);
     character += "%";
@@ -712,6 +737,7 @@ string character::ToStringForConsole()
     character += "|";
     character += "\n";
 
+    // Adds the characters Combat Maneuver Bonus and how it is calculated
     character += "|     CMB:                           ";
     character += to_string(CMB());
     character += " (";
@@ -726,6 +752,7 @@ string character::ToStringForConsole()
     character += "|";
     character += "\n";
 
+    // Adds the characters Combat Maneuver Defense and how it is calculated
     character += "|     CMD:                           ";
     character += to_string(CMD());
     character += " (";
@@ -744,6 +771,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Combat Stats
 
+// Adds all the characters weapons to the string
 #pragma region Weapons
 
     character += "|     Weapons:";
@@ -756,11 +784,13 @@ string character::ToStringForConsole()
         character += weapon->Name();
         character += "\n";
         character += "|         Attack Bonus:              ";
+
+        // If the characters attack bonus for the weapon is positive it adds a + to the string
         if ((_baseAttackBonuses.front() + _abilityScores[EnumToIndex(weapon->AbilityType())]->AdjustedModifier() + EnumToBonus(_size)) >= 0)
         {
             character += "+";
-            character += to_string(_baseAttackBonuses.front() + _abilityScores[EnumToIndex(weapon->AbilityType())]->AdjustedModifier() + EnumToBonus(_size));
         }
+        character += to_string(_baseAttackBonuses.front() + _abilityScores[EnumToIndex(weapon->AbilityType())]->AdjustedModifier() + EnumToBonus(_size));
         character += "\n";
         character += "|         Critical:                  ";
         character += weapon->CritRange();
@@ -773,6 +803,7 @@ string character::ToStringForConsole()
         character += " ft.";
         character += "\n";
         character += "|         Ammo:                      ";
+        // If the weapon doesn't use ammo it displays N/A
         if (weapon->Ammo() == -1)
             character += "N/A";
         else
@@ -780,6 +811,8 @@ string character::ToStringForConsole()
         character += "\n";
         character += "|         Damage:                    ";
         character += weapon->Damage();
+
+        // If the weapon adds the characters strength mod to the damage it display it
         if (weapon->AbilityType() == strength)
         {
             character += "+";
@@ -793,6 +826,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Weapons
 
+// Adds the characters weapon and armor proficiencies to the string
 #pragma region Proficiencies
 
     character += "|     Proficiencies:                 ";
@@ -805,6 +839,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Combat
 
+// Adds the characters equipment to the string
 #pragma region Equipment
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
@@ -814,12 +849,14 @@ string character::ToStringForConsole()
     character += "|";
     character += "\n";
 
+// Adds any items currently worn or wielded by the character that would affect the characters stats to the string
 #pragma region ACItems
     character += "|     AC Items:";
     character += "\n";
     character += "|";
     character += "\n";
     {
+        // Calculates the totals for each stat affected whilst adding them to the string
         unsigned short totalBonus = 0;
         unsigned short maxDexBonus = USHRT_MAX;
         unsigned short totalCheckPenalty = 0;
@@ -884,6 +921,7 @@ string character::ToStringForConsole()
             totalWeight += acItem->Weight();
         }
 
+        // Adds the total stat changes gotten by wearing/wielding all the listed armor items
         character += "|     AC Item Totals:";
         character += "\n";
         character += "|";
@@ -928,6 +966,7 @@ string character::ToStringForConsole()
 
 #pragma endregion ACItems
 
+// Adds the characters gear to the string
 #pragma region Gear
 
     character += "|     Gear:";
@@ -935,6 +974,7 @@ string character::ToStringForConsole()
     character += "|";
     character += "\n";
     {
+        // Calculates the total weight of all the carried gear and displays if it is a light, medium, or heavy load based on the characters strength score
         unsigned short totalWeight = 0;
         for (auto &&item : _gear)
         {
@@ -952,6 +992,8 @@ string character::ToStringForConsole()
             character += "\n";
             totalWeight += item->Weight();
         }
+
+        // Displays the type of load the character is carrying and the characters different lift/carrying stats based of the characters strength
         character += "|     Total Weight:                  ";
         character += to_string(totalWeight);
         character += " lbs.";
@@ -986,6 +1028,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Gear
 
+// Adds the characters funds to the string
 #pragma region Money
 
     character += "|     Money:";
@@ -1019,6 +1062,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Equipment
 
+// Adds the characters feats to the string
 #pragma region Feats
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
@@ -1041,6 +1085,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Feats
 
+// Adds the characters racial traits to the string
 #pragma region Racial Traits
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
@@ -1063,6 +1108,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Racial Traits
 
+// Adds the class features of each role to the string
 #pragma region Class Features
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
@@ -1098,6 +1144,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Class Features
 
+// Adds the characters total exp and how much is required to level up to the string
 #pragma region Exp
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
@@ -1115,6 +1162,7 @@ string character::ToStringForConsole()
 
 #pragma endregion Exp
 
+// Displays all the known spells for each of the characters roles and the stats regarding spell casting provided the character knows at least a spell from that level
 #pragma region Spells
 
     character += "|--------------------------------------------------------------------------------------------------------------------";
@@ -1139,6 +1187,7 @@ string character::ToStringForConsole()
             character += "\n";
             for (short i = 0; i < 10; i++)
             {
+                // If the character knows at least 1 spell of the given level and has a high enough spell casting ability score to cast spells of that level it displays the spell stats for that level
                 if (role->SpellStats()[i]->SpellsKnown() != 0 && _abilityScores[EnumToIndex(role->SpellStats()[i]->AbilityType())]->AdjustedScore() >= 10 + role->SpellStats()[i]->SpellLevel())
                 {
                     character += "|             Spell Level:           ";
@@ -1180,6 +1229,7 @@ string character::ToStringForConsole()
                     character += "|";
                     character += "\n";
                 }
+                // Otherwise, if the character knows at least 1 spell it displays the number of spells known and the save dc for that level (for if they have spell-like abilities that use that dc) but tells them they arent allowed to cast any spells of that level
                 else if (role->SpellStats()[i]->SpellsKnown() != 0 && _abilityScores[EnumToIndex(role->SpellStats()[i]->AbilityType())]->AdjustedScore() < 10 + role->SpellStats()[i]->SpellLevel())
                 {
 
@@ -1223,6 +1273,7 @@ string character::ToStringForConsole()
                 }
             }
 
+            // Adds all the spells known in detail to the string
             character += "|         Spells:";
             character += "\n";
             character += "|";
@@ -1386,6 +1437,7 @@ void character::BaB(unsigned short BaB)
     unique_lock<mutex> lock(_mutex);
     _baseAttackBonuses.clear();
     _baseAttackBonuses.emplace_back(BaB);
+    // adds base attack bonuses to the vector at 5 less than the previous until the bonus would be 0 or less
     while (BaB > 5)
     {
         BaB -= 5;
@@ -1408,6 +1460,7 @@ void character::Currency(currencyType currency, int amount)
 void character::ArmoredSpeed(unsigned short speed)
 {
     unique_lock<mutex> lock(_mutex);
+    // If the adjusted armored speed would raise the speed it won't change the displayed speed
     if (speed < _speed->Armored())
     {
         _speed->Armored(speed);
@@ -1463,6 +1516,7 @@ void character::AddRole(string name)
 void character::AddClassSkill(skillType skillType)
 {
     unique_lock<mutex> lock(_mutex);
+    // For each skill it checks if the skill is the one it is supposed to change and if so marks it as a class skill
     for (auto &&skill : _skills)
     {
         if (skill->SkillType() == skillType)
@@ -1473,6 +1527,7 @@ void character::AddClassSkill(skillType skillType)
 short character::AddSkillRankToSkill(skillType skillType)
 {
     unique_lock<mutex> lock(_mutex);
+    // For each skill, if it is the one we want to add a rank to and it doesnt already have one, it adds a rank
     for (auto &&skill : _skills)
     {
         if (skill->SkillType() == skillType && skill->Ranks() < 1)
