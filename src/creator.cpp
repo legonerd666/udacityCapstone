@@ -171,7 +171,7 @@ void creator::Equipment(shared_ptr<character> &&characterSheet)
     SetGold(characterSheet);
     AddWeapon(characterSheet);
     AddArmor(characterSheet);
-    // AddGear(characterSheet);
+    AddGear(characterSheet);
     this_thread::sleep_for(chrono::milliseconds(1));
 }
 
@@ -1457,7 +1457,7 @@ void creator::AddWeapon(shared_ptr<character> characterSheet)
 void creator::AddArmor(shared_ptr<character> characterSheet)
 {
     DelayedCout("Great! Now let's purchase the armor you are gonna wear!");
-    DelayedCout("Keep in mind this is just what you'll be wearing, you can purchase more armor that you want to bring with but don't wear immediately later");
+    DelayedCout("Keep in mind this is just what you'll be wearing, you can purchase more armor that you want to bring with but don't wear immediately later.");
     DelayedCout(FormattedCurrencies(characterSheet));
     DelayedCout("Would you like to purchase some armor?");
     DelayedCout("Y/n: ", false);
@@ -1521,6 +1521,45 @@ void creator::AddArmor(shared_ptr<character> characterSheet)
         DelayedCout("Could you run that by me again? Perhaps using one of the response options I asked for?");
         DelayedCout("Thanks.");
         AddArmor(move(characterSheet));
+    }
+}
+
+void creator::AddGear(shared_ptr<character> characterSheet)
+{
+    DelayedCout("Almost done with equipment!");
+    DelayedCout("Now just enter in any extra gear you'd like to buy including any armor or weapons you didn't add earlier.");
+    DelayedCout(FormattedCurrencies(characterSheet));
+    DelayedCout("Would you like to purchase some gear?");
+    DelayedCout("Y/n: ", false);
+    string addGear;
+    getline(cin, addGear, '\n');
+    if (tolower(addGear[0]) == 'y')
+    {
+        currencyType costType = GetCurrencyType();
+        int cost = GetCost();
+        if (SubtractCost(characterSheet, move(costType), move(cost)) == -1)
+        {
+            DelayedCout("You can't afford that.");
+            AddGear(move(characterSheet));
+        }
+        else
+        {
+            string name;
+            DelayedCout("Ok, and what's the name of the gear: ", false);
+            getline(cin, name, '\n');
+            unsigned short weight = GetWeight();
+            string description;
+            DelayedCout("Ok, this is the last thing I'll need you to tell me about your gear.");
+            DelayedCout("Please write down any special properties and/or a description of the gear: ", false);
+            getline(cin, description, '\n');
+            _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, weight)));
+            AddGear(move(characterSheet));
+        }
+    }
+    else if (tolower(addGear[0]) != 'n')
+    {
+        DelayedCout("*wails uncontrollably* I- Don't- Understaaaaaand");
+        AddGear(move(characterSheet));
     }
 }
 
