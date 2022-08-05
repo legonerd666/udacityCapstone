@@ -12,9 +12,9 @@ class weapon
 public:
     weapon();
 
-    weapon(string name, string critRange, string damageType, string range, die damageDie, short numberOfDice, abilityType abilityType);
+    weapon(string name, string critRange, string damageType, string range, die damageDie, short numberOfDice, abilityType abilityType, short ammo);
 
-    //Getters
+    // Getters
     string Name();
     string CritRange();
     string DamageType();
@@ -22,7 +22,6 @@ public:
     short Ammo();
     string Damage();
     abilityType AbilityType();
-
 
 private:
     string _name;
@@ -34,6 +33,5 @@ private:
     short _numberOfDamageDice;
     abilityType _abiliyType;
 };
-
 
 #endif

@@ -61,6 +61,9 @@ private:
     die GetDie();
     unsigned short GetWeight();
     abilityType GetAbilityType();
+    short GetAmmo(shared_ptr<character> character);
+    bool WillBuyAmmo();
+    short GetAmmoAmount();
     void AddArmor(shared_ptr<character> character);
     void AddGear(shared_ptr<character> character);
 

@@ -767,12 +767,11 @@ string character::ToStringForConsole()
         character += weapon->Name();
         character += "\n";
         character += "|         Attack Bonus:              ";
-        if (_baseAttackBonuses.front() + _abilityScores[EnumToIndex(weapon->AbilityType())]->AdjustedModifier() + EnumToBonus(_size) >= 0)
+        if ((_baseAttackBonuses.front() + _abilityScores[EnumToIndex(weapon->AbilityType())]->AdjustedModifier() + EnumToBonus(_size)) >= 0)
         {
             character += "+";
+            character += to_string(_baseAttackBonuses.front() + _abilityScores[EnumToIndex(weapon->AbilityType())]->AdjustedModifier() + EnumToBonus(_size));
         }
-
-        character += to_string(_baseAttackBonuses.front() + _abilityScores[EnumToIndex(weapon->AbilityType())]->AdjustedModifier() + EnumToBonus(_size));
         character += "\n";
         character += "|         Critical:                  ";
         character += weapon->CritRange();
@@ -782,9 +781,13 @@ string character::ToStringForConsole()
         character += "\n";
         character += "|         Range:                     ";
         character += weapon->Range();
+        character += " ft.";
         character += "\n";
         character += "|         Ammo:                      ";
-        character += to_string(weapon->Ammo());
+        if (weapon->Ammo() == -1)
+            character += "N/A";
+        else
+            character += to_string(weapon->Ammo());
         character += "\n";
         character += "|         Damage:                    ";
         character += weapon->Damage();
@@ -1464,6 +1467,18 @@ void character::AddFeat(unique_ptr<feat> &&feat)
 {
     unique_lock<mutex> lock(_mutex);
     _feats.emplace_back(move(feat));
+}
+
+void character::AddGear(unique_ptr<gear> &&gear)
+{
+    unique_lock<mutex> lock(_mutex);
+    _gear.emplace_back(move(gear));
+}
+
+void character::AddWeapon(unique_ptr<weapon> &&weapon)
+{
+    unique_lock<mutex> lock(_mutex);
+    _weapons.emplace_back(move(weapon));
 }
 
 short character::CMB()

@@ -1417,26 +1417,34 @@ void creator::AddWeapon(shared_ptr<character> characterSheet)
             DelayedCout("You can't afford that.");
             AddWeapon(move(characterSheet));
         }
-        string name;
-        DelayedCout("Ok, and what's the name of the weapon: ", false);
-        getline(cin, name, '\n');
-        short nOfDice = GetNDice();
-        die damageDie = GetDie();
-        string critRange;
-        DelayedCout("What is the critical range of your weapon: ", false);
-        getline(cin, critRange, '\n');
-        string range;
-        DelayedCout("What is the range increment of your weapon: ", false);
-        getline(cin, range, '\n');
-        unsigned short weight = GetWeight();
-        string damageType;
-        DelayedCout("What is the Damage Type of your weapon: ", false);
-        getline(cin, damageType, '\n');
-        abilityType abilityType = GetAbilityType();
-        string description;
-        DelayedCout("Ok, this is the last thing I'll need you to tell me about your weapon.");
-        DelayedCout("Please write down any special properties and/or a description of the weapon: ", false);
-        getline(cin, description, '\n');
+        else
+        {
+            string name;
+            DelayedCout("Ok, and what's the name of the weapon: ", false);
+            getline(cin, name, '\n');
+            short nOfDice = GetNDice();
+            die damageDie = GetDie();
+            string critRange;
+            DelayedCout("What is the critical range of your weapon: ", false);
+            getline(cin, critRange, '\n');
+            string range;
+            DelayedCout("What is the range increment of your weapon: ", false);
+            getline(cin, range, '\n');
+            unsigned short weight = GetWeight();
+            string damageType;
+            DelayedCout("What is the Damage Type of your weapon: ", false);
+            getline(cin, damageType, '\n');
+            abilityType abilityType = GetAbilityType();
+            short ammo = GetAmmo(characterSheet);
+            string description;
+            DelayedCout("Ok, this is the last thing I'll need you to tell me about your weapon.");
+            DelayedCout("Please write down any special properties and/or a description of the weapon: ", false);
+            getline(cin, description, '\n');
+
+            _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, move(weight))));
+            _threads.emplace_back(thread(&character::AddWeapon, characterSheet, make_unique<weapon>(move(name), move(critRange), move(damageType), move(range), move(damageDie), move(nOfDice), move(abilityType), move(ammo))));
+            AddWeapon(move(characterSheet));
+        }
     }
     else if (tolower(addWeapon[0]) != 'n')
     {
@@ -1448,7 +1456,7 @@ void creator::AddWeapon(shared_ptr<character> characterSheet)
 
 currencyType creator::GetCurrencyType()
 {
-    DelayedCout("First things first: Does the weapon cost Copper, Silver, Gold, Or Platinum: ", false);
+    DelayedCout("First things first: Does this cost Copper, Silver, Gold, Or Platinum: ", false);
     string costType;
     getline(cin, costType, '\n');
     for (auto &&c : costType)
@@ -1624,7 +1632,10 @@ int creator::SubtractCost(shared_ptr<character> characterSheet, currencyType &&c
         }
     }
     else
+    {
         characterSheet->Currency(currencyType, characterSheet->Currency(currencyType) - cost);
+        return 0;
+    }
 }
 
 short creator::GetNDice()
@@ -1688,7 +1699,7 @@ die creator::GetDie()
 
 unsigned short creator::GetWeight()
 {
-    DelayedCout("How much does your weapon weigh in pounds: ", false);
+    DelayedCout("How much does it weigh in pounds: ", false);
     string weight;
     getline(cin, weight, '\n');
     try
@@ -1710,20 +1721,118 @@ unsigned short creator::GetWeight()
 
 abilityType creator::GetAbilityType()
 {
-    DelayedCout("Does this weapon add your strength modifier to its damage? (Most melee weapons do)");
-    DelayedCout("Y/n: ", false);
-    string addStrength;
-    getline(cin, addStrength, '\n');
-    if (tolower(addStrength[0]) == 'y')
+    DelayedCout("What ability does this use to attack.");
+    DelayedCout("Ability Score: ", false);
+    string ability;
+    getline(cin, ability, '\n');
+    for (auto &&c : ability)
+    {
+        c = tolower(c);
+    }
+
+    if (ability == "strength")
         return strength;
-    else if (tolower(addStrength[0]) == 'n')
+    else if (ability == "dexterity")
+        return dexterity;
+    else if (ability == "constitution")
         return constitution;
+    else if (ability == "intelligence")
+        return intelligence;
+    else if (ability == "wisdom")
+        return wisdom;
+    else if (ability == "charisma")
+        return charisma;
     else
     {
         DelayedCout("...");
         DelayedCout("...");
         DelayedCout("...");
+        DelayedCout("I need the name of an ability score...");
         return GetAbilityType();
+    }
+}
+
+short creator::GetAmmo(shared_ptr<character> characterSheet)
+{
+    DelayedCout("Does this weapon use ammo?");
+    DelayedCout("Y/n: ", false);
+    string usesAmmo;
+    getline(cin, usesAmmo, '\n');
+    if (tolower(usesAmmo[0]) == 'y')
+    {
+        if (WillBuyAmmo())
+        {
+            short AmmoAmount = GetAmmoAmount();
+            currencyType currency = GetCurrencyType();
+            DelayedCout("How much does it cost to buy the amount of that ammo?");
+            int cost = GetCost();
+            if (SubtractCost(characterSheet, move(currency), move(cost)) == -1)
+            {
+                DelayedCout("You can't afford that.");
+                return GetAmmo(move(characterSheet));
+            }
+            else
+            {
+                DelayedCout("How much does that amount of ammo weigh?");
+                unsigned short weight = GetWeight();
+                string name;
+                DelayedCout("What's this ammo called: ", false);
+                getline(cin, name, '\n');
+                string description;
+                DelayedCout("Please write down any special properties and/or a description of the ammo: ", false);
+                getline(cin, description, '\n');
+                _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(move(name + "(" + to_string(AmmoAmount) + ")"), move(description), move(weight))));
+                return AmmoAmount;
+            }
+        }
+        else
+            return 0;
+    }
+    else if (tolower(usesAmmo[0]) != 'n')
+    {
+        DelayedCout("I'll ask again.");
+        return GetAmmo(move(characterSheet));
+    }
+    return -1;
+}
+
+bool creator::WillBuyAmmo()
+{
+    DelayedCout("Would you like to purchase some ammo?");
+    DelayedCout("Y/n: ", false);
+    string willBuy;
+    getline(cin, willBuy, '\n');
+    if (tolower(willBuy[0]) == 'y')
+    {
+        return true;
+    }
+    else if (tolower(willBuy[0]) != 'n')
+    {
+        DelayedCout("IIt's a Yes or No question.");
+        return WillBuyAmmo();
+    }
+    return false;
+}
+
+short creator::GetAmmoAmount()
+{
+    DelayedCout("How much of said ammo would you like to buy: ", false);
+    string amount;
+    getline(cin, amount, '\n');
+    try
+    {
+        if (stoi(amount) > 0)
+            return stoi(amount);
+        else
+        {
+            DelayedCout("I need a number bigger than 0.");
+            return GetAmmoAmount();
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("The... Umm... Amount...?");
+        return GetAmmoAmount();
     }
 }
 

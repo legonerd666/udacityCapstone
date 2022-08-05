@@ -2,7 +2,8 @@
 
 #include "../enums.h"
 
-weapon::weapon() {
+weapon::weapon()
+{
     _name = "Example Weapon";
     _criticalRange = "x2";
     _damageType = "S";
@@ -13,35 +14,41 @@ weapon::weapon() {
     _abiliyType = strength;
 }
 
-weapon::weapon(string name, string critRange, string damageType, string range, die damageDie, short numberOfDice, abilityType abilityType):
-_name(name), _criticalRange(critRange), _damageType(damageType), _range(range), _damageDie(damageDie), _numberOfDamageDice(numberOfDice), _abiliyType(abilityType) {
-    _ammo = 0;
+weapon::weapon(string name, string critRange, string damageType, string range, die damageDie, short numberOfDice, abilityType abilityType, short ammo) : _name(name), _criticalRange(critRange), _damageType(damageType), _range(range), _damageDie(damageDie), _numberOfDamageDice(numberOfDice), _abiliyType(abilityType), _ammo(ammo)
+{
 }
 
-string weapon::Name() {
+string weapon::Name()
+{
     return _name;
 }
 
-string weapon::CritRange() {
+string weapon::CritRange()
+{
     return _criticalRange;
 }
 
-string weapon::DamageType() {
+string weapon::DamageType()
+{
     return _damageType;
 }
 
-string weapon::Range() {
+string weapon::Range()
+{
     return _range;
 }
 
-short weapon::Ammo() {
+short weapon::Ammo()
+{
     return _ammo;
 }
 
-string weapon::Damage() {
+string weapon::Damage()
+{
     return to_string(_numberOfDamageDice) + EnumToString(_damageDie);
 }
 
-abilityType weapon::AbilityType() {
+abilityType weapon::AbilityType()
+{
     return _abiliyType;
 }

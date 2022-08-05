@@ -60,6 +60,8 @@ public:
     void AddClassFeature(short roleIndex, string name, string description);
     void AddSpell(short roleIndex, shared_ptr<spell> &&spell);
     void AddFeat(unique_ptr<feat> &&feat);
+    void AddGear(unique_ptr<gear> &&gear);
+    void AddWeapon(unique_ptr<weapon> &&weapon);
 
 private:
     string _name;
