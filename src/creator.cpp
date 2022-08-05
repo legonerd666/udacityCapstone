@@ -172,7 +172,53 @@ void creator::Equipment(shared_ptr<character> &&characterSheet)
     AddWeapon(characterSheet);
     AddArmor(characterSheet);
     AddGear(characterSheet);
+    Characteristics(move(characterSheet));
     this_thread::sleep_for(chrono::milliseconds(1));
+}
+
+void creator::Characteristics(shared_ptr<character> &&characterSheet)
+{
+    DelayedCout("Great Job!! We are now on the last step!");
+    DelayedCout("Just fill in your characters characteristics and we will be all done and ready to play!");
+    alignment alignment = GetAlignment();
+    string playerName;
+    DelayedCout("What is the name of the person who plans to play this character (probably your name): ", false);
+    getline(cin, playerName, '\n');
+    string deity;
+    DelayedCout("What is the name of the deity your character believes in (if any): ", false);
+    getline(cin, deity, '\n');
+    string homeland;
+    DelayedCout("What is the name of your characters homeland: ", false);
+    getline(cin, homeland, '\n');
+    string gender;
+    DelayedCout("What gender is your character: ", false);
+    getline(cin, gender, '\n');
+    short age = GetAge();
+    short height = GetHeight();
+    short weight = GetWeight();
+    string hair;
+    DelayedCout("What is your characters hair color: ", false);
+    getline(cin, hair, '\n');
+    string eyes;
+    DelayedCout("What is your characters eye color: ", false);
+    getline(cin, eyes, '\n');
+    string name;
+    DelayedCout("And finally...");
+    DelayedCout("What is your characters...");
+    DelayedCout("Name: ", false);
+    getline(cin, name, '\n');
+    _threads.emplace_back(thread(&character::Characteristics, move(characterSheet), move(alignment), move(playerName), move(deity), move(homeland), move(gender), move(age), move(height), move(weight), move(hair), move(eyes), move(name)));
+    DelayedCout("Ok, great, lemme just fill out everything else.");
+    DelayedCout("...");
+    DelayedCout("...");
+    DelayedCout("...");
+    DelayedCout("...");
+    DelayedCout("...");
+    DelayedCout("Ok, all done, whenever you are ready I will display your new character!");
+    DelayedCout("Click <Enter> To View Your Character");
+    string enter;
+    getline(cin, enter, '\n');
+    return;
 }
 
 short creator::GetScore(abilityType abilityType)
@@ -1528,6 +1574,8 @@ void creator::AddGear(shared_ptr<character> characterSheet)
 {
     DelayedCout("Almost done with equipment!");
     DelayedCout("Now just enter in any extra gear you'd like to buy including any armor or weapons you didn't add earlier.");
+    DelayedCout("You also start with an outfit worth 10 gold or less if you choose so.");
+    DelayedCout("If you choose to add that then just enter in the cost as 0");
     DelayedCout(FormattedCurrencies(characterSheet));
     DelayedCout("Would you like to purchase some gear?");
     DelayedCout("Y/n: ", false);
@@ -2046,6 +2094,101 @@ unsigned short creator::GetBaseSpeedAdjustment()
     {
         DelayedCout("Please give me the adjustment as a number.");
         return GetBaseSpeedAdjustment();
+    }
+}
+
+alignment creator::GetAlignment()
+{
+    DelayedCout("Please select the number correspending to your characters alignment.");
+    DelayedCout("1. Lawful Good\n2. Neutral Good\n3. Chaotic Good\n4. Lawful Neutral\n5. True Neutral\n6. Chaotic Neutral\n7. Lawful Evil\n8. Neutral Evil\n9. Chaotic Evil");
+    DelayedCout("#: ", false);
+    string alignment;
+    getline(cin, alignment, '\n');
+    try
+    {
+        switch (stoi(alignment))
+        {
+        case 1:
+            return LG;
+        case 2:
+            return NG;
+        case 3:
+            return CG;
+        case 4:
+            return LN;
+        case 5:
+            return TN;
+        case 6:
+            return CN;
+        case 7:
+            return LE;
+        case 8:
+            return NE;
+        case 9:
+            return CE;
+        default:
+            DelayedCout("That wasn't an option.");
+            return GetAlignment();
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("Please enter a number.");
+        return GetAlignment();
+    }
+}
+
+short creator::GetAge()
+{
+    DelayedCout("To determine the age of your character you can either look at the chart in the Additional Rules chapter of the Pathfinder 1e Core Rulebook for how fast your race ages.");
+    DelayedCout("Or you can role the dice stated there and multiply it by the given number to get a random age base on your race and class.");
+    DelayedCout("Age: ", false);
+    string age;
+    getline(cin, age, '\n');
+    try
+    {
+        return stoi(age);
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("I need a number.");
+        return GetAge();
+    }
+}
+
+short creator::GetHeight()
+{
+    DelayedCout("To determine the height of your character you can either look at the chart in the Additional Rules chapter of the Pathfinder 1e Core Rulebook for how tall your race is on average.");
+    DelayedCout("Or you can role the dice stated there and add it to the given number to get a random height based on your race.");
+    DelayedCout("Height: ", false);
+    string height;
+    getline(cin, height, '\n');
+    try
+    {
+        return stoi(height);
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("I need a number.");
+        return GetHeight();
+    }
+}
+
+short creator::GetCharacterWeight()
+{
+    DelayedCout("To determine the weight of your character you can either look at the chart in the Additional Rules chapter of the Pathfinder 1e Core Rulebook for how heavy your race is on average.");
+    DelayedCout("Or if you rolled dice for your height you can multiply its result by the given number and add it to the other given number to determine a random weight based of your race and height.");
+    DelayedCout("Weight: ", false);
+    string weight;
+    getline(cin, weight, '\n');
+    try
+    {
+        return stoi(weight);
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("I need a number.");
+        return GetCharacterWeight();
     }
 }
 

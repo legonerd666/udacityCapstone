@@ -9,17 +9,6 @@ using namespace std;
 
 character::character()
 {
-    _name = "Example Name";
-    _alignment = LG;
-    _player = "Example Player";
-    _deity = "Example Deity";
-    _homeland = "Example Homeland";
-    _gender = "Example Gender";
-    _age = 0;
-    _height = 0;
-    _weight = 0;
-    _hairColor = "Example Hair Color";
-    _eyeColor = "Example Eye Color";
     _initiative = make_unique<initiative>();
     _armorClass = make_unique<armorClass>();
 
@@ -1441,6 +1430,22 @@ void character::MiscACBonus(short miscBonus)
 {
     unique_lock<mutex> lock(_mutex);
     _armorClass->MiscMod(_armorClass->MiscMod() + miscBonus);
+}
+
+void character::Characteristics(alignment alignment, string playerName, string deity, string homeland, string gender, short age, short height, short weight, string hair, string eyes, string name)
+{
+    unique_lock<mutex> lock(_mutex);
+    _alignment = alignment;
+    _player = playerName;
+    _deity = deity;
+    _homeland = homeland;
+    _gender = gender;
+    _age = age;
+    _height = height;
+    _weight = weight;
+    _hairColor = hair;
+    _eyeColor = eyes;
+    _name = name;
 }
 
 void character::AddRacialTrait(shared_ptr<feat> &&racialTrait)

@@ -55,6 +55,7 @@ public:
     void ArmorBonus(short armorBonus);
     void ShieldBonus(short shieldBonus);
     void MiscACBonus(short miscBonus);
+    void Characteristics(alignment alignment, string playerName, string deity, string homeland, string gender, short age, short height, short weight, string hair, string eyes, string name);
 
     // Adders
     void AddRacialTrait(shared_ptr<feat> &&racialTrait);

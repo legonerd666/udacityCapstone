@@ -25,6 +25,7 @@ private:
     void Role(shared_ptr<character> &&character);
     void Feats(shared_ptr<character> &&character);
     void Equipment(shared_ptr<character> &&character);
+    void Characteristics(shared_ptr<character> &&character);
 
     short GetScore(abilityType abilityType);
     short GetScoreAdj(abilityType abilityType);
@@ -71,6 +72,10 @@ private:
     short GetCheckPenalty();
     unsigned short GetSpellFailureChance();
     unsigned short GetBaseSpeedAdjustment();
+    alignment GetAlignment();
+    short GetAge();
+    short GetHeight();
+    short GetCharacterWeight();
 
     vector<thread> _threads;
 };
