@@ -852,6 +852,7 @@ string character::ToStringForConsole()
             character += "|         Max Dex Bonus:         ";
             if (acItem->MaxDexBonus() != USHRT_MAX)
             {
+                character += "+";
                 character += to_string(acItem->MaxDexBonus());
             }
             else
@@ -1328,12 +1329,6 @@ currencyType character::CurrencyType(short index)
     return _currency[index]->Type();
 }
 
-unsigned short character::ArmoredSpeed()
-{
-    unique_lock<mutex> lock(_mutex);
-    return _speed->Armored();
-}
-
 void character::AbilityScores(short newAbilityScores[6])
 {
     unique_lock<mutex> lock(_mutex);
@@ -1428,6 +1423,24 @@ void character::ArmoredSpeed(unsigned short speed)
     {
         _speed->Armored(speed);
     }
+}
+
+void character::ArmorBonus(short armorBonus)
+{
+    unique_lock<mutex> lock(_mutex);
+    _armorClass->Armor(_armorClass->Armor() + armorBonus);
+}
+
+void character::ShieldBonus(short shieldBonus)
+{
+    unique_lock<mutex> lock(_mutex);
+    _armorClass->Shield(_armorClass->Shield() + shieldBonus);
+}
+
+void character::MiscACBonus(short miscBonus)
+{
+    unique_lock<mutex> lock(_mutex);
+    _armorClass->MiscMod(_armorClass->MiscMod() + miscBonus);
 }
 
 void character::AddRacialTrait(shared_ptr<feat> &&racialTrait)

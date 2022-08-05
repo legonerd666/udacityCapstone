@@ -16,10 +16,9 @@ speed::speed()
     _burrowTempMod = 0;
 }
 
-speed::speed(unsigned short baseSpeed) : _base(baseSpeed)
+speed::speed(unsigned short baseSpeed) : _base(baseSpeed), _armored(baseSpeed)
 {
     _baseTempMod = 0;
-    _armored = 0;
     _armoredTempMod = 0;
     _fly = 0;
     _flyTempMod = 0;

@@ -36,7 +36,6 @@ public:
     string Proficiencies();
     int Currency(currencyType currency);
     currencyType CurrencyType(short index);
-    unsigned short ArmoredSpeed();
 
     // Setters
     void AbilityScores(short newAbilityScores[6]);
@@ -53,6 +52,9 @@ public:
     void Save(saveType saveType, unsigned short save);
     void Currency(currencyType currency, int amount);
     void ArmoredSpeed(unsigned short speed);
+    void ArmorBonus(short armorBonus);
+    void ShieldBonus(short shieldBonus);
+    void MiscACBonus(short miscBonus);
 
     // Adders
     void AddRacialTrait(shared_ptr<feat> &&racialTrait);

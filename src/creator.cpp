@@ -1477,9 +1477,9 @@ void creator::AddArmor(shared_ptr<character> characterSheet)
             string name;
             DelayedCout("Ok, and what's the name of the armor: ", false);
             getline(cin, name, '\n');
-            string type;
+            string actype;
             DelayedCout("Ok, and is it a piece of armor or a shield: ", false);
-            getline(cin, type, '\n');
+            getline(cin, actype, '\n');
             unsigned short aCBonus = GetACBonus();
             unsigned short maxDex = GetMaxDex();
             short checkPenalty = GetCheckPenalty();
@@ -1491,8 +1491,28 @@ void creator::AddArmor(shared_ptr<character> characterSheet)
             DelayedCout("Please write down any special properties and/or a description of the armor: ", false);
             getline(cin, description, '\n');
 
+            for (auto &&c : actype)
+            {
+                c = tolower(c);
+            }
+            if (actype == "armor")
+            {
+                _threads.emplace_back(thread(&character::ArmorBonus, characterSheet, aCBonus));
+                actype[0] = 'A';
+            }
+            else if (actype == "shield")
+            {
+                _threads.emplace_back(thread(&character::ShieldBonus, characterSheet, aCBonus));
+                actype[0] = 'S';
+            }
+            else
+            {
+                _threads.emplace_back(thread(&character::MiscACBonus, characterSheet, aCBonus));
+                actype[0] = toupper(actype[0]);
+            }
+            _threads.emplace_back(thread(&character::ArmoredSpeed, characterSheet, baseSpeedAdjustment));
             _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, weight)));
-            _threads.emplace_back(thread(&character::AddArmor, characterSheet, make_unique<armorClassItem>(move(name), move(type), move(aCBonus), move(maxDex), move(checkPenalty), move(spellFailureChance), move(baseSpeedAdjustment), move(weight), move(description))));
+            _threads.emplace_back(thread(&character::AddArmor, characterSheet, make_unique<armorClassItem>(move(name), move(actype), move(aCBonus), move(maxDex), move(checkPenalty), move(spellFailureChance), move(baseSpeedAdjustment), move(weight), move(description))));
             AddArmor(move(characterSheet));
         }
     }
@@ -1883,6 +1903,110 @@ short creator::GetAmmoAmount()
     {
         DelayedCout("The... Umm... Amount...?");
         return GetAmmoAmount();
+    }
+}
+
+unsigned short creator::GetACBonus()
+{
+    DelayedCout("What is the armor bonus: ", false);
+    string bonus;
+    getline(cin, bonus, '\n');
+    try
+    {
+        if (stoi(bonus) > 0)
+            return stoi(bonus);
+        else
+        {
+            DelayedCout("Your armor most have a bonus of at least 1.");
+            return GetACBonus();
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("Please give me the bonus as a number.");
+        return GetACBonus();
+    }
+}
+
+unsigned short creator::GetMaxDex()
+{
+    DelayedCout("What is the armors max dex bonus: ", false);
+    string bonus;
+    getline(cin, bonus, '\n');
+    try
+    {
+        if (stoi(bonus) >= 0)
+            return stoi(bonus);
+        else
+        {
+            DelayedCout("Your armors max dex penalty can't be less than 0.");
+            return GetMaxDex();
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("Please give me the bonus as a number.");
+        return GetMaxDex();
+    }
+}
+
+short creator::GetCheckPenalty()
+{
+    DelayedCout("What is the armors check penalty: ", false);
+    string penalty;
+    getline(cin, penalty, '\n');
+    try
+    {
+        return stoi(penalty);
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("Please give me the penalty as a number.");
+        return GetCheckPenalty();
+    }
+}
+
+unsigned short creator::GetSpellFailureChance()
+{
+    DelayedCout("What is the armors spell failure chance: ", false);
+    string chance;
+    getline(cin, chance, '\n');
+    try
+    {
+        if (stoi(chance) >= 0)
+            return stoi(chance);
+        else
+        {
+            DelayedCout("Your armors spell failure chance can't be less than 0.");
+            return GetSpellFailureChance();
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("Please give me the chance as a number.");
+        return GetSpellFailureChance();
+    }
+}
+
+unsigned short creator::GetBaseSpeedAdjustment()
+{
+    DelayedCout("What is the armors base speed adjustment: ", false);
+    string speed;
+    getline(cin, speed, '\n');
+    try
+    {
+        if (stoi(speed) >= 0)
+            return stoi(speed);
+        else
+        {
+            DelayedCout("Your armors base speed adjustment can't be less than 0.");
+            return GetBaseSpeedAdjustment();
+        }
+    }
+    catch (const std::invalid_argument &e)
+    {
+        DelayedCout("Please give me the adjustment as a number.");
+        return GetBaseSpeedAdjustment();
     }
 }
 

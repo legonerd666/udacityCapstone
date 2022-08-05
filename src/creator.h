@@ -66,6 +66,11 @@ private:
     short GetAmmoAmount();
     void AddArmor(shared_ptr<character> character);
     void AddGear(shared_ptr<character> character);
+    unsigned short GetACBonus();
+    unsigned short GetMaxDex();
+    short GetCheckPenalty();
+    unsigned short GetSpellFailureChance();
+    unsigned short GetBaseSpeedAdjustment();
 
     vector<thread> _threads;
 };

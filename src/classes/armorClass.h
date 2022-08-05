@@ -8,7 +8,7 @@ class armorClass
 public:
     armorClass();
 
-    //Getters
+    // Getters
     short Total(short dexMod, sizeType sizeType);
     short TouchArmorClass(short dexMod, sizeType sizeType);
     short FlatFootedArmorClass(sizeType sizeType);
@@ -20,13 +20,12 @@ public:
     short DodgeBonus();
     short MiscMod();
 
-    //Setters
-    // void Armor(short newArmor);
-    // void Shield(short newShield);
+    // Setters
+    void Armor(short newArmor);
+    void Shield(short newShield);
     // void NaturalArmor(short newNaturalArmor);
     // void DeflectionMod(short newDeflectionMod);
-    // void MiscMod(short NewMiscMod);
-
+    void MiscMod(short NewMiscMod);
 
 private:
     short _armor;
@@ -35,7 +34,6 @@ private:
     short _deflectionBonus;
     short _dodgeBonus;
     short _miscMod;
-
 };
 
 #endif
