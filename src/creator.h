@@ -13,6 +13,10 @@ class creator
 public:
     creator();
     ~creator();
+    creator(const creator &) = delete;
+    creator &operator=(const creator &) = delete;
+    creator(creator &&oldCreator);
+    creator &operator=(creator &&oldCreator);
 
     void Intro(shared_ptr<character> character);
 

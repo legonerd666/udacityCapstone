@@ -19,6 +19,19 @@ creator::~creator()
     }
 }
 
+creator::creator(creator &&oldCreator)
+{
+    _threads = oldCreator._threads;
+    oldCreator._threads.clear();
+}
+
+creator &creator::operator=(creator &&oldCreator)
+{
+    this->_threads = oldCreator._threads;
+    oldCreator._threads.clear();
+    return *this;
+}
+
 void creator::Intro(shared_ptr<character> characterSheet)
 {
     DelayedCout("Welcome to the character creator, I will walk you through creating a character in Pathfinder 1e right here in the console!");
