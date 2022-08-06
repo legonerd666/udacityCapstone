@@ -20,9 +20,9 @@ public:
     // Disables a creator and its' threads from being copied
     creator &operator=(const creator &) = delete;
     // Moves the vector of threads from the old creator to the new one and clears the old creators' vector
-    creator(creator &&oldCreator);
+    creator(creator &&oldCreator) = delete;
     // Moves the vector of threads from the old creator to the new one and clears the old creators' vector
-    creator &operator=(creator &&oldCreator);
+    creator &operator=(creator &&oldCreator) = delete;
 
     // Prints a short intro to how the creator is going to work to the console and starts character creation by running the ability scores function
     void Intro(shared_ptr<character> character);
@@ -145,7 +145,7 @@ private:
     // Returns the characters weight in pounds
     short GetCharacterWeight();
 
-    unique_ptr<vector<thread>> _threads;
+    vector<thread> _threads;
 };
 
 #endif
