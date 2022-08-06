@@ -1,67 +1,67 @@
-##How to build and run this program on linux:
-1. Clone Repo
-2. Open terminal in the cloned directory
-3. mkdir build
-4. cd build
-5. cmake ..
-6. make
-8. ./CharacterCreator
-9. Enjoy! :]
+## How to build and run this program on linux:
+    1. Clone Repo
+    2. Open terminal in the cloned directory
+    3. mkdir build
+    4. cd build
+    5. cmake ..
+    6. make
+    7. ./CharacterCreator
+    8. Enjoy! :]
 
-##What this program does:
-This program uses a class "creator" to fill in the fields of a large class "character" to create a character sheet for the RPG Pathfinder 1e.
-It asks the user of the program for info using the console and takes the data inputed by the user and stores it in the character class and once all the field have been filled the program prints the completed character sheet to the console as a large formatted string.
+## What this program does:
+    This program uses a class "creator" to fill in the fields of a large class "character" to create a character sheet for the RPG Pathfinder 1e.
+    It asks the user of the program for info using the console and takes the data inputed by the user and stores it in the character class and once all the field have been filled the program prints the completed character sheet to the console as a large formatted string.
 
-##File Structure:
-All the relevant code is in the src directory
-src/:
-    classes/
-    creator.cpp
-    enums.cpp
-    main.cpp
-    creator.h
-    enums.h
-src/classes/:
-    abilityScore.cpp
-    armorClass.cpp
-    armorClassItem.cpp
-    character.cpp
-    classSpellListItem.cpp
-    currency.cpp
-    feat.cpp
-    gear.cpp
-    hitDie.cpp
-    hitPoints.cpp
-    initiative.cpp
-    race.cpp
-    role.cpp
-    save.cpp
-    skill.cpp
-    speed.cpp
-    spell.cpp
-    spellStat.cpp
-    weapon.cpp
-    abilityScore.h
-    armorClass.h
-    armorClassItem.h
-    character.h
-    classSpellListItem.h
-    currency.h
-    feat.h
-    gear.h
-    hitDie.h
-    hitPoints.h
-    initiative.h
-    race.h
-    role.h
-    save.h
-    skill.h
-    speed.h
-    spell.h
-    spellStat.h
-    weapon.h
+## File Structure:
+    All the relevant code is in the src directory
+    src/:
+        classes/
+        creator.cpp
+        enums.cpp
+        main.cpp
+        creator.h
+        enums.h
+    src/classes/:
+        abilityScore.cpp
+        armorClass.cpp
+        armorClassItem.cpp
+        character.cpp
+        classSpellListItem.cpp
+        currency.cpp
+        feat.cpp
+        gear.cpp
+        hitDie.cpp
+        hitPoints.cpp
+        initiative.cpp
+        race.cpp
+        role.cpp
+        save.cpp
+        skill.cpp
+        speed.cpp
+        spell.cpp
+        spellStat.cpp
+        weapon.cpp
+        abilityScore.h
+        armorClass.h
+        armorClassItem.h
+        character.h
+        classSpellListItem.h
+        currency.h
+        feat.h
+        gear.h
+        hitDie.h
+        hitPoints.h
+        initiative.h
+        race.h
+        role.h
+        save.h
+        skill.h
+        speed.h
+        spell.h
+        spellStat.h
+        weapon.h
 
-##Class Structure:
+## Class Structure:
     creator:
         vector<threads> _threads
     character:
@@ -231,13 +231,14 @@ src/classes/:
 
         mutex _mutex
 
-##Rubric Items:
+## Rubric Items:
     I'm not gonna spend the next month finding line numbers in files for each rubric item if it has it EVERYWHERE. If you'd like to check I will be giving some recommended files to look in for each though most rubric items that have been filled have been filled in tons of files so I won't be listing them all.
-    ####Loops, Functions, I/O:
+    The project requires I include at least 5 rubric items in my code. My code implements all rubrics items except 5. Enjoy.
+#### Loops, Functions, I/O:
         1. For lots of examples: creator.cpp and character.cpp
         2. N/A
         3. Lots in creator.cpp
-    ####OOP:
+#### OOP:
         1. Open any file except main
         2. Open any file except main
         3. Open any file except main and creator
@@ -247,16 +248,15 @@ src/classes/:
         7. Lots of examples in enums.h/enums.cpp
         8. N/A
         9. N/A
-    ####Memory Management:
+#### Memory Management:
         1. If r-value references and pointers count, character.h and creator.h have tons of examples. If not hitPoints.h line 27 has 1, and creator.h has 1 on line 19 and 1 on line 21
         2. creator.h has a destructor that joins threads
         3. creator.h and character.cpp ToStringForConsole()
         4. creator.h
         5. creator.h/creator.cpp and character.h/character.cpp
         6. Just open any of my code, dude. They are everywhere
-    ####Concurrency:
+#### Concurrency:
         1. creator.cpp
         2. N/A
         3. character.cpp/character.h
         4. N/A
-    The project requires I include at least 5 rubric items in my code. My code implements all rubrics items except 5. Enjoy.
