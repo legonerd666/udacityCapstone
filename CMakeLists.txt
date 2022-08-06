@@ -10,3 +10,7 @@ project(CharacterCreator)
 file(GLOB project_SRCS src/*.cpp src/classes/*.cpp)
 
 add_executable(CharacterCreator ${project_SRCS})
+
+TARGET_LINK_LIBRARIES(CharacterCreator
+    pthread
+)

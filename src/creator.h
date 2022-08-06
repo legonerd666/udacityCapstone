@@ -19,9 +19,9 @@ public:
     creator(const creator &) = delete;
     // Disables a creator and its' threads from being copied
     creator &operator=(const creator &) = delete;
-    // Moves the vector of threads from the old creator to the new one and clears the old creators' vector
+    // Disables moving a creator object
     creator(creator &&oldCreator) = delete;
-    // Moves the vector of threads from the old creator to the new one and clears the old creators' vector
+    // Disables moving a creator object
     creator &operator=(creator &&oldCreator) = delete;
 
     // Prints a short intro to how the creator is going to work to the console and starts character creation by running the ability scores function
