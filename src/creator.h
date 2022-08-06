@@ -46,54 +46,103 @@ private:
     // Takes user input and sets all characteristics using worker threads (name, alignment, player name, deity, homeland, gender, age, height, weight, hair color, and eye color) then waits for user to click enter before ending the creation process
     void Characteristics(shared_ptr<character> &&character);
 
+    // Returns short ranging from 3 to 18 to be used as ability scores
     short GetScore(abilityType abilityType);
+    // Returns a short of value 2 or -2 to be used as racial adjustments to ability scores
     short GetScoreAdj(abilityType abilityType);
+    // Returns size enum to be used as character size
     sizeType GetSize();
+    // Returns short ranging from 0 to SHRT_MAX to be used as character base speed
     short GetSpeed();
+    // Recurrently adds racial traits to character until user chooses to stop
     void RacialTraits(shared_ptr<character> character);
+    // Uses a for loop to add languages to inputted languages based on characters intelligence modifier
     void ExtraLanguages(shared_ptr<character> character, string languages);
+    // Returns a die enum of d6, d8, d10, or d12 to be used as characters hitdie
     die GetHitDie();
+    // Takes string and finds all skills listed in them and send them to the ChechClassSkills function to be verified
     void SetClassSkills(shared_ptr<character> character);
+    // Checks list of skills provided by SetClassSkills and if it's correct sets characters class skills to said list
     void CheckClassSkills(shared_ptr<character> character, vector<skillType> skillTypes);
+    // Uses a for loop to call AddSkillRankToSkill after getting the amount of ranks to use and ensuring the amount is less than 35 (which would cause an infinite loop)
     void SetSkillRanks(shared_ptr<character> character);
+    // Displays the number of remaining ranks and allows user to input a skill to place a rank into, if however that skill already has one it recursively calls this function to allow the user to enter a different skill
     void AddSkillRankToSkill(shared_ptr<character> character, short ranks);
+    // Sets the characters role to a casting class with all that that entails if the user wants it to
     void IsCastingClass(shared_ptr<character> character);
+    // Returns the casting ability score the characters role should use
     abilityType GetCastingAbility(shared_ptr<character> character);
+    // Sets spells known for a given level
     void SetSpellsKnown(shared_ptr<character> character, short spellLevel);
+    // Sets spell per day for a given level
     void SetSpellsPerDay(shared_ptr<character> character, short spellLevel);
+    // Recursively calls itself to add all the characters spells to its' spell list
     void AddSpell(shared_ptr<character> character);
+    // Returns the desired magic school for a spell
     magicSchool GetSchool();
+    // Populates a vector of classSpellListItems for a spell
     void GetRoles(vector<shared_ptr<classSpellListItem>> &roles);
+    // Returns the caster type for GetRoles function
     casterType GetCasterType();
+    // Returns the level for GetRoles function
     unsigned short GetLevel();
+    // Returns a bool based on if a spell is affected by spell resistance
     bool GetSpellResistance();
+    // Returns an unsigned short to be used as a characters base attack bonus
     unsigned short GetBaB();
+    // Returns an unsigned short to used as the base save for a given save type
     unsigned short GetSave(saveType saveType);
+    // Recursively adds class features to the character
     void AddClassFeatures(shared_ptr<character> character);
+    // Recursively adds feats to the character
     void AddFeat(shared_ptr<character> character);
+    // Sets the characters starting gold
     void SetGold(shared_ptr<character> character);
+    // Returns a formatted string displaying a characters funds for purchasing equipment in the creator
     string FormattedCurrencies(shared_ptr<character> character);
+    // Recursively adds weapons and gear items of the weapon to the character
     void AddWeapon(shared_ptr<character> character);
+    // Returns a currency type to be used for purchasing in the creator
     currencyType GetCurrencyType();
+    // Returns an int to be used as the cost of an item purchased in the creator
     int GetCost();
+    // Checks if an item is affordable to the user by checking if the user has the required amount of the type of currency the item costs and if not if if they converted their other currency types to the used currency type they would have sufficient funds, if so it returns 0 and sets the characters new funds as neccesary, if funds are not sufficient character funds aren't changed and the function returns -1
     int SubtractCost(shared_ptr<character> character, currencyType &&currencyType, int &&cost);
+    // Returns the number of damage dice rolled for a weapon
     short GetNDice();
+    // Returns die enum for die used by a weapon
     die GetDie();
+    // Returns an unsigned short to be used as an items' weight
     unsigned short GetWeight();
+    // Returns the ability a weapons attack uses
     abilityType GetAbilityType();
+    // Returns a short indicating the amount of ammo the character has for the weapon and adds it to gear
     short GetAmmo(shared_ptr<character> character);
+    // Returns a bool based off if the user would like to purchase ammo for a weapon
     bool WillBuyAmmo();
+    // Returns a short of how much ammo they are buying
     short GetAmmoAmount();
+    // Recursively adds armor to the characters armor class items and gear, and adds to the armor, shield, or miscellaneous bonus to the characters armor class
     void AddArmor(shared_ptr<character> character);
+    // Recursively adds gear to the character
     void AddGear(shared_ptr<character> character);
+    // Returns the AC bonus to be used in an armor class item
     unsigned short GetACBonus();
+    // Returns the Maximum dexterity bonus allowed by an armor class item when worn
     unsigned short GetMaxDex();
+    // Returns the check penalty afforded when wearing an armor class item
     short GetCheckPenalty();
+    // Returns the spell failure chance inflicted by wearing an armor class item
     unsigned short GetSpellFailureChance();
+    // Returns the speed adjustment made when wearing an armor class item
     unsigned short GetBaseSpeedAdjustment();
+    // Returns an alignment enum to be used as the characters alignment
     alignment GetAlignment();
+    // Returns the characters age
     short GetAge();
+    // Returns the characters height
     short GetHeight();
+    // Returns the characters weight in pounds
     short GetCharacterWeight();
 
     vector<thread> _threads;

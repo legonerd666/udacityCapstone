@@ -127,6 +127,7 @@ void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6
     DelayedCout("Languages: ", false);
     string languages;
     getline(cin, languages, '\n');
+    // Lets you pick a number of extra languages based on your intelligence modifier
     if (characterSheet->AbilityMod(intelligence) > 0)
     {
         DelayedCout("You get to choose " + to_string(characterSheet->AbilityMod(intelligence)) + " extra languages from your race list!");
@@ -148,24 +149,33 @@ void creator::Role(shared_ptr<character> &&characterSheet)
     DelayedCout("Figured out your class? What's it called: ", false);
     string name;
     getline(cin, name, '\n');
+    // Initializes your role
     _threads.emplace_back(thread(&character::AddRole, characterSheet, move(name)));
     DelayedCout("Great! Now what hit die does this class use?");
+    // Adds Hitpoints
     _threads.emplace_back(thread(&character::HitPoints, characterSheet, move(GetHitDie())));
     DelayedCout("Now I need the skills that are class skills for you.");
+    // Sets Class Skills
     SetClassSkills(characterSheet);
+    // Sets Skill Ranks
     SetSkillRanks(characterSheet);
     DelayedCout("Classes give you proficiency with different weapons and armors, please input those proficiencies.");
     DelayedCout("Proficiencies: ", false);
     string proficiencies;
     getline(cin, proficiencies, '\n');
+    // Sets Proficiencies
     _threads.emplace_back(thread([characterSheet, proficiencies]()
                                  { characterSheet->Proficiencies(characterSheet->Proficiencies() + " " + proficiencies); }));
+    // Sets class as casting class if desired
     IsCastingClass(characterSheet);
+    // Sets Base Attack Bonuses
     _threads.emplace_back(thread(&character::BaB, characterSheet, GetBaB()));
+    // Sets Saves
     _threads.emplace_back(thread(&character::Save, characterSheet, fortitude, GetSave(fortitude)));
     _threads.emplace_back(thread(&character::Save, characterSheet, reflex, GetSave(reflex)));
     _threads.emplace_back(thread(&character::Save, characterSheet, will, GetSave(will)));
     DelayedCout("Ok, time for the final step of choosing your class: Entering in your class features!");
+    // Sets Class Features
     AddClassFeatures(characterSheet);
     Feats(move(characterSheet));
 }
@@ -173,6 +183,7 @@ void creator::Role(shared_ptr<character> &&characterSheet)
 void creator::Feats(shared_ptr<character> &&characterSheet)
 {
     DelayedCout("Ok now we are gonna go through and add your feats. All characters start at level 1 with 1 feat. Some races and classes may get extras.");
+    // Sets Feats
     AddFeat(characterSheet);
     Equipment(move(characterSheet));
 }
@@ -181,9 +192,13 @@ void creator::Equipment(shared_ptr<character> &&characterSheet)
 {
     DelayedCout("Great, we are nearing the finish line!");
     DelayedCout("Time to choose your starting equipment!");
+    // Sets Gold
     SetGold(characterSheet);
+    // Sets Weapons
     AddWeapon(characterSheet);
+    // Sets Armor
     AddArmor(characterSheet);
+    // Sets Gear
     AddGear(characterSheet);
     Characteristics(move(characterSheet));
     this_thread::sleep_for(chrono::milliseconds(1));
@@ -220,6 +235,7 @@ void creator::Characteristics(shared_ptr<character> &&characterSheet)
     DelayedCout("What is your characters...");
     DelayedCout("Name: ", false);
     getline(cin, name, '\n');
+    // Sets All Characteristics
     _threads.emplace_back(thread(&character::Characteristics, move(characterSheet), move(alignment), move(playerName), move(deity), move(homeland), move(gender), move(age), move(height), move(weight), move(hair), move(eyes), move(name)));
     DelayedCout("Ok, great, lemme just fill out everything else.");
     DelayedCout("...");
@@ -348,11 +364,11 @@ short creator::GetSpeed()
     getline(cin, speed, '\n');
     try
     {
-        if (stoi(speed) >= 0 && stoi(speed) < USHRT_MAX)
+        if (stoi(speed) >= 0 && stoi(speed) < SHRT_MAX)
             return stoi(speed);
         else
         {
-            DelayedCout("Please unsure your speed entered is at least 0 and at most " + to_string(USHRT_MAX - 1) + ".");
+            DelayedCout("Please unsure your speed entered is at least 0 and at most " + to_string(SHRT_MAX - 1) + ".");
             DelayedCout("Let's go again.");
             return GetSpeed();
         }
@@ -1006,17 +1022,21 @@ void creator::IsCastingClass(shared_ptr<character> characterSheet)
     getline(cin, isCastingClass, '\n');
     if (tolower(isCastingClass[0]) == 'y')
     {
+        // Sets role to casting class and sets up spellstats with bonus spells
         _threads.emplace_back(thread(&character::SetRoleToCastingClass, characterSheet, 0, GetCastingAbility(characterSheet)));
         DelayedCout("Each spell casting class has a description of how spells work for that class under a class feature named \"Spells\".");
         DelayedCout("So, please give me the description (or a shortened version if you'd prefer) of how spells work in your class and I'll write them down in a class feature named spells.");
         DelayedCout("Spells Description: ", false);
         string spellsDesc;
         getline(cin, spellsDesc, '\n');
+        // Adds class feature for spell casting
         _threads.emplace_back(thread(&character::AddClassFeature, characterSheet, 0, "Spells", move(spellsDesc)));
+        // Sets spells known and spells per day for spell levels 0 and 1
         SetSpellsKnown(characterSheet, 0);
         SetSpellsKnown(characterSheet, 1);
         SetSpellsPerDay(characterSheet, 0);
         SetSpellsPerDay(characterSheet, 1);
+        // Adds all the characters spells to the character
         AddSpell(move(characterSheet));
     }
     else if (tolower(isCastingClass[0]) != 'n')
@@ -1035,6 +1055,7 @@ abilityType creator::GetCastingAbility(shared_ptr<character> characterSheet)
     getline(cin, castingAbility, '\n');
     try
     {
+        // Only allows mental ability to be selected as a casting ability
         if (stoi(castingAbility) == 1)
             return intelligence;
         else if (stoi(castingAbility) == 2)
@@ -1074,6 +1095,7 @@ void creator::SetSpellsKnown(shared_ptr<character> characterSheet, short spellLe
     }
     try
     {
+        // Sets spells known to a number which is then used to dynamically display the spells known in the characters ToStringForConsole function
         if (spellsKnown == "n/a" || spellsKnown == "prepare")
             _threads.emplace_back(thread(&character::SetSpellsKnown, characterSheet, 0, move(spellLevel), -2));
         else if (spellsKnown == "all")
@@ -1171,6 +1193,7 @@ void creator::AddSpell(shared_ptr<character> characterSheet)
         DelayedCout("What is the spells description: ", false);
         string description;
         getline(cin, description, '\n');
+        // Adds a spell object with all its member variables to the character
         _threads.emplace_back(thread(&character::AddSpell, characterSheet, 0, move(make_shared<spell>(move(name), move(school), move(roles), move(castingTime), move(components), move(range), move(target), move(duration), move(savingThrow), move(spellResistance), move(description)))));
         AddSpell(move(characterSheet));
     }
@@ -1471,6 +1494,7 @@ void creator::AddWeapon(shared_ptr<character> characterSheet)
     {
         currencyType costType = GetCurrencyType();
         int cost = GetCost();
+        // Ensures that the user has enough funds to purchase the weapon
         if (SubtractCost(characterSheet, move(costType), move(cost)) == -1)
         {
             DelayedCout("You can't afford that.");
@@ -1500,6 +1524,7 @@ void creator::AddWeapon(shared_ptr<character> characterSheet)
             DelayedCout("Please write down any special properties and/or a description of the weapon: ", false);
             getline(cin, description, '\n');
 
+            // Adds the weapon to both gear and weapons
             _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, move(weight))));
             _threads.emplace_back(thread(&character::AddWeapon, characterSheet, make_unique<weapon>(move(name), move(critRange), move(damageType), move(range), move(damageDie), move(nOfDice), move(abilityType), move(ammo))));
             AddWeapon(move(characterSheet));
@@ -1526,6 +1551,7 @@ void creator::AddArmor(shared_ptr<character> characterSheet)
     {
         currencyType costType = GetCurrencyType();
         int cost = GetCost();
+        // Ensures the user has sufficient funds to purchase the armor
         if (SubtractCost(characterSheet, move(costType), move(cost)) == -1)
         {
             DelayedCout("You can't afford that.");
@@ -1569,6 +1595,7 @@ void creator::AddArmor(shared_ptr<character> characterSheet)
                 _threads.emplace_back(thread(&character::MiscACBonus, characterSheet, aCBonus));
                 actype[0] = toupper(actype[0]);
             }
+            // Adds the armor to armor class items and gear and adds its' bonus to the characters' armor class
             _threads.emplace_back(thread(&character::ArmoredSpeed, characterSheet, baseSpeedAdjustment));
             _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, weight)));
             _threads.emplace_back(thread(&character::AddArmor, characterSheet, make_unique<armorClassItem>(move(name), move(actype), move(aCBonus), move(maxDex), move(checkPenalty), move(spellFailureChance), move(baseSpeedAdjustment), move(weight), move(description))));
@@ -1598,6 +1625,7 @@ void creator::AddGear(shared_ptr<character> characterSheet)
     {
         currencyType costType = GetCurrencyType();
         int cost = GetCost();
+        // Ensures the user has enough money to afford the piece of gear
         if (SubtractCost(characterSheet, move(costType), move(cost)) == -1)
         {
             DelayedCout("You can't afford that.");
@@ -1613,6 +1641,7 @@ void creator::AddGear(shared_ptr<character> characterSheet)
             DelayedCout("Ok, this is the last thing I'll need you to tell me about your gear.");
             DelayedCout("Please write down any special properties and/or a description of the gear: ", false);
             getline(cin, description, '\n');
+            // Adds the item to gear
             _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, weight)));
             AddGear(move(characterSheet));
         }
@@ -1936,6 +1965,7 @@ short creator::GetAmmo(shared_ptr<character> characterSheet)
             currencyType currency = GetCurrencyType();
             DelayedCout("How much does it cost to buy the amount of that ammo?");
             int cost = GetCost();
+            // Ensures they can afford that amount of ammo
             if (SubtractCost(characterSheet, move(currency), move(cost)) == -1)
             {
                 DelayedCout("You can't afford that.");
@@ -1951,6 +1981,7 @@ short creator::GetAmmo(shared_ptr<character> characterSheet)
                 string description;
                 DelayedCout("Please write down any special properties and/or a description of the ammo: ", false);
                 getline(cin, description, '\n');
+                // Adds it to gear
                 _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(move(name + "(" + to_string(AmmoAmount) + ")"), move(description), move(weight))));
                 return AmmoAmount;
             }
