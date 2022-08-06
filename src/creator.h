@@ -11,6 +11,8 @@
 class creator
 {
 public:
+    // Stops users from not providing a character object to populate
+    creator() = delete;
     // Upon creation this object runs the user through character creation in the console and sets all the characters values
     creator(shared_ptr<character> character);
     // Joins all threads in the vector of threads before destructing
