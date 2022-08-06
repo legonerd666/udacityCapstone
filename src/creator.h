@@ -11,7 +11,7 @@
 class creator
 {
 public:
-    // Creates a creator object with an empty vector of threads and a shared pointer to the character to create
+    // Upon creation this object runs the user through character creation in the console and sets all the characters values
     creator(shared_ptr<character> character);
     // Joins all threads in the vector of threads before destructing
     ~creator();
