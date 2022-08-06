@@ -9,7 +9,10 @@
 
 using namespace std;
 
-creator::creator() {}
+creator::creator(shared_ptr<character> character) : _character(character)
+{
+    Intro();
+}
 
 creator::~creator()
 {
@@ -19,15 +22,15 @@ creator::~creator()
     }
 }
 
-void creator::Intro(shared_ptr<character> characterSheet)
+void creator::Intro()
 {
     DelayedCout("Welcome to the character creator, I will walk you through creating a character in Pathfinder 1e right here in the console!");
     DelayedCout("What will happen is as follows: I will ask you questions about the next section in the character sheet, and you will type an appropriate response in the console. Then we repeat this step for the next field.");
     DelayedCout("After all the required steps have been completed I will do a bit of math and fill out any other fields that don't need your input and print your new character sheet to the console for you to use!");
-    AbilityScores(move(characterSheet));
+    AbilityScores();
 }
 
-void creator::AbilityScores(shared_ptr<character> &&characterSheet)
+void creator::AbilityScores()
 {
     short abilityScores[6];
     DelayedCout("First up: ability scores!");
@@ -41,10 +44,10 @@ void creator::AbilityScores(shared_ptr<character> &&characterSheet)
     abilityScores[3] = GetScore(intelligence);
     abilityScores[4] = GetScore(wisdom);
     abilityScores[5] = GetScore(charisma);
-    Race(move(characterSheet), move(abilityScores));
+    Race(move(abilityScores));
 }
 
-void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6])
+void creator::Race(short abilityScores[6])
 {
     DelayedCout("Now that that's done, it's time to pick your race!");
     DelayedCout("Look in the Pathfinder Core Rulebook and decide which race suits your character most;");
@@ -52,7 +55,7 @@ void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6
     DelayedCout("Let's get a name for your race: ", false);
     string name;
     getline(cin, name, '\n');
-    _threads.emplace_back(thread(&character::Race, characterSheet, move(name)));
+    _threads.emplace_back(thread(&character::Race, _character, move(name)));
 #pragma region Ability Scores
 
     {
@@ -70,28 +73,28 @@ void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6
             abilityScores[i] += abilityScoreAdjs[i];
         }
     }
-    _threads.emplace_back(thread(&character::AbilityScores, characterSheet, move(abilityScores)));
+    _threads.emplace_back(thread(&character::AbilityScores, _character, move(abilityScores)));
 
 #pragma endregion Ability Scores
 
 #pragma region Size
 
     DelayedCout("Ok, Now let's write down your size!");
-    _threads.emplace_back(thread(&character::Size, characterSheet, move(GetSize())));
+    _threads.emplace_back(thread(&character::Size, _character, move(GetSize())));
 
 #pragma endregion Size
 
 #pragma region Speed
 
     DelayedCout("Time to enter their speed!");
-    _threads.emplace_back(thread(&character::Speed, characterSheet, move(GetSpeed())));
+    _threads.emplace_back(thread(&character::Speed, _character, move(GetSpeed())));
 
 #pragma endregion Speed
 
 #pragma region Racial Traits
 
     DelayedCout("Now you get to enter any racial traits!");
-    RacialTraits(characterSheet);
+    RacialTraits();
 
 #pragma endregion Racial Traits
 
@@ -101,8 +104,8 @@ void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6
     DelayedCout("Weapons: ", false);
     string weapons;
     getline(cin, weapons, '\n');
-    _threads.emplace_back(thread([characterSheet, weapons]()
-                                 { characterSheet->Proficiencies(weapons); }));
+    _threads.emplace_back(thread([this, weapons]()
+                                 { _character->Proficiencies(weapons); }));
 
 #pragma endregion Weapon Familiarity
 
@@ -115,83 +118,83 @@ void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6
     string languages;
     getline(cin, languages, '\n');
     // Lets you pick a number of extra languages based on your intelligence modifier
-    if (characterSheet->AbilityMod(intelligence) > 0)
+    if (_character->AbilityMod(intelligence) > 0)
     {
-        DelayedCout("You get to choose " + to_string(characterSheet->AbilityMod(intelligence)) + " extra languages from your race list!");
-        ExtraLanguages(characterSheet, move(languages));
+        DelayedCout("You get to choose " + to_string(_character->AbilityMod(intelligence)) + " extra languages from your race list!");
+        ExtraLanguages(move(languages));
     }
     else
     {
-        _threads.emplace_back(thread(&character::Languages, characterSheet, move(languages)));
+        _threads.emplace_back(thread(&character::Languages, _character, move(languages)));
     }
 
 #pragma endregion Languages
 
-    Role(move(characterSheet));
+    Role();
 }
 
-void creator::Role(shared_ptr<character> &&characterSheet)
+void creator::Role()
 {
     DelayedCout("Time to select your class! Look in the Pathfinder 1e Core Rulebook for which class you want to play and then I will get that info from you and write it in your character sheet!");
     DelayedCout("Figured out your class? What's it called: ", false);
     string name;
     getline(cin, name, '\n');
     // Initializes your role
-    _threads.emplace_back(thread(&character::AddRole, characterSheet, move(name)));
+    _threads.emplace_back(thread(&character::AddRole, _character, move(name)));
     DelayedCout("Great! Now what hit die does this class use?");
     // Adds Hitpoints
-    _threads.emplace_back(thread(&character::HitPoints, characterSheet, move(GetHitDie())));
+    _threads.emplace_back(thread(&character::HitPoints, _character, move(GetHitDie())));
     DelayedCout("Now I need the skills that are class skills for you.");
     // Sets Class Skills
-    SetClassSkills(characterSheet);
+    SetClassSkills();
     // Sets Skill Ranks
-    SetSkillRanks(characterSheet);
+    SetSkillRanks();
     DelayedCout("Classes give you proficiency with different weapons and armors, please input those proficiencies.");
     DelayedCout("Proficiencies: ", false);
     string proficiencies;
     getline(cin, proficiencies, '\n');
     // Sets Proficiencies
-    _threads.emplace_back(thread([characterSheet, proficiencies]()
-                                 { characterSheet->Proficiencies(characterSheet->Proficiencies() + " " + proficiencies); }));
+    _threads.emplace_back(thread([this, proficiencies]()
+                                 { _character->Proficiencies(_character->Proficiencies() + " " + proficiencies); }));
     // Sets class as casting class if desired
-    IsCastingClass(characterSheet);
+    IsCastingClass();
     // Sets Base Attack Bonuses
-    _threads.emplace_back(thread(&character::BaB, characterSheet, GetBaB()));
+    _threads.emplace_back(thread(&character::BaB, _character, GetBaB()));
     // Sets Saves
-    _threads.emplace_back(thread(&character::Save, characterSheet, fortitude, GetSave(fortitude)));
-    _threads.emplace_back(thread(&character::Save, characterSheet, reflex, GetSave(reflex)));
-    _threads.emplace_back(thread(&character::Save, characterSheet, will, GetSave(will)));
+    _threads.emplace_back(thread(&character::Save, _character, fortitude, GetSave(fortitude)));
+    _threads.emplace_back(thread(&character::Save, _character, reflex, GetSave(reflex)));
+    _threads.emplace_back(thread(&character::Save, _character, will, GetSave(will)));
     DelayedCout("Ok, time for the final step of choosing your class: Entering in your class features!");
     // Sets Class Features
-    AddClassFeatures(characterSheet);
-    Feats(move(characterSheet));
+    AddClassFeatures();
+    Feats();
 }
 
-void creator::Feats(shared_ptr<character> &&characterSheet)
+void creator::Feats()
 {
     DelayedCout("Ok now we are gonna go through and add your feats. All characters start at level 1 with 1 feat. Some races and classes may get extras.");
     // Sets Feats
-    AddFeat(characterSheet);
-    Equipment(move(characterSheet));
+    AddFeat();
+    Equipment();
 }
 
-void creator::Equipment(shared_ptr<character> &&characterSheet)
+void creator::Equipment()
 {
     DelayedCout("Great, we are nearing the finish line!");
     DelayedCout("Time to choose your starting equipment!");
     // Sets Gold
-    SetGold(characterSheet);
+    SetGold();
     // Sets Weapons
-    AddWeapon(characterSheet);
+    AddWeapon();
     // Sets Armor
-    AddArmor(characterSheet);
+    AddArmor();
     // Sets Gear
-    AddGear(characterSheet);
-    Characteristics(move(characterSheet));
+    AddGear();
+    Characteristics();
     this_thread::sleep_for(chrono::milliseconds(1));
 }
 
-void creator::Characteristics(shared_ptr<character> &&characterSheet)
+void creator::Characteristics()
 {
     DelayedCout("Great Job!! We are now on the last step!");
     DelayedCout("Just fill in your characters characteristics and we will be all done and ready to play!");
@@ -223,7 +226,7 @@ void creator::Characteristics(shared_ptr<character> &&characterSheet)
     DelayedCout("Name: ", false);
     getline(cin, name, '\n');
     // Sets All Characteristics
-    _threads.emplace_back(thread(&character::Characteristics, move(characterSheet), move(alignment), move(playerName), move(deity), move(homeland), move(gender), move(age), move(height), move(weight), move(hair), move(eyes), move(name)));
+    _threads.emplace_back(thread(&character::Characteristics, _character, move(alignment), move(playerName), move(deity), move(homeland), move(gender), move(age), move(height), move(weight), move(hair), move(eyes), move(name)));
     DelayedCout("Ok, great, lemme just fill out everything else.");
     DelayedCout("...");
     DelayedCout("...");
@@ -368,7 +371,7 @@ short creator::GetSpeed()
     }
 }
 
-void creator::RacialTraits(shared_ptr<character> characterSheet)
+void creator::RacialTraits()
 {
     DelayedCout("Would you like to add a racial trait?");
     DelayedCout("Y/n: ", false);
@@ -383,8 +386,8 @@ void creator::RacialTraits(shared_ptr<character> characterSheet)
         DelayedCout(name + "'s description: ", false);
         string description;
         getline(cin, description, '\n');
-        _threads.emplace_back(&character::AddRacialTrait, characterSheet, move(make_shared<feat>(name, description)));
-        RacialTraits(move(characterSheet));
+        _threads.emplace_back(&character::AddRacialTrait, _character, move(make_shared<feat>(name, description)));
+        RacialTraits();
     }
     else if (tolower(addTrait.front()) == 'n')
     {
@@ -393,14 +396,14 @@ void creator::RacialTraits(shared_ptr<character> characterSheet)
     else
     {
         DelayedCout("Please answer either Y or n.");
-        RacialTraits(move(characterSheet));
+        RacialTraits();
     }
     return;
 }
 
-void creator::ExtraLanguages(shared_ptr<character> characterSheet, string languages)
+void creator::ExtraLanguages(string languages)
 {
-    for (short i = 0; i < characterSheet->AbilityMod(intelligence); i++)
+    for (short i = 0; i < _character->AbilityMod(intelligence); i++)
     {
         DelayedCout("Please enter an extra language from your list: ", false);
         string language;
@@ -408,7 +411,7 @@ void creator::ExtraLanguages(shared_ptr<character> characterSheet, string langua
         languages += " ";
         languages += language;
     }
-    _threads.emplace_back(thread(&character::Languages, move(characterSheet), languages));
+    _threads.emplace_back(thread(&character::Languages, _character, languages));
 }
 
 die creator::GetHitDie()
@@ -446,7 +449,7 @@ die creator::GetHitDie()
     }
 }
 
-void creator::SetClassSkills(shared_ptr<character> characterSheet)
+void creator::SetClassSkills()
 {
     DelayedCout("Please enter all skills which are class skills for you: ", false);
     string skills;
@@ -610,10 +613,10 @@ void creator::SetClassSkills(shared_ptr<character> characterSheet)
     {
         skillTypes.emplace_back(useMagicDevice);
     }
-    CheckClassSkills(move(characterSheet), move(skillTypes));
+    CheckClassSkills(move(skillTypes));
 }
 
-void creator::CheckClassSkills(shared_ptr<character> characterSheet, vector<skillType> skillTypes)
+void creator::CheckClassSkills(vector<skillType> skillTypes)
 {
     DelayedCout("To confirm, are these all the skills that are your class skills?");
     for (auto &&skillT : skillTypes)
@@ -627,22 +630,22 @@ void creator::CheckClassSkills(shared_ptr<character> characterSheet, vector<skil
     {
         for (auto &&skillT : skillTypes)
         {
-            _threads.emplace_back(thread(&character::AddClassSkill, characterSheet, skillT));
+            _threads.emplace_back(thread(&character::AddClassSkill, _character, skillT));
         }
     }
     else if (tolower(isCorrect[0]) == 'n')
     {
         DelayedCout("Ok, I'll let you enter them again, make sure this time that they are all spelled correctly and that knowledge skills are written \"knowledge (category)\" (eg. \"knowledge (arcana) or knowledge (all)\")");
-        SetClassSkills(move(characterSheet));
+        SetClassSkills();
     }
     else
     {
         DelayedCout("Not sure what you mean by that, let's try again.");
-        CheckClassSkills(move(characterSheet), move(skillTypes));
+        CheckClassSkills(move(skillTypes));
     }
 }
 
-void creator::SetSkillRanks(shared_ptr<character> characterSheet)
+void creator::SetSkillRanks()
 {
     DelayedCout("Ok, now you will need to tell me how many skill ranks your class starts with and then put them into your skills");
     DelayedCout("How many skill ranks does your class start with: ", false);
@@ -651,25 +654,25 @@ void creator::SetSkillRanks(shared_ptr<character> characterSheet)
     try
     {
         // This if statement ensures they can't have more ranks than skills which would cause the following for loop to be unable to finish due to the fact that only one rank can be put in each skill
-        if (stoi(ranks) + characterSheet->AbilityMod(intelligence) > 35)
+        if (stoi(ranks) + _character->AbilityMod(intelligence) > 35)
         {
             ranks = "35";
         }
 
-        for (int i = stoi(ranks) + characterSheet->AbilityMod(intelligence) - 1; i >= 0; i--)
+        for (int i = stoi(ranks) + _character->AbilityMod(intelligence) - 1; i >= 0; i--)
         {
-            AddSkillRankToSkill(characterSheet, i + 1);
+            AddSkillRankToSkill(i + 1);
         }
     }
     catch (const std::invalid_argument &e)
     {
         DelayedCout("So, FYI, usually when someone asks for an amount, they are asking for a number.");
         DelayedCout("It's fine, I'll let you enter it again, but this time, please give me the number of skill ranks your class starts with.");
-        SetSkillRanks(move(characterSheet));
+        SetSkillRanks();
     }
 }
 
-void creator::AddSkillRankToSkill(shared_ptr<character> characterSheet, short ranks)
+void creator::AddSkillRankToSkill(short ranks)
 {
     DelayedCout("You have " + to_string(ranks) + " ranks. Please enter a skill in which you'd like to put a rank: ", false);
     string skill;
@@ -681,327 +684,327 @@ void creator::AddSkillRankToSkill(shared_ptr<character> characterSheet, short ra
     }
     if (skill.find(" acrobatics") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(acrobatics) == -1)
+        if (_character->AddSkillRankToSkill(acrobatics) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" appraise") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(appraise) == -1)
+        if (_character->AddSkillRankToSkill(appraise) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" bluff") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(bluff) == -1)
+        if (_character->AddSkillRankToSkill(bluff) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" climb") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(climb) == -1)
+        if (_character->AddSkillRankToSkill(climb) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" craft") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(craft) == -1)
+        if (_character->AddSkillRankToSkill(craft) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" diplomacy") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(diplomacy) == -1)
+        if (_character->AddSkillRankToSkill(diplomacy) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" disable device") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(disableDevice) == -1)
+        if (_character->AddSkillRankToSkill(disableDevice) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" disguise") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(disguise) == -1)
+        if (_character->AddSkillRankToSkill(disguise) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" escape artist") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(escapeArtist) == -1)
+        if (_character->AddSkillRankToSkill(escapeArtist) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" fly") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(fly) == -1)
+        if (_character->AddSkillRankToSkill(fly) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" handle animal") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(handleAnimal) == -1)
+        if (_character->AddSkillRankToSkill(handleAnimal) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" heal") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(heal) == -1)
+        if (_character->AddSkillRankToSkill(heal) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" intimidate") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(intimidate) == -1)
+        if (_character->AddSkillRankToSkill(intimidate) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" knowledge (arcana)") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(knowArcana) == -1)
+        if (_character->AddSkillRankToSkill(knowArcana) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" knowledge (dungeoneering)") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(knowDungeoneering) == -1)
+        if (_character->AddSkillRankToSkill(knowDungeoneering) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" knowledge (engineering)") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(knowEngineering) == -1)
+        if (_character->AddSkillRankToSkill(knowEngineering) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" knowledge (geography)") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(knowGeography) == -1)
+        if (_character->AddSkillRankToSkill(knowGeography) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" knowledge (history)") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(knowHistory) == -1)
+        if (_character->AddSkillRankToSkill(knowHistory) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" knowledge (local)") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(knowLocal) == -1)
+        if (_character->AddSkillRankToSkill(knowLocal) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" knowledge (nature)") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(knowNature) == -1)
+        if (_character->AddSkillRankToSkill(knowNature) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" knowledge (nobility)") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(knowNobility) == -1)
+        if (_character->AddSkillRankToSkill(knowNobility) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" knowledge (planes)") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(knowPlanes) == -1)
+        if (_character->AddSkillRankToSkill(knowPlanes) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" knowledge (religion)") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(knowReligion) == -1)
+        if (_character->AddSkillRankToSkill(knowReligion) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" linguistics") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(linguistics) == -1)
+        if (_character->AddSkillRankToSkill(linguistics) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" perception") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(perception) == -1)
+        if (_character->AddSkillRankToSkill(perception) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" perform") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(perform) == -1)
+        if (_character->AddSkillRankToSkill(perform) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" profession") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(profession) == -1)
+        if (_character->AddSkillRankToSkill(profession) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" ride") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(ride) == -1)
+        if (_character->AddSkillRankToSkill(ride) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" sense motive") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(senseMotive) == -1)
+        if (_character->AddSkillRankToSkill(senseMotive) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" sleight of hand") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(sleightOfHand) == -1)
+        if (_character->AddSkillRankToSkill(sleightOfHand) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" spellcraft") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(spellcraft) == -1)
+        if (_character->AddSkillRankToSkill(spellcraft) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" stealth") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(stealth) == -1)
+        if (_character->AddSkillRankToSkill(stealth) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" survival") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(survival) == -1)
+        if (_character->AddSkillRankToSkill(survival) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" swim") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(swim) == -1)
+        if (_character->AddSkillRankToSkill(swim) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else if (skill.find(" use magic device") != string::npos)
     {
-        if (characterSheet->AddSkillRankToSkill(useMagicDevice) == -1)
+        if (_character->AddSkillRankToSkill(useMagicDevice) == -1)
         {
             DelayedCout("I'm sorry, but you can't put more ranks in a skill than you character level and since we are creating a 1st level character that means only 1 skill rank per skill.");
             DelayedCout("You'll have to pick a different skill.");
-            AddSkillRankToSkill(move(characterSheet), ranks);
+            AddSkillRankToSkill(ranks);
         }
     }
     else
     {
         DelayedCout("I don't know what skill you mean, could you enter it again please and make sure you spelled it properly? (knowledge skills should be written as such: knowledge (category) eg. knowledge (nature))");
-        AddSkillRankToSkill(move(characterSheet), ranks);
+        AddSkillRankToSkill(ranks);
     }
 }
 
-void creator::IsCastingClass(shared_ptr<character> characterSheet)
+void creator::IsCastingClass()
 {
     DelayedCout("Ok, now I need to know if your class is a casting class.");
     DelayedCout("Is this a casting class? Y/n: ", false);
@@ -1010,30 +1013,30 @@ void creator::IsCastingClass(shared_ptr<character> characterSheet)
     if (tolower(isCastingClass[0]) == 'y')
     {
         // Sets role to casting class and sets up spellstats with bonus spells
-        _threads.emplace_back(thread(&character::SetRoleToCastingClass, characterSheet, 0, GetCastingAbility(characterSheet)));
+        _threads.emplace_back(thread(&character::SetRoleToCastingClass, _character, 0, GetCastingAbility()));
         DelayedCout("Each spell casting class has a description of how spells work for that class under a class feature named \"Spells\".");
         DelayedCout("So, please give me the description (or a shortened version if you'd prefer) of how spells work in your class and I'll write them down in a class feature named spells.");
         DelayedCout("Spells Description: ", false);
         string spellsDesc;
         getline(cin, spellsDesc, '\n');
         // Adds class feature for spell casting
-        _threads.emplace_back(thread(&character::AddClassFeature, characterSheet, 0, "Spells", move(spellsDesc)));
+        _threads.emplace_back(thread(&character::AddClassFeature, _character, 0, "Spells", move(spellsDesc)));
         // Sets spells known and spells per day for spell levels 0 and 1
-        SetSpellsKnown(characterSheet, 0);
-        SetSpellsKnown(characterSheet, 1);
-        SetSpellsPerDay(characterSheet, 0);
-        SetSpellsPerDay(characterSheet, 1);
+        SetSpellsKnown(0);
+        SetSpellsKnown(1);
+        SetSpellsPerDay(0);
+        SetSpellsPerDay(1);
         // Adds all the characters spells to the character
-        AddSpell(move(characterSheet));
+        AddSpell();
     }
     else if (tolower(isCastingClass[0]) != 'n')
     {
         DelayedCout("I don't understand. Please answer Y or n.");
-        IsCastingClass(move(characterSheet));
+        IsCastingClass();
     }
 }
 
-abilityType creator::GetCastingAbility(shared_ptr<character> characterSheet)
+abilityType creator::GetCastingAbility()
 {
     DelayedCout("What ability score is your class's casting tied to?");
     DelayedCout("1. Intelligence\n2. Wisdom\n3. Charisma");
@@ -1052,17 +1055,17 @@ abilityType creator::GetCastingAbility(shared_ptr<character> characterSheet)
         else
         {
             DelayedCout("That wasn't one of the options.");
-            return GetCastingAbility(move(characterSheet));
+            return GetCastingAbility();
         }
     }
     catch (const std::invalid_argument &e)
     {
         DelayedCout("I need a number.");
-        return GetCastingAbility(move(characterSheet));
+        return GetCastingAbility();
     }
 }
 
-void creator::SetSpellsKnown(shared_ptr<character> characterSheet, short spellLevel)
+void creator::SetSpellsKnown(short spellLevel)
 {
     DelayedCout("Now I'll be asking you how many level " + to_string(spellLevel) + " spells you know.");
     DelayedCout("If your class knows all spells of this level please answer \"all\".");
@@ -1084,27 +1087,27 @@ void creator::SetSpellsKnown(shared_ptr<character> characterSheet, short spellLe
     {
         // Sets spells known to a number which is then used to dynamically display the spells known in the characters ToStringForConsole function
         if (spellsKnown == "n/a" || spellsKnown == "prepare")
-            _threads.emplace_back(thread(&character::SetSpellsKnown, characterSheet, 0, move(spellLevel), -2));
+            _threads.emplace_back(thread(&character::SetSpellsKnown, _character, 0, move(spellLevel), -2));
         else if (spellsKnown == "all")
-            _threads.emplace_back(thread(&character::SetSpellsKnown, characterSheet, 0, move(spellLevel), -1));
+            _threads.emplace_back(thread(&character::SetSpellsKnown, _character, 0, move(spellLevel), -1));
         else if (stoi(spellsKnown) >= 0)
-            _threads.emplace_back(thread(&character::SetSpellsKnown, characterSheet, 0, move(spellLevel), stoi(spellsKnown)));
+            _threads.emplace_back(thread(&character::SetSpellsKnown, _character, 0, move(spellLevel), stoi(spellsKnown)));
         else if (stoi(spellsKnown) < 0)
         {
             DelayedCout("Dude, you can't know negative spells. How would that even work?");
             DelayedCout("We'll go again, and this time, give my a positive number or one of the words I gave you.");
-            SetSpellsKnown(move(characterSheet), move(spellLevel));
+            SetSpellsKnown(move(spellLevel));
         }
     }
     catch (const std::invalid_argument &e)
     {
         DelayedCout("I'm sorry, but the options are: A number, \"all\", \"N/A\", and \"Prepare\". Not whatever you just said.");
         DelayedCout("Please try that again.");
-        SetSpellsKnown(move(characterSheet), move(spellLevel));
+        SetSpellsKnown(move(spellLevel));
     }
 }
 
-void creator::SetSpellsPerDay(shared_ptr<character> characterSheet, short spellLevel)
+void creator::SetSpellsPerDay(short spellLevel)
 {
     DelayedCout("Now I'll be asking you how many level " + to_string(spellLevel) + " spells you can cast per day.");
     DelayedCout("All casting classes have their spells per day written in a table with all their other info.");
@@ -1121,23 +1124,23 @@ void creator::SetSpellsPerDay(shared_ptr<character> characterSheet, short spellL
     try
     {
         if (stoi(spellsPerDay) >= 0)
-            _threads.emplace_back(thread(&character::SetSpellsPerDay, characterSheet, 0, move(spellLevel), stoi(spellsPerDay)));
+            _threads.emplace_back(thread(&character::SetSpellsPerDay, _character, 0, move(spellLevel), stoi(spellsPerDay)));
         else if (stoi(spellsPerDay) < 0)
         {
             DelayedCout("Your class should either be able to cast a positive number or 0 spells per day. Check to make sure you read it correctly.");
             DelayedCout("We'll go again, and this time, give my a positive number.");
-            SetSpellsPerDay(move(characterSheet), move(spellLevel));
+            SetSpellsPerDay(move(spellLevel));
         }
     }
     catch (const std::invalid_argument &e)
     {
         DelayedCout("I'm gonna need the number of spells per day, please.");
         DelayedCout("Let's try that again.");
-        SetSpellsPerDay(move(characterSheet), move(spellLevel));
+        SetSpellsPerDay(move(spellLevel));
     }
 }
 
-void creator::AddSpell(shared_ptr<character> characterSheet)
+void creator::AddSpell()
 {
     DelayedCout("Let's add all your known spells! (For the sake of brevity I won't be explaining much about each field, I'll simply ask for what you'd like it to be.)");
     DelayedCout("All the fields are explained in the Pathfinder 1e Core Rulebook in the chapter on spells.");
@@ -1181,13 +1184,13 @@ void creator::AddSpell(shared_ptr<character> characterSheet)
         string description;
         getline(cin, description, '\n');
         // Adds a spell object with all its member variables to the character
-        _threads.emplace_back(thread(&character::AddSpell, characterSheet, 0, move(make_shared<spell>(move(name), move(school), move(roles), move(castingTime), move(components), move(range), move(target), move(duration), move(savingThrow), move(spellResistance), move(description)))));
-        AddSpell(move(characterSheet));
+        _threads.emplace_back(thread(&character::AddSpell, _character, 0, move(make_shared<spell>(move(name), move(school), move(roles), move(castingTime), move(components), move(range), move(target), move(duration), move(savingThrow), move(spellResistance), move(description)))));
+        AddSpell();
     }
     else if (tolower(addSpell[0] != 'n'))
     {
         DelayedCout("I need you to answer Y or n.");
-        AddSpell(move(characterSheet));
+        AddSpell();
     }
 }
 
@@ -1376,7 +1379,7 @@ unsigned short creator::GetSave(saveType saveType)
     }
 }
 
-void creator::AddClassFeatures(shared_ptr<character> characterSheet)
+void creator::AddClassFeatures()
 {
     DelayedCout("Would you like to add a class feature?");
     DelayedCout("Y/n: ", false);
@@ -1390,17 +1393,17 @@ void creator::AddClassFeatures(shared_ptr<character> characterSheet)
         DelayedCout("Ok, now the description: ", false);
         string description;
         getline(cin, description, '\n');
-        _threads.emplace_back(thread(&character::AddClassFeature, characterSheet, 0, move(name), move(description)));
-        AddClassFeatures(move(characterSheet));
+        _threads.emplace_back(thread(&character::AddClassFeature, _character, 0, move(name), move(description)));
+        AddClassFeatures();
     }
     else if (tolower(addClassFeature[0]) != 'n')
     {
         DelayedCout("Not sure how to respond to that...");
-        AddClassFeatures(move(characterSheet));
+        AddClassFeatures();
     }
 }
 
-void creator::AddFeat(shared_ptr<character> characterSheet)
+void creator::AddFeat()
 {
     DelayedCout("Is there a feat you want to add?");
     DelayedCout("Y/n: ", false);
@@ -1414,8 +1417,8 @@ void creator::AddFeat(shared_ptr<character> characterSheet)
         getline(cin, name, '\n');
         DelayedCout("What is its description: ", false);
         getline(cin, description, '\n');
-        _threads.emplace_back(thread(&character::AddFeat, characterSheet, make_unique<feat>(name, description)));
-        AddFeat(move(characterSheet));
+        _threads.emplace_back(thread(&character::AddFeat, _character, make_unique<feat>(name, description)));
+        AddFeat();
     }
     else if (tolower(addFeat[0]) != 'n')
     {
@@ -1424,11 +1427,11 @@ void creator::AddFeat(shared_ptr<character> characterSheet)
         DelayedCout("...");
         DelayedCout("Aaaaaaaaaaaanyway...");
         DelayedCout("Ima need you to answer either Y or n.");
-        AddFeat(move(characterSheet));
+        AddFeat();
     }
 }
 
-void creator::SetGold(shared_ptr<character> characterSheet)
+void creator::SetGold()
 {
     DelayedCout("All characters start out with a random amount of gold to spend based on their class.");
     DelayedCout("So what you'll do is look in the Pathfinder 1e Core Rulebook and on the first page it will list a number of a specific sided die to roll and then multiply that number by 10.");
@@ -1440,26 +1443,26 @@ void creator::SetGold(shared_ptr<character> characterSheet)
     try
     {
         stoi(goldPieces);
-        _threads.emplace_back(thread([characterSheet, goldPieces]()
-                                     { characterSheet->Currency(gold, stoi(goldPieces)); }));
+        _threads.emplace_back(thread([this, goldPieces]()
+                                     { _character->Currency(gold, stoi(goldPieces)); }));
     }
     catch (const std::invalid_argument &e)
     {
         DelayedCout("Please give me the amount of gold as a number.");
-        SetGold(move(characterSheet));
+        SetGold();
     }
 }
 
-string creator::FormattedCurrencies(shared_ptr<character> characterSheet)
+string creator::FormattedCurrencies()
 {
     string currencies = "You currently have: ";
     for (short i = 0; i < 4; i++)
     {
-        currencies += to_string(characterSheet->Currency(characterSheet->CurrencyType(i)));
+        currencies += to_string(_character->Currency(_character->CurrencyType(i)));
         currencies += " ";
-        currencies += EnumToString(characterSheet->CurrencyType(i));
+        currencies += EnumToString(_character->CurrencyType(i));
         currencies += " piece";
-        if (characterSheet->Currency(characterSheet->CurrencyType(i)) != 1)
+        if (_character->Currency(_character->CurrencyType(i)) != 1)
             currencies += "s";
         if (i < 3)
             currencies += ", ";
@@ -1469,10 +1472,10 @@ string creator::FormattedCurrencies(shared_ptr<character> characterSheet)
     return currencies;
 }
 
-void creator::AddWeapon(shared_ptr<character> characterSheet)
+void creator::AddWeapon()
 {
     DelayedCout("Great! Now that you have all your money set up lets purchase some weaponry!");
-    DelayedCout(FormattedCurrencies(characterSheet));
+    DelayedCout(FormattedCurrencies());
     DelayedCout("Would you like to purchase a weapon?");
     DelayedCout("Y/n: ", false);
     string addWeapon;
@@ -1482,10 +1485,10 @@ void creator::AddWeapon(shared_ptr<character> characterSheet)
         currencyType costType = GetCurrencyType();
         int cost = GetCost();
         // Ensures that the user has enough funds to purchase the weapon
-        if (SubtractCost(characterSheet, move(costType), move(cost)) == -1)
+        if (SubtractCost(move(costType), move(cost)) == -1)
         {
             DelayedCout("You can't afford that.");
-            AddWeapon(move(characterSheet));
+            AddWeapon();
         }
         else
         {
@@ -1505,31 +1508,31 @@ void creator::AddWeapon(shared_ptr<character> characterSheet)
             DelayedCout("What is the Damage Type of your weapon: ", false);
             getline(cin, damageType, '\n');
             abilityType abilityType = GetAbilityType();
-            short ammo = GetAmmo(characterSheet);
+            short ammo = GetAmmo();
             string description;
             DelayedCout("Ok, this is the last thing I'll need you to tell me about your weapon.");
             DelayedCout("Please write down any special properties and/or a description of the weapon: ", false);
             getline(cin, description, '\n');
 
             // Adds the weapon to both gear and weapons
-            _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, move(weight))));
-            _threads.emplace_back(thread(&character::AddWeapon, characterSheet, make_unique<weapon>(move(name), move(critRange), move(damageType), move(range), move(damageDie), move(nOfDice), move(abilityType), move(ammo))));
-            AddWeapon(move(characterSheet));
+            _threads.emplace_back(thread(&character::AddGear, _character, make_unique<gear>(name, description, move(weight))));
+            _threads.emplace_back(thread(&character::AddWeapon, _character, make_unique<weapon>(move(name), move(critRange), move(damageType), move(range), move(damageDie), move(nOfDice), move(abilityType), move(ammo))));
+            AddWeapon();
         }
     }
     else if (tolower(addWeapon[0]) != 'n')
     {
         DelayedCout("Could you run that by me again? Perhaps using one of the response options I asked for?");
         DelayedCout("Thanks.");
-        AddWeapon(move(characterSheet));
+        AddWeapon();
     }
 }
 
-void creator::AddArmor(shared_ptr<character> characterSheet)
+void creator::AddArmor()
 {
     DelayedCout("Great! Now let's purchase the armor you are gonna wear!");
     DelayedCout("Keep in mind this is just what you'll be wearing, you can purchase more armor that you want to bring with but don't wear immediately later.");
-    DelayedCout(FormattedCurrencies(characterSheet));
+    DelayedCout(FormattedCurrencies());
     DelayedCout("Would you like to purchase some armor?");
     DelayedCout("Y/n: ", false);
     string addArmor;
@@ -1539,10 +1542,10 @@ void creator::AddArmor(shared_ptr<character> characterSheet)
         currencyType costType = GetCurrencyType();
         int cost = GetCost();
         // Ensures the user has sufficient funds to purchase the armor
-        if (SubtractCost(characterSheet, move(costType), move(cost)) == -1)
+        if (SubtractCost(move(costType), move(cost)) == -1)
         {
             DelayedCout("You can't afford that.");
-            AddArmor(move(characterSheet));
+            AddArmor();
         }
         else
         {
@@ -1569,41 +1572,41 @@ void creator::AddArmor(shared_ptr<character> characterSheet)
             }
             if (actype == "armor")
             {
-                _threads.emplace_back(thread(&character::ArmorBonus, characterSheet, aCBonus));
+                _threads.emplace_back(thread(&character::ArmorBonus, _character, aCBonus));
                 actype[0] = 'A';
             }
             else if (actype == "shield")
             {
-                _threads.emplace_back(thread(&character::ShieldBonus, characterSheet, aCBonus));
+                _threads.emplace_back(thread(&character::ShieldBonus, _character, aCBonus));
                 actype[0] = 'S';
             }
             else
             {
-                _threads.emplace_back(thread(&character::MiscACBonus, characterSheet, aCBonus));
+                _threads.emplace_back(thread(&character::MiscACBonus, _character, aCBonus));
                 actype[0] = toupper(actype[0]);
             }
             // Adds the armor to armor class items and gear and adds its' bonus to the characters' armor class
-            _threads.emplace_back(thread(&character::ArmoredSpeed, characterSheet, baseSpeedAdjustment));
-            _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, weight)));
-            _threads.emplace_back(thread(&character::AddArmor, characterSheet, make_unique<armorClassItem>(move(name), move(actype), move(aCBonus), move(maxDex), move(checkPenalty), move(spellFailureChance), move(baseSpeedAdjustment), move(weight), move(description))));
-            AddArmor(move(characterSheet));
+            _threads.emplace_back(thread(&character::ArmoredSpeed, _character, baseSpeedAdjustment));
+            _threads.emplace_back(thread(&character::AddGear, _character, make_unique<gear>(name, description, weight)));
+            _threads.emplace_back(thread(&character::AddArmor, _character, make_unique<armorClassItem>(move(name), move(actype), move(aCBonus), move(maxDex), move(checkPenalty), move(spellFailureChance), move(baseSpeedAdjustment), move(weight), move(description))));
+            AddArmor();
         }
     }
     else if (tolower(addArmor[0]) != 'n')
     {
         DelayedCout("Could you run that by me again? Perhaps using one of the response options I asked for?");
         DelayedCout("Thanks.");
-        AddArmor(move(characterSheet));
+        AddArmor();
     }
 }
 
-void creator::AddGear(shared_ptr<character> characterSheet)
+void creator::AddGear()
 {
     DelayedCout("Almost done with equipment!");
     DelayedCout("Now just enter in any extra gear you'd like to buy including any armor or weapons you didn't add earlier.");
     DelayedCout("You also start with an outfit worth 10 gold or less if you choose so.");
     DelayedCout("If you choose to add that then just enter in the cost as 0");
-    DelayedCout(FormattedCurrencies(characterSheet));
+    DelayedCout(FormattedCurrencies());
     DelayedCout("Would you like to purchase some gear?");
     DelayedCout("Y/n: ", false);
     string addGear;
@@ -1613,10 +1616,10 @@ void creator::AddGear(shared_ptr<character> characterSheet)
         currencyType costType = GetCurrencyType();
         int cost = GetCost();
         // Ensures the user has enough money to afford the piece of gear
-        if (SubtractCost(characterSheet, move(costType), move(cost)) == -1)
+        if (SubtractCost(move(costType), move(cost)) == -1)
         {
             DelayedCout("You can't afford that.");
-            AddGear(move(characterSheet));
+            AddGear();
         }
         else
         {
@@ -1629,14 +1632,14 @@ void creator::AddGear(shared_ptr<character> characterSheet)
             DelayedCout("Please write down any special properties and/or a description of the gear: ", false);
             getline(cin, description, '\n');
             // Adds the item to gear
-            _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, weight)));
-            AddGear(move(characterSheet));
+            _threads.emplace_back(thread(&character::AddGear, _character, make_unique<gear>(name, description, weight)));
+            AddGear();
         }
     }
     else if (tolower(addGear[0]) != 'n')
     {
         DelayedCout("*wails uncontrollably* I- Don't- Understaaaaaand");
-        AddGear(move(characterSheet));
+        AddGear();
     }
 }
 
@@ -1686,14 +1689,14 @@ int creator::GetCost()
     }
 }
 
-int creator::SubtractCost(shared_ptr<character> characterSheet, currencyType &&currencyType, int &&cost)
+int creator::SubtractCost(currencyType &&currencyType, int &&cost)
 {
-    if (characterSheet->Currency(currencyType) < cost)
+    if (_character->Currency(currencyType) < cost)
     {
-        int CPs = characterSheet->Currency(copper);
-        int SPs = characterSheet->Currency(silver);
-        int GPs = characterSheet->Currency(gold);
-        int PPs = characterSheet->Currency(platinum);
+        int CPs = _character->Currency(copper);
+        int SPs = _character->Currency(silver);
+        int GPs = _character->Currency(gold);
+        int PPs = _character->Currency(platinum);
 
         switch (currencyType)
         {
@@ -1723,10 +1726,10 @@ int creator::SubtractCost(shared_ptr<character> characterSheet, currencyType &&c
                     return -1;
                 }
             }
-            characterSheet->Currency(copper, CPs - cost);
-            characterSheet->Currency(silver, SPs);
-            characterSheet->Currency(gold, GPs);
-            characterSheet->Currency(platinum, PPs);
+            _character->Currency(copper, CPs - cost);
+            _character->Currency(silver, SPs);
+            _character->Currency(gold, GPs);
+            _character->Currency(platinum, PPs);
             return 0;
         case silver:
             while (SPs < cost)
@@ -1752,10 +1755,10 @@ int creator::SubtractCost(shared_ptr<character> characterSheet, currencyType &&c
                     return -1;
                 }
             }
-            characterSheet->Currency(copper, CPs);
-            characterSheet->Currency(silver, SPs - cost);
-            characterSheet->Currency(gold, GPs);
-            characterSheet->Currency(platinum, PPs);
+            _character->Currency(copper, CPs);
+            _character->Currency(silver, SPs - cost);
+            _character->Currency(gold, GPs);
+            _character->Currency(platinum, PPs);
             return 0;
         case gold:
             while (GPs < cost)
@@ -1780,10 +1783,10 @@ int creator::SubtractCost(shared_ptr<character> characterSheet, currencyType &&c
                     return -1;
                 }
             }
-            characterSheet->Currency(copper, CPs);
-            characterSheet->Currency(silver, SPs);
-            characterSheet->Currency(gold, GPs - cost);
-            characterSheet->Currency(platinum, PPs);
+            _character->Currency(copper, CPs);
+            _character->Currency(silver, SPs);
+            _character->Currency(gold, GPs - cost);
+            _character->Currency(platinum, PPs);
             return 0;
         case platinum:
             while (PPs < cost)
@@ -1808,10 +1811,10 @@ int creator::SubtractCost(shared_ptr<character> characterSheet, currencyType &&c
                     return -1;
                 }
             }
-            characterSheet->Currency(copper, CPs);
-            characterSheet->Currency(silver, SPs);
-            characterSheet->Currency(gold, GPs);
-            characterSheet->Currency(platinum, PPs - cost);
+            _character->Currency(copper, CPs);
+            _character->Currency(silver, SPs);
+            _character->Currency(gold, GPs);
+            _character->Currency(platinum, PPs - cost);
             return 0;
         default:
             return -1;
@@ -1819,7 +1822,7 @@ int creator::SubtractCost(shared_ptr<character> characterSheet, currencyType &&c
     }
     else
     {
-        characterSheet->Currency(currencyType, characterSheet->Currency(currencyType) - cost);
+        _character->Currency(currencyType, _character->Currency(currencyType) - cost);
         return 0;
     }
 }
@@ -1938,7 +1941,7 @@ abilityType creator::GetAbilityType()
     }
 }
 
-short creator::GetAmmo(shared_ptr<character> characterSheet)
+short creator::GetAmmo()
 {
     DelayedCout("Does this weapon use ammo?");
     DelayedCout("Y/n: ", false);
@@ -1953,10 +1956,10 @@ short creator::GetAmmo(shared_ptr<character> characterSheet)
             DelayedCout("How much does it cost to buy the amount of that ammo?");
             int cost = GetCost();
             // Ensures they can afford that amount of ammo
-            if (SubtractCost(characterSheet, move(currency), move(cost)) == -1)
+            if (SubtractCost(move(currency), move(cost)) == -1)
             {
                 DelayedCout("You can't afford that.");
-                return GetAmmo(move(characterSheet));
+                return GetAmmo();
             }
             else
             {
@@ -1969,7 +1972,7 @@ short creator::GetAmmo(shared_ptr<character> characterSheet)
                 DelayedCout("Please write down any special properties and/or a description of the ammo: ", false);
                 getline(cin, description, '\n');
                 // Adds it to gear
-                _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(move(name + "(" + to_string(AmmoAmount) + ")"), move(description), move(weight))));
+                _threads.emplace_back(thread(&character::AddGear, _character, make_unique<gear>(move(name + "(" + to_string(AmmoAmount) + ")"), move(description), move(weight))));
                 return AmmoAmount;
             }
         }
@@ -1979,7 +1982,7 @@ short creator::GetAmmo(shared_ptr<character> characterSheet)
     else if (tolower(usesAmmo[0]) != 'n')
     {
         DelayedCout("I'll ask again.");
-        return GetAmmo(move(characterSheet));
+        return GetAmmo();
     }
     return -1;
 }
