@@ -14,139 +14,139 @@ It asks the user of the program for info using the console and takes the data in
 
 ##File Structure:
 All the relevant code is in the src directory
--src/:
- -classes/
- -creator.cpp
- -enums.cpp
- -main.cpp
- -creator.h
- -enums.h
--src/classes/:
- -abilityScore.cpp
- -armorClass.cpp
- -armorClassItem.cpp
- -character.cpp
- -classSpellListItem.cpp
- -currency.cpp
- -feat.cpp
- -gear.cpp
- -hitDie.cpp
- -hitPoints.cpp
- -initiative.cpp
- -race.cpp
- -role.cpp
- -save.cpp
- -skill.cpp
- -speed.cpp
- -spell.cpp
- -spellStat.cpp
- -weapon.cpp
- -abilityScore.h
- -armorClass.h
- -armorClassItem.h
- -character.h
- -classSpellListItem.h
- -currency.h
- -feat.h
- -gear.h
- -hitDie.h
- -hitPoints.h
- -initiative.h
- -race.h
- -role.h
- -save.h
- -skill.h
- -speed.h
- -spell.h
- -spellStat.h
- -weapon.h
+src/:
+    classes/
+    creator.cpp
+    enums.cpp
+    main.cpp
+    creator.h
+    enums.h
+src/classes/:
+    abilityScore.cpp
+    armorClass.cpp
+    armorClassItem.cpp
+    character.cpp
+    classSpellListItem.cpp
+    currency.cpp
+    feat.cpp
+    gear.cpp
+    hitDie.cpp
+    hitPoints.cpp
+    initiative.cpp
+    race.cpp
+    role.cpp
+    save.cpp
+    skill.cpp
+    speed.cpp
+    spell.cpp
+    spellStat.cpp
+    weapon.cpp
+    abilityScore.h
+    armorClass.h
+    armorClassItem.h
+    character.h
+    classSpellListItem.h
+    currency.h
+    feat.h
+    gear.h
+    hitDie.h
+    hitPoints.h
+    initiative.h
+    race.h
+    role.h
+    save.h
+    skill.h
+    speed.h
+    spell.h
+    spellStat.h
+    weapon.h
 
 ##Class Structure:
-    -creator:
-     -vector<threads> _threads
-    -character:
-     -string _name
-     -alignment _alignment
-      -enum
-     -string _player
-     -vector<unique_ptr<role>> _roles
-      -role:
-       -string _name
-       -unsigned short _level
-       -vector<shared_ptr<feat>> _classFeatures
-        -feat:
-         -string _name
-         -string _description
-       -shared_ptr<spellStat> _spellStats[10]
-        -spellStat:
-         -unsigned short _spellLevel
-         -short _spellsKnown
-         -abilityType _abilityType
-          -enum
-         -short _spellsPerDay
-         -short _bonusSpells
-       -vector<shared_ptr<spell>> _spells
-        -spell:
-         -string _name
-         -magicSchool _school
-          -enum
-         -vector<shared_ptr<classSpellListItem>> _roles
-          -classSpellListItem:
-           -casterType _casterType
-            -enum
-           -unsigned short _level
-         -string _castingTime
-         -string _components
-         -string _range
-         -string _target
-         -string _duration
-         -string _savingThrow
-         -bool _spellResistance
-         -string _description
-       -bool _isCastingClass
-     -string _deity
-     -string _homeland
-     -unique_ptr<race> _race
-      -race:
-       -string _name
-       -vector<shared_ptr<feat>> _racialTraits
-        -feat:
-         -string _name
-         -string _description
-     -sizeType _size
-      -enum
-     -string _gender
-     -short _age
-     -short _height
-     -short _weight
-     -string _hairColor
-     -string _eyeColor
+    creator:
+        vector<threads> _threads
+    character:
+        string _name
+        alignment _alignment
+            enum
+        string _player
+        vector<unique_ptr<role>> _roles
+            role:
+                string _name
+                unsigned short _level
+                vector<shared_ptr<feat>> _classFeatures
+                    feat:
+                        string _name
+                        string _description
+                shared_ptr<spellStat> _spellStats[10]
+                    spellStat:
+                        unsigned short _spellLevel
+                        short _spellsKnown
+                        abilityType _abilityType
+                            enum
+                        short _spellsPerDay
+                        short _bonusSpells
+                vector<shared_ptr<spell>> _spells
+                    spell:
+                        string _name
+                        magicSchool _school
+                            enum
+                        vector<shared_ptr<classSpellListItem>> _roles
+                            classSpellListItem:
+                                casterType _casterType
+                                    enum
+                                unsigned short _level
+                        string _castingTime
+                        string _components
+                        string _range
+                        string _target
+                        string _duration
+                        string _savingThrow
+                        bool _spellResistance
+                        string _description
+                bool _isCastingClass
+        string _deity
+        string _homeland
+        unique_ptr<race> _race
+            race:
+                string _name
+                vector<shared_ptr<feat>> _racialTraits
+                    feat:
+                        string _name
+                        string _description
+        sizeType _size
+            enum
+        string _gender
+        short _age
+        short _height
+        short _weight
+        string _hairColor
+        string _eyeColor
 
-     -unique_ptr<hitPoints> _hitpoints
-      -hitpoints:
-       -short _totalHP
-       -short _currentDamage
-       -short _nonLethalDamage
-       -vector<unique_ptr<hitDie>> _hitdice
-        -hitDie:
-         -die _hitDie
-          -enum
-         -short _numberOfHitDice
-     -unique_ptr<abilityScore> _abilityScores[6]
-      -abilityScore:
-       -short _score
-       -short _adjustedScore
-     -unique_ptr<speed> _speed
-      -speed:
-       -unsigned short _base
-       -unsigned short _baseTempMod
-       -unsigned short _armored
-       -unsigned short _armoredTempMod
-       -unsigned short _fly
-       -unsigned short _flyTempMod
-       -unsigned short _swim
-       -unsigned short _swimTempMod
-       -unsigned short _climb
+        unique_ptr<hitPoints> _hitpoints
+            hitpoints:
+                short _totalHP
+                short _currentDamage
+                short _nonLethalDamage
+                vector<unique_ptr<hitDie>> _hitdice
+                    hitDie:
+                        die _hitDie
+                            enum
+                        short _numberOfHitDice
+        unique_ptr<abilityScore> _abilityScores[6]
+            abilityScore:
+                short _score
+                short _adjustedScore
+        unique_ptr<speed> _speed
+            speed:
+                unsigned short _base
+                unsigned short _baseTempMod
+                unsigned short _armored
+                unsigned short _armoredTempMod
+                unsigned short _fly
+                unsigned short _flyTempMod
+                unsigned short _swim
+                unsigned short _swimTempMod
+                unsigned short _climb
                 unsigned short _climbTempMod
                 unsigned short _burrow
                 unsigned short _burrowTempMod
