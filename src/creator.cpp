@@ -13,22 +13,22 @@ creator::creator() {}
 
 creator::~creator()
 {
-    for (auto &&thread : _threads)
+    for (int i = 0; i < _threads->size(); i++)
     {
-        thread.join();
+        _threads->at(i).join();
     }
 }
 
 creator::creator(creator &&oldCreator)
 {
-    _threads = oldCreator._threads;
-    oldCreator._threads.clear();
+    _threads = move(oldCreator._threads);
+    oldCreator._threads->clear();
 }
 
 creator &creator::operator=(creator &&oldCreator)
 {
-    this->_threads = oldCreator._threads;
-    oldCreator._threads.clear();
+    this->_threads = move(oldCreator._threads);
+    oldCreator._threads->clear();
     return *this;
 }
 
@@ -65,7 +65,7 @@ void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6
     DelayedCout("Let's get a name for your race: ", false);
     string name;
     getline(cin, name, '\n');
-    _threads.emplace_back(thread(&character::Race, characterSheet, move(name)));
+    _threads->emplace_back(thread(&character::Race, characterSheet, move(name)));
 #pragma region Ability Scores
 
     {
@@ -83,21 +83,21 @@ void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6
             abilityScores[i] += abilityScoreAdjs[i];
         }
     }
-    _threads.emplace_back(thread(&character::AbilityScores, characterSheet, move(abilityScores)));
+    _threads->emplace_back(thread(&character::AbilityScores, characterSheet, move(abilityScores)));
 
 #pragma endregion Ability Scores
 
 #pragma region Size
 
     DelayedCout("Ok, Now let's write down your size!");
-    _threads.emplace_back(thread(&character::Size, characterSheet, move(GetSize())));
+    _threads->emplace_back(thread(&character::Size, characterSheet, move(GetSize())));
 
 #pragma endregion Size
 
 #pragma region Speed
 
     DelayedCout("Time to enter their speed!");
-    _threads.emplace_back(thread(&character::Speed, characterSheet, move(GetSpeed())));
+    _threads->emplace_back(thread(&character::Speed, characterSheet, move(GetSpeed())));
 
 #pragma endregion Speed
 
@@ -114,8 +114,8 @@ void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6
     DelayedCout("Weapons: ", false);
     string weapons;
     getline(cin, weapons, '\n');
-    _threads.emplace_back(thread([characterSheet, weapons]()
-                                 { characterSheet->Proficiencies(weapons); }));
+    _threads->emplace_back(thread([characterSheet, weapons]()
+                                  { characterSheet->Proficiencies(weapons); }));
 
 #pragma endregion Weapon Familiarity
 
@@ -135,7 +135,7 @@ void creator::Race(shared_ptr<character> &&characterSheet, short abilityScores[6
     }
     else
     {
-        _threads.emplace_back(thread(&character::Languages, characterSheet, move(languages)));
+        _threads->emplace_back(thread(&character::Languages, characterSheet, move(languages)));
     }
 
 #pragma endregion Languages
@@ -150,10 +150,10 @@ void creator::Role(shared_ptr<character> &&characterSheet)
     string name;
     getline(cin, name, '\n');
     // Initializes your role
-    _threads.emplace_back(thread(&character::AddRole, characterSheet, move(name)));
+    _threads->emplace_back(thread(&character::AddRole, characterSheet, move(name)));
     DelayedCout("Great! Now what hit die does this class use?");
     // Adds Hitpoints
-    _threads.emplace_back(thread(&character::HitPoints, characterSheet, move(GetHitDie())));
+    _threads->emplace_back(thread(&character::HitPoints, characterSheet, move(GetHitDie())));
     DelayedCout("Now I need the skills that are class skills for you.");
     // Sets Class Skills
     SetClassSkills(characterSheet);
@@ -164,16 +164,16 @@ void creator::Role(shared_ptr<character> &&characterSheet)
     string proficiencies;
     getline(cin, proficiencies, '\n');
     // Sets Proficiencies
-    _threads.emplace_back(thread([characterSheet, proficiencies]()
-                                 { characterSheet->Proficiencies(characterSheet->Proficiencies() + " " + proficiencies); }));
+    _threads->emplace_back(thread([characterSheet, proficiencies]()
+                                  { characterSheet->Proficiencies(characterSheet->Proficiencies() + " " + proficiencies); }));
     // Sets class as casting class if desired
     IsCastingClass(characterSheet);
     // Sets Base Attack Bonuses
-    _threads.emplace_back(thread(&character::BaB, characterSheet, GetBaB()));
+    _threads->emplace_back(thread(&character::BaB, characterSheet, GetBaB()));
     // Sets Saves
-    _threads.emplace_back(thread(&character::Save, characterSheet, fortitude, GetSave(fortitude)));
-    _threads.emplace_back(thread(&character::Save, characterSheet, reflex, GetSave(reflex)));
-    _threads.emplace_back(thread(&character::Save, characterSheet, will, GetSave(will)));
+    _threads->emplace_back(thread(&character::Save, characterSheet, fortitude, GetSave(fortitude)));
+    _threads->emplace_back(thread(&character::Save, characterSheet, reflex, GetSave(reflex)));
+    _threads->emplace_back(thread(&character::Save, characterSheet, will, GetSave(will)));
     DelayedCout("Ok, time for the final step of choosing your class: Entering in your class features!");
     // Sets Class Features
     AddClassFeatures(characterSheet);
@@ -236,7 +236,7 @@ void creator::Characteristics(shared_ptr<character> &&characterSheet)
     DelayedCout("Name: ", false);
     getline(cin, name, '\n');
     // Sets All Characteristics
-    _threads.emplace_back(thread(&character::Characteristics, move(characterSheet), move(alignment), move(playerName), move(deity), move(homeland), move(gender), move(age), move(height), move(weight), move(hair), move(eyes), move(name)));
+    _threads->emplace_back(thread(&character::Characteristics, move(characterSheet), move(alignment), move(playerName), move(deity), move(homeland), move(gender), move(age), move(height), move(weight), move(hair), move(eyes), move(name)));
     DelayedCout("Ok, great, lemme just fill out everything else.");
     DelayedCout("...");
     DelayedCout("...");
@@ -396,7 +396,7 @@ void creator::RacialTraits(shared_ptr<character> characterSheet)
         DelayedCout(name + "'s description: ", false);
         string description;
         getline(cin, description, '\n');
-        _threads.emplace_back(&character::AddRacialTrait, characterSheet, move(make_shared<feat>(name, description)));
+        _threads->emplace_back(&character::AddRacialTrait, characterSheet, move(make_shared<feat>(name, description)));
         RacialTraits(move(characterSheet));
     }
     else if (tolower(addTrait.front()) == 'n')
@@ -421,7 +421,7 @@ void creator::ExtraLanguages(shared_ptr<character> characterSheet, string langua
         languages += " ";
         languages += language;
     }
-    _threads.emplace_back(thread(&character::Languages, move(characterSheet), languages));
+    _threads->emplace_back(thread(&character::Languages, move(characterSheet), languages));
 }
 
 die creator::GetHitDie()
@@ -640,7 +640,7 @@ void creator::CheckClassSkills(shared_ptr<character> characterSheet, vector<skil
     {
         for (auto &&skillT : skillTypes)
         {
-            _threads.emplace_back(thread(&character::AddClassSkill, characterSheet, skillT));
+            _threads->emplace_back(thread(&character::AddClassSkill, characterSheet, skillT));
         }
     }
     else if (tolower(isCorrect[0]) == 'n')
@@ -1023,14 +1023,14 @@ void creator::IsCastingClass(shared_ptr<character> characterSheet)
     if (tolower(isCastingClass[0]) == 'y')
     {
         // Sets role to casting class and sets up spellstats with bonus spells
-        _threads.emplace_back(thread(&character::SetRoleToCastingClass, characterSheet, 0, GetCastingAbility(characterSheet)));
+        _threads->emplace_back(thread(&character::SetRoleToCastingClass, characterSheet, 0, GetCastingAbility(characterSheet)));
         DelayedCout("Each spell casting class has a description of how spells work for that class under a class feature named \"Spells\".");
         DelayedCout("So, please give me the description (or a shortened version if you'd prefer) of how spells work in your class and I'll write them down in a class feature named spells.");
         DelayedCout("Spells Description: ", false);
         string spellsDesc;
         getline(cin, spellsDesc, '\n');
         // Adds class feature for spell casting
-        _threads.emplace_back(thread(&character::AddClassFeature, characterSheet, 0, "Spells", move(spellsDesc)));
+        _threads->emplace_back(thread(&character::AddClassFeature, characterSheet, 0, "Spells", move(spellsDesc)));
         // Sets spells known and spells per day for spell levels 0 and 1
         SetSpellsKnown(characterSheet, 0);
         SetSpellsKnown(characterSheet, 1);
@@ -1097,11 +1097,11 @@ void creator::SetSpellsKnown(shared_ptr<character> characterSheet, short spellLe
     {
         // Sets spells known to a number which is then used to dynamically display the spells known in the characters ToStringForConsole function
         if (spellsKnown == "n/a" || spellsKnown == "prepare")
-            _threads.emplace_back(thread(&character::SetSpellsKnown, characterSheet, 0, move(spellLevel), -2));
+            _threads->emplace_back(thread(&character::SetSpellsKnown, characterSheet, 0, move(spellLevel), -2));
         else if (spellsKnown == "all")
-            _threads.emplace_back(thread(&character::SetSpellsKnown, characterSheet, 0, move(spellLevel), -1));
+            _threads->emplace_back(thread(&character::SetSpellsKnown, characterSheet, 0, move(spellLevel), -1));
         else if (stoi(spellsKnown) >= 0)
-            _threads.emplace_back(thread(&character::SetSpellsKnown, characterSheet, 0, move(spellLevel), stoi(spellsKnown)));
+            _threads->emplace_back(thread(&character::SetSpellsKnown, characterSheet, 0, move(spellLevel), stoi(spellsKnown)));
         else if (stoi(spellsKnown) < 0)
         {
             DelayedCout("Dude, you can't know negative spells. How would that even work?");
@@ -1134,7 +1134,7 @@ void creator::SetSpellsPerDay(shared_ptr<character> characterSheet, short spellL
     try
     {
         if (stoi(spellsPerDay) >= 0)
-            _threads.emplace_back(thread(&character::SetSpellsPerDay, characterSheet, 0, move(spellLevel), stoi(spellsPerDay)));
+            _threads->emplace_back(thread(&character::SetSpellsPerDay, characterSheet, 0, move(spellLevel), stoi(spellsPerDay)));
         else if (stoi(spellsPerDay) < 0)
         {
             DelayedCout("Your class should either be able to cast a positive number or 0 spells per day. Check to make sure you read it correctly.");
@@ -1194,7 +1194,7 @@ void creator::AddSpell(shared_ptr<character> characterSheet)
         string description;
         getline(cin, description, '\n');
         // Adds a spell object with all its member variables to the character
-        _threads.emplace_back(thread(&character::AddSpell, characterSheet, 0, move(make_shared<spell>(move(name), move(school), move(roles), move(castingTime), move(components), move(range), move(target), move(duration), move(savingThrow), move(spellResistance), move(description)))));
+        _threads->emplace_back(thread(&character::AddSpell, characterSheet, 0, move(make_shared<spell>(move(name), move(school), move(roles), move(castingTime), move(components), move(range), move(target), move(duration), move(savingThrow), move(spellResistance), move(description)))));
         AddSpell(move(characterSheet));
     }
     else if (tolower(addSpell[0] != 'n'))
@@ -1403,7 +1403,7 @@ void creator::AddClassFeatures(shared_ptr<character> characterSheet)
         DelayedCout("Ok, now the description: ", false);
         string description;
         getline(cin, description, '\n');
-        _threads.emplace_back(thread(&character::AddClassFeature, characterSheet, 0, move(name), move(description)));
+        _threads->emplace_back(thread(&character::AddClassFeature, characterSheet, 0, move(name), move(description)));
         AddClassFeatures(move(characterSheet));
     }
     else if (tolower(addClassFeature[0]) != 'n')
@@ -1427,7 +1427,7 @@ void creator::AddFeat(shared_ptr<character> characterSheet)
         getline(cin, name, '\n');
         DelayedCout("What is its description: ", false);
         getline(cin, description, '\n');
-        _threads.emplace_back(thread(&character::AddFeat, characterSheet, make_unique<feat>(name, description)));
+        _threads->emplace_back(thread(&character::AddFeat, characterSheet, make_unique<feat>(name, description)));
         AddFeat(move(characterSheet));
     }
     else if (tolower(addFeat[0]) != 'n')
@@ -1453,8 +1453,8 @@ void creator::SetGold(shared_ptr<character> characterSheet)
     try
     {
         stoi(goldPieces);
-        _threads.emplace_back(thread([characterSheet, goldPieces]()
-                                     { characterSheet->Currency(gold, stoi(goldPieces)); }));
+        _threads->emplace_back(thread([characterSheet, goldPieces]()
+                                      { characterSheet->Currency(gold, stoi(goldPieces)); }));
     }
     catch (const std::invalid_argument &e)
     {
@@ -1525,8 +1525,8 @@ void creator::AddWeapon(shared_ptr<character> characterSheet)
             getline(cin, description, '\n');
 
             // Adds the weapon to both gear and weapons
-            _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, move(weight))));
-            _threads.emplace_back(thread(&character::AddWeapon, characterSheet, make_unique<weapon>(move(name), move(critRange), move(damageType), move(range), move(damageDie), move(nOfDice), move(abilityType), move(ammo))));
+            _threads->emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, move(weight))));
+            _threads->emplace_back(thread(&character::AddWeapon, characterSheet, make_unique<weapon>(move(name), move(critRange), move(damageType), move(range), move(damageDie), move(nOfDice), move(abilityType), move(ammo))));
             AddWeapon(move(characterSheet));
         }
     }
@@ -1582,23 +1582,23 @@ void creator::AddArmor(shared_ptr<character> characterSheet)
             }
             if (actype == "armor")
             {
-                _threads.emplace_back(thread(&character::ArmorBonus, characterSheet, aCBonus));
+                _threads->emplace_back(thread(&character::ArmorBonus, characterSheet, aCBonus));
                 actype[0] = 'A';
             }
             else if (actype == "shield")
             {
-                _threads.emplace_back(thread(&character::ShieldBonus, characterSheet, aCBonus));
+                _threads->emplace_back(thread(&character::ShieldBonus, characterSheet, aCBonus));
                 actype[0] = 'S';
             }
             else
             {
-                _threads.emplace_back(thread(&character::MiscACBonus, characterSheet, aCBonus));
+                _threads->emplace_back(thread(&character::MiscACBonus, characterSheet, aCBonus));
                 actype[0] = toupper(actype[0]);
             }
             // Adds the armor to armor class items and gear and adds its' bonus to the characters' armor class
-            _threads.emplace_back(thread(&character::ArmoredSpeed, characterSheet, baseSpeedAdjustment));
-            _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, weight)));
-            _threads.emplace_back(thread(&character::AddArmor, characterSheet, make_unique<armorClassItem>(move(name), move(actype), move(aCBonus), move(maxDex), move(checkPenalty), move(spellFailureChance), move(baseSpeedAdjustment), move(weight), move(description))));
+            _threads->emplace_back(thread(&character::ArmoredSpeed, characterSheet, baseSpeedAdjustment));
+            _threads->emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, weight)));
+            _threads->emplace_back(thread(&character::AddArmor, characterSheet, make_unique<armorClassItem>(move(name), move(actype), move(aCBonus), move(maxDex), move(checkPenalty), move(spellFailureChance), move(baseSpeedAdjustment), move(weight), move(description))));
             AddArmor(move(characterSheet));
         }
     }
@@ -1642,7 +1642,7 @@ void creator::AddGear(shared_ptr<character> characterSheet)
             DelayedCout("Please write down any special properties and/or a description of the gear: ", false);
             getline(cin, description, '\n');
             // Adds the item to gear
-            _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, weight)));
+            _threads->emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(name, description, weight)));
             AddGear(move(characterSheet));
         }
     }
@@ -1982,7 +1982,7 @@ short creator::GetAmmo(shared_ptr<character> characterSheet)
                 DelayedCout("Please write down any special properties and/or a description of the ammo: ", false);
                 getline(cin, description, '\n');
                 // Adds it to gear
-                _threads.emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(move(name + "(" + to_string(AmmoAmount) + ")"), move(description), move(weight))));
+                _threads->emplace_back(thread(&character::AddGear, characterSheet, make_unique<gear>(move(name + "(" + to_string(AmmoAmount) + ")"), move(description), move(weight))));
                 return AmmoAmount;
             }
         }
@@ -2238,19 +2238,34 @@ short creator::GetCharacterWeight()
 
 void creator::DelayedCout(string &&string)
 {
-    this_thread::sleep_for(chrono::milliseconds(500));
-    cout << string << endl;
+    for (auto &&c : string)
+    {
+        this_thread::sleep_for(chrono::milliseconds(50));
+        cout << c;
+        cout.flush();
+    }
+    cout << endl;
 }
 
 void creator::DelayedCout(string &&string, bool doNewLine)
 {
-    this_thread::sleep_for(chrono::milliseconds(500));
     if (doNewLine)
     {
-        cout << string << endl;
+        for (auto &&c : string)
+        {
+            this_thread::sleep_for(chrono::milliseconds(50));
+            cout << c;
+            cout.flush();
+        }
+        cout << endl;
     }
     else
     {
-        cout << string;
+        for (auto &&c : string)
+        {
+            this_thread::sleep_for(chrono::milliseconds(50));
+            cout << c;
+            cout.flush();
+        }
     }
 }

@@ -27,9 +27,9 @@ public:
     // Prints a short intro to how the creator is going to work to the console and starts character creation by running the ability scores function
     void Intro(shared_ptr<character> character);
 
-    // Adds a short delay before printing a line to the console to make the text print at a readable speed rather than just vomiting out a chunk of text
+    // Prints string to the console one character at a time to make reading it more pleasant and less overwhelming
     void DelayedCout(string &&string);
-    // Adds a short delay before printing a line to the console to make the text print at a readable speed rather than just vomiting out a chunk of text and allows you to stop it from adding a newline character
+    // Prints string to the console one character at a time to make reading it more pleasant and less overwhelming and allows you to choose if you'd like a new line character to be added at the end
     void DelayedCout(string &&string, bool doNewLine);
 
 private:
@@ -145,7 +145,7 @@ private:
     // Returns the characters weight in pounds
     short GetCharacterWeight();
 
-    vector<thread> _threads;
+    unique_ptr<vector<thread>> _threads;
 };
 
 #endif
