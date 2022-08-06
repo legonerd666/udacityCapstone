@@ -11,6 +11,7 @@
 ## What this program does:
     This program uses a class "creator" to fill in the fields of a large class "character" to create a character sheet for the RPG Pathfinder 1e.
     It asks the user of the program for info using the console and takes the data inputed by the user and stores it in the character class and once all the field have been filled the program prints the completed character sheet to the console as a large formatted string.
+    The text is displayed in a way that makes it much more readable by adding a delay to the text display.
     The program text is also designed to not be robotic in its phrasing and has its own personality!
 
 ## File Structure:
