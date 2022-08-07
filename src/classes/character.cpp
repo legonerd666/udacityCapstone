@@ -857,12 +857,12 @@ string character::ToStringForConsole()
     character += "\n";
     {
         // Calculates the totals for each stat affected whilst adding them to the string
-        unsigned short totalBonus = 0;
+        int totalBonus = 0;
         unsigned short maxDexBonus = USHRT_MAX;
-        unsigned short totalCheckPenalty = 0;
-        unsigned short totalSpellFailureChance = 0;
+        int totalCheckPenalty = 0;
+        int totalSpellFailureChance = 0;
         unsigned short baseSpeedAdjustment = _speed->Base();
-        unsigned short totalWeight = 0;
+        int totalWeight = 0;
         for (auto &&acItem : _armorClassItems)
         {
             character += "|         Name:                  ";
@@ -975,7 +975,7 @@ string character::ToStringForConsole()
     character += "\n";
     {
         // Calculates the total weight of all the carried gear and displays if it is a light, medium, or heavy load based on the characters strength score
-        unsigned short totalWeight = 0;
+        int totalWeight = 0;
         for (auto &&item : _gear)
         {
             character += "|         Name:                      ";
