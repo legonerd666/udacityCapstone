@@ -2244,7 +2244,7 @@ void creator::DelayedCout(string &&string)
 {
     for (auto &&c : string)
     {
-        this_thread::sleep_for(chrono::milliseconds(0));
+        this_thread::sleep_for(chrono::milliseconds(25));
         cout << c;
         cout.flush();
     }
@@ -2257,7 +2257,7 @@ void creator::DelayedCout(string &&string, bool doNewLine)
     {
         for (auto &&c : string)
         {
-            this_thread::sleep_for(chrono::milliseconds(0));
+            this_thread::sleep_for(chrono::milliseconds(25));
             cout << c;
             cout.flush();
         }
@@ -2267,7 +2267,7 @@ void creator::DelayedCout(string &&string, bool doNewLine)
     {
         for (auto &&c : string)
         {
-            this_thread::sleep_for(chrono::milliseconds(0));
+            this_thread::sleep_for(chrono::milliseconds(25));
             cout << c;
             cout.flush();
         }
