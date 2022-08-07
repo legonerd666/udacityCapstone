@@ -373,7 +373,7 @@ short creator::GetSpeed()
             return stoi(speed);
         else
         {
-            DelayedCout("Please unsure your speed entered is at least 0 and at most " + to_string(SHRT_MAX - 1) + ".");
+            DelayedCout("Please ensure your speed entered is at least 0 and at most " + to_string(SHRT_MAX - 1) + ".");
             DelayedCout("Let's go again.");
             return GetSpeed();
         }
@@ -670,9 +670,10 @@ void creator::SetSkillRanks()
     {
         // This if statement ensures they can't have more ranks than skills which would cause the following for loop to be unable to finish due to the fact that only one rank can be put in each skill
         if (stoi(ranks) + _character->AbilityMod(intelligence) > 35)
-        {
             ranks = "35";
-        }
+
+        if (stoi(ranks) < 0)
+            ranks = "0";
 
         for (int i = stoi(ranks) + _character->AbilityMod(intelligence) - 1; i >= 0; i--)
         {
@@ -1105,12 +1106,17 @@ void creator::SetSpellsKnown(short spellLevel)
             _threads.emplace_back(thread(&character::SetSpellsKnown, _character, 0, move(spellLevel), -2));
         else if (spellsKnown == "all")
             _threads.emplace_back(thread(&character::SetSpellsKnown, _character, 0, move(spellLevel), -1));
-        else if (stoi(spellsKnown) >= 0)
+        else if (stoi(spellsKnown) >= 0 && stoi(spellsKnown) < SHRT_MAX)
             _threads.emplace_back(thread(&character::SetSpellsKnown, _character, 0, move(spellLevel), stoi(spellsKnown)));
         else if (stoi(spellsKnown) < 0)
         {
             DelayedCout("Dude, you can't know negative spells. How would that even work?");
             DelayedCout("We'll go again, and this time, give my a positive number or one of the words I gave you.");
+            SetSpellsKnown(move(spellLevel));
+        }
+        else
+        {
+            DelayedCout("I'm sorry, but that is a ridiculous amount of spells, I'm gonna have to ask you to reduce that.");
             SetSpellsKnown(move(spellLevel));
         }
     }
@@ -1138,12 +1144,17 @@ void creator::SetSpellsPerDay(short spellLevel)
     }
     try
     {
-        if (stoi(spellsPerDay) >= 0)
+        if (stoi(spellsPerDay) >= 0 && stoi(spellsPerDay) < SHRT_MAX)
             _threads.emplace_back(thread(&character::SetSpellsPerDay, _character, 0, move(spellLevel), stoi(spellsPerDay)));
         else if (stoi(spellsPerDay) < 0)
         {
             DelayedCout("Your class should either be able to cast a positive number or 0 spells per day. Check to make sure you read it correctly.");
             DelayedCout("We'll go again, and this time, give my a positive number.");
+            SetSpellsPerDay(move(spellLevel));
+        }
+        else
+        {
+            DelayedCout("I'm sorry, but not even a god could cast that many spells. Please give me a reasonable number.");
             SetSpellsPerDay(move(spellLevel));
         }
     }
@@ -1848,11 +1859,11 @@ short creator::GetNDice()
     getline(cin, numberOfDice, '\n');
     try
     {
-        if (stoi(numberOfDice) > 0)
+        if (stoi(numberOfDice) > 0 && stoi(numberOfDice) < SHRT_MAX)
             return stoi(numberOfDice);
         else
         {
-            DelayedCout("Your weapon must roll at least 1 damage die.");
+            DelayedCout("Your weapon must roll at least 1 damage die and it can't be super ridiculously massive.");
             return GetNDice();
         }
     }
@@ -1907,11 +1918,11 @@ unsigned short creator::GetWeight()
     getline(cin, weight, '\n');
     try
     {
-        if (stoi(weight) >= 0 && stoi(weight) <= USHRT_MAX)
+        if (stoi(weight) >= 0 && stoi(weight) < USHRT_MAX)
             return stoi(weight);
         else
         {
-            DelayedCout("Please don't give my a negative weight or a weight above 65535.");
+            DelayedCout("Please don't give my a negative weight and please make sure it's not so heavy that carrying it would create a blackhole that swallows the planet");
             return GetWeight();
         }
     }
@@ -2026,11 +2037,11 @@ short creator::GetAmmoAmount()
     getline(cin, amount, '\n');
     try
     {
-        if (stoi(amount) > 0)
+        if (stoi(amount) > 0 && stoi(amount) < SHRT_MAX)
             return stoi(amount);
         else
         {
-            DelayedCout("I need a number bigger than 0.");
+            DelayedCout("I need a number bigger than 0 and isn't super large.");
             return GetAmmoAmount();
         }
     }
@@ -2048,11 +2059,11 @@ unsigned short creator::GetACBonus()
     getline(cin, bonus, '\n');
     try
     {
-        if (stoi(bonus) > 0)
+        if (stoi(bonus) > 0 && SHRT_MAX)
             return stoi(bonus);
         else
         {
-            DelayedCout("Your armor most have a bonus of at least 1.");
+            DelayedCout("Your armor most have a bonus of at least 1 and isn't so massive nothing could ever pierce your armor.");
             return GetACBonus();
         }
     }
@@ -2070,11 +2081,11 @@ unsigned short creator::GetMaxDex()
     getline(cin, bonus, '\n');
     try
     {
-        if (stoi(bonus) >= 0)
+        if (stoi(bonus) >= 0 && stoi(bonus) <= USHRT_MAX)
             return stoi(bonus);
         else
         {
-            DelayedCout("Your armors max dex penalty can't be less than 0.");
+            DelayedCout("Your armors max dex penalty can't be less than 0 or greater than 65535.");
             return GetMaxDex();
         }
     }
@@ -2092,7 +2103,13 @@ short creator::GetCheckPenalty()
     getline(cin, penalty, '\n');
     try
     {
-        return stoi(penalty);
+        if (stoi(penalty) > SHRT_MIN && stoi(penalty) < SHRT_MAX)
+            return stoi(penalty);
+        else
+        {
+            DelayedCout("That's outrageous. Be reasonable.");
+            return GetCheckPenalty();
+        }
     }
     catch (const std::invalid_argument &e)
     {
@@ -2108,11 +2125,11 @@ unsigned short creator::GetSpellFailureChance()
     getline(cin, chance, '\n');
     try
     {
-        if (stoi(chance) >= 0)
+        if (stoi(chance) >= 0 && stoi(chance) <= 100)
             return stoi(chance);
         else
         {
-            DelayedCout("Your armors spell failure chance can't be less than 0.");
+            DelayedCout("Your armors spell failure chance can't be less than 0 or more than 100");
             return GetSpellFailureChance();
         }
     }
@@ -2130,11 +2147,11 @@ unsigned short creator::GetBaseSpeedAdjustment()
     getline(cin, speed, '\n');
     try
     {
-        if (stoi(speed) >= 0)
+        if (stoi(speed) >= 0 && stoi(speed) < USHRT_MAX)
             return stoi(speed);
         else
         {
-            DelayedCout("Your armors base speed adjustment can't be less than 0.");
+            DelayedCout("Your armors base speed adjustment can't be less than 0 or greater than 65535.");
             return GetBaseSpeedAdjustment();
         }
     }
@@ -2195,7 +2212,13 @@ short creator::GetAge()
     getline(cin, age, '\n');
     try
     {
-        return stoi(age);
+        if (stoi(age) > SHRT_MIN && stoi(age) < SHRT_MAX)
+            return stoi(age);
+        else
+        {
+            DelayedCout("Please give me a normal amount of age for a fictional character.");
+            return GetAge();
+        }
     }
     catch (const std::invalid_argument &e)
     {
@@ -2213,7 +2236,13 @@ short creator::GetHeight()
     getline(cin, height, '\n');
     try
     {
-        return stoi(height);
+        if (stoi(height) > SHRT_MIN && stoi(height) < SHRT_MAX)
+            return stoi(height);
+        else
+        {
+            DelayedCout("Dude, be serious.");
+            return GetHeight();
+        }
     }
     catch (const std::invalid_argument &e)
     {
@@ -2231,8 +2260,15 @@ short creator::GetCharacterWeight()
     getline(cin, weight, '\n');
     try
     {
-        return stoi(weight);
-    }
+        if (stoi(weight) > SHRT_MIN && stoi(weight) < SHRT_MAX)
+            return stoi(weight);
+        else
+        {
+            DelayedCout("At this rate you'll have your own massive gravitational pull.");
+            DelayedCout("Give me something reasonable.");
+            return stoi(weight);
+        }
+        }
     catch (const std::invalid_argument &e)
     {
         DelayedCout("I need a number.");
