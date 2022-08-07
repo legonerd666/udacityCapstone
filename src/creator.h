@@ -13,7 +13,7 @@ class creator
 public:
     // Stops users from not providing a character object to populate
     creator() = delete;
-    // Upon creation this object runs the user through character creation in the console and sets all the characters values
+    // Initializes a creator object with the provided character as the character it will edit
     creator(shared_ptr<character> character);
     // Joins all threads in the vector of threads before destructing
     ~creator();
@@ -25,6 +25,9 @@ public:
     creator(creator &&oldCreator) = delete;
     // Disables moving a creator object
     creator &operator=(creator &&oldCreator) = delete;
+
+    // Gets user input from the console to set the variables of the provided character
+    void CreateCharacter();
 
     // Prints string to the console one character at a time to make reading it more pleasant and less overwhelming
     void DelayedCout(string &&string);

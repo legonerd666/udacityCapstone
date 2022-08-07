@@ -11,13 +11,6 @@ using namespace std;
 
 creator::creator(shared_ptr<character> character) : _character(character)
 {
-    Intro();
-    AbilityScores();
-    Race();
-    Role();
-    Feats();
-    Equipment();
-    Characteristics();
 }
 
 creator::~creator()
@@ -25,6 +18,22 @@ creator::~creator()
     for (auto &&thread : _threads)
     {
         thread.join();
+    }
+}
+
+void creator::CreateCharacter()
+{
+    Intro();
+    AbilityScores();
+    Race();
+    Role();
+    Feats();
+    Equipment();
+    Characteristics();
+    for (int i = 0; i < _threads.size(); i++)
+    {
+        _threads.back().join();
+        _threads.pop_back();
     }
 }
 
