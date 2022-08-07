@@ -12,6 +12,12 @@ using namespace std;
 creator::creator(shared_ptr<character> character) : _character(character)
 {
     Intro();
+    AbilityScores();
+    Race();
+    Role();
+    Feats();
+    Equipment();
+    Characteristics();
 }
 
 creator::~creator()
@@ -27,7 +33,6 @@ void creator::Intro()
     DelayedCout("Welcome to the character creator, I will walk you through creating a character in Pathfinder 1e right here in the console!");
     DelayedCout("What will happen is as follows: I will ask you questions about the next section in the character sheet, and you will type an appropriate response in the console. Then we repeat this step for the next field.");
     DelayedCout("After all the required steps have been completed I will do a bit of math and fill out any other fields that don't need your input and print your new character sheet to the console for you to use!");
-    AbilityScores();
 }
 
 void creator::AbilityScores()
@@ -44,10 +49,11 @@ void creator::AbilityScores()
     abilityScores[3] = GetScore(intelligence);
     abilityScores[4] = GetScore(wisdom);
     abilityScores[5] = GetScore(charisma);
-    Race(move(abilityScores));
+
+    _character->AbilityScores(move(abilityScores));
 }
 
-void creator::Race(short abilityScores[6])
+void creator::Race()
 {
     DelayedCout("Now that that's done, it's time to pick your race!");
     DelayedCout("Look in the Pathfinder Core Rulebook and decide which race suits your character most;");
@@ -58,6 +64,13 @@ void creator::Race(short abilityScores[6])
     _threads.emplace_back(thread(&character::Race, _character, move(name)));
 #pragma region Ability Scores
 
+    short abilityScores[6];
+    abilityScores[0] = _character->AbilityScore(strength);
+    abilityScores[1] = _character->AbilityScore(dexterity);
+    abilityScores[2] = _character->AbilityScore(constitution);
+    abilityScores[3] = _character->AbilityScore(intelligence);
+    abilityScores[4] = _character->AbilityScore(wisdom);
+    abilityScores[5] = _character->AbilityScore(charisma);
     {
         short abilityScoreAdjs[6];
         DelayedCout("Since we now have a name, First things first, races often come with minor adjustments to your ability scores, giving one or more stats +2 bonus or a -2 penalty.");
@@ -68,12 +81,13 @@ void creator::Race(short abilityScores[6])
         abilityScoreAdjs[3] = GetScoreAdj(intelligence);
         abilityScoreAdjs[4] = GetScoreAdj(wisdom);
         abilityScoreAdjs[5] = GetScoreAdj(charisma);
+
         for (short i = 0; i < 6; i++)
         {
             abilityScores[i] += abilityScoreAdjs[i];
         }
     }
-    _threads.emplace_back(thread(&character::AbilityScores, _character, move(abilityScores)));
+    _character->AbilityScores(move(abilityScores));
 
 #pragma endregion Ability Scores
 
@@ -104,8 +118,7 @@ void creator::Race(short abilityScores[6])
     DelayedCout("Weapons: ", false);
     string weapons;
     getline(cin, weapons, '\n');
-    _threads.emplace_back(thread([this, weapons]()
-                                 { _character->Proficiencies(weapons); }));
+    _character->Proficiencies(weapons);
 
 #pragma endregion Weapon Familiarity
 
@@ -129,8 +142,6 @@ void creator::Race(short abilityScores[6])
     }
 
 #pragma endregion Languages
-
-    Role();
 }
 
 void creator::Role()
@@ -154,8 +165,7 @@ void creator::Role()
     string proficiencies;
     getline(cin, proficiencies, '\n');
     // Sets Proficiencies
-    _threads.emplace_back(thread([this, proficiencies]()
-                                 { _character->Proficiencies(_character->Proficiencies() + " " + proficiencies); }));
+    _character->Proficiencies(_character->Proficiencies() + " " + proficiencies);
     // Sets class as casting class if desired
     IsCastingClass();
     // Sets Base Attack Bonuses
@@ -167,7 +177,6 @@ void creator::Role()
     DelayedCout("Ok, time for the final step of choosing your class: Entering in your class features!");
     // Sets Class Features
     AddClassFeatures();
-    Feats();
 }
 
 void creator::Feats()
@@ -175,7 +184,6 @@ void creator::Feats()
     DelayedCout("Ok now we are gonna go through and add your feats. All characters start at level 1 with 1 feat. Some races and classes may get extras.");
     // Sets Feats
     AddFeat();
-    Equipment();
 }
 
 void creator::Equipment()
@@ -190,8 +198,6 @@ void creator::Equipment()
     AddArmor();
     // Sets Gear
     AddGear();
-    Characteristics();
-    this_thread::sleep_for(chrono::milliseconds(1));
 }
 
 void creator::Characteristics()
@@ -1013,7 +1019,7 @@ void creator::IsCastingClass()
     if (tolower(isCastingClass[0]) == 'y')
     {
         // Sets role to casting class and sets up spellstats with bonus spells
-        _threads.emplace_back(thread(&character::SetRoleToCastingClass, _character, 0, GetCastingAbility()));
+        _character->SetRoleToCastingClass(0, GetCastingAbility());
         DelayedCout("Each spell casting class has a description of how spells work for that class under a class feature named \"Spells\".");
         DelayedCout("So, please give me the description (or a shortened version if you'd prefer) of how spells work in your class and I'll write them down in a class feature named spells.");
         DelayedCout("Spells Description: ", false);
@@ -1443,8 +1449,7 @@ void creator::SetGold()
     try
     {
         stoi(goldPieces);
-        _threads.emplace_back(thread([this, goldPieces]()
-                                     { _character->Currency(gold, stoi(goldPieces)); }));
+        _character->Currency(gold, stoi(goldPieces));
     }
     catch (const std::invalid_argument &e)
     {
@@ -2230,7 +2235,7 @@ void creator::DelayedCout(string &&string)
 {
     for (auto &&c : string)
     {
-        this_thread::sleep_for(chrono::milliseconds(25));
+        this_thread::sleep_for(chrono::milliseconds(0));
         cout << c;
         cout.flush();
     }
@@ -2243,7 +2248,7 @@ void creator::DelayedCout(string &&string, bool doNewLine)
     {
         for (auto &&c : string)
         {
-            this_thread::sleep_for(chrono::milliseconds(25));
+            this_thread::sleep_for(chrono::milliseconds(0));
             cout << c;
             cout.flush();
         }
@@ -2253,7 +2258,7 @@ void creator::DelayedCout(string &&string, bool doNewLine)
     {
         for (auto &&c : string)
         {
-            this_thread::sleep_for(chrono::milliseconds(25));
+            this_thread::sleep_for(chrono::milliseconds(0));
             cout << c;
             cout.flush();
         }

@@ -1344,6 +1344,12 @@ string character::ToStringForConsole()
     return character;
 }
 
+short character::AbilityScore(abilityType abilityType)
+{
+    unique_lock<mutex> lock(_mutex);
+    return _abilityScores[EnumToIndex(abilityType)]->Score();
+}
+
 short character::AbilityMod(abilityType abilityType)
 {
     unique_lock<mutex> lock(_mutex);

@@ -34,7 +34,9 @@ public:
     // Getters
     // Outputs the character data as a nicely formatted dynamic string
     string ToStringForConsole();
-    // Returns the modifier of an ability of the given type
+    // Returns the score of an ability based on the given type
+    short AbilityScore(abilityType abilityType);
+    // Returns the adjusted modifier of an ability of the given type
     short AbilityMod(abilityType abilityType);
     // Returns the characters proficiencies
     string Proficiencies();
