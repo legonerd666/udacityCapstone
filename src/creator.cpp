@@ -1,11 +1,12 @@
 #include "creator.h"
-#include "classes/character.h"
+#include "character.h"
 #include "enums.h"
 
 #include <iostream>
 #include <memory>
 #include <thread>
 #include <climits>
+#include <algorithm>
 
 using namespace std;
 
@@ -51,6 +52,7 @@ void creator::AbilityScores()
     DelayedCout("Roll 4 six-sided dice and take away the lowest die, then add up the remaining 3 dice to get an ability score!");
     DelayedCout("Write that ability score on a piece of paper and repeat 5 more times so that you have 6 ability scores written down, ranging from 3 to 18 in value.");
     DelayedCout("Figure out which scores you want to use each number for (strength, dexterity, constitution, intelligence, wisdom, and charisma) or you can do them in the order you rolled them.");
+    DelayedCout("If you just want random ability scores then don't enter anything and I'll generate them for you.");
     DelayedCout("Now that you've chosen the order to use them in:");
     abilityScores[0] = GetScore(strength);
     abilityScores[1] = GetScore(dexterity);
@@ -274,8 +276,21 @@ short creator::GetScore(abilityType abilityType)
     }
     catch (const std::invalid_argument &e)
     {
-        DelayedCout("Sorry, but the answer you gave wasn't a number, let's start over. This time please give me a number.");
-        return GetScore(abilityType);
+        if (score == "")
+        {
+            ushort rolls[4];
+            rolls[0] = (rand() % 6) + 1;
+            rolls[1] = (rand() % 6) + 1;
+            rolls[2] = (rand() % 6) + 1;
+            rolls[3] = (rand() % 6) + 1;
+            sort(begin(rolls), end(rolls));
+            return rolls[1] + rolls[2] + rolls[3];
+        }
+        else
+        {
+            DelayedCout("Sorry, but the answer you gave wasn't a number, let's start over. This time please give me a number.");
+            return GetScore(abilityType);
+        }
     }
 }
 
@@ -2268,7 +2283,7 @@ short creator::GetCharacterWeight()
             DelayedCout("Give me something reasonable.");
             return stoi(weight);
         }
-        }
+    }
     catch (const std::invalid_argument &e)
     {
         DelayedCout("I need a number.");
@@ -2280,7 +2295,7 @@ void creator::DelayedCout(string &&string)
 {
     for (auto &&c : string)
     {
-        this_thread::sleep_for(chrono::milliseconds(25));
+        this_thread::sleep_for(chrono::milliseconds(1));
         cout << c;
         cout.flush();
     }
@@ -2293,7 +2308,7 @@ void creator::DelayedCout(string &&string, bool doNewLine)
     {
         for (auto &&c : string)
         {
-            this_thread::sleep_for(chrono::milliseconds(25));
+            this_thread::sleep_for(chrono::milliseconds(1));
             cout << c;
             cout.flush();
         }
@@ -2303,7 +2318,7 @@ void creator::DelayedCout(string &&string, bool doNewLine)
     {
         for (auto &&c : string)
         {
-            this_thread::sleep_for(chrono::milliseconds(25));
+            this_thread::sleep_for(chrono::milliseconds(1));
             cout << c;
             cout.flush();
         }

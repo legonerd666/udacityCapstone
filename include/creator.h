@@ -1,7 +1,7 @@
 #ifndef INTRO_H
 #define INTRO_H
 
-#include "classes/character.h"
+#include "character.h"
 #include "enums.h"
 
 #include <memory>
@@ -50,7 +50,7 @@ private:
     // Takes user input and sets all characteristics using worker threads (name, alignment, player name, deity, homeland, gender, age, height, weight, hair color, and eye color) then waits for user to click enter before ending the creation process
     void Characteristics();
 
-    // Returns short ranging from 3 to 18 to be used as ability scores
+    // Returns short ranging from 3 to 18 to be used as ability scores either one entered by the user or a random one if none was entered
     short GetScore(abilityType abilityType);
     // Returns a short of value 2 or -2 to be used as racial adjustments to ability scores
     short GetScoreAdj(abilityType abilityType);
