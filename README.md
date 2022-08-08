@@ -234,31 +234,30 @@
         mutex _mutex
 
 ## Rubric Items:
-    I'm not gonna spend the next month finding line numbers in files for each rubric item if it has it EVERYWHERE. If you'd like to check I will be giving some recommended files to look in for each though most rubric items that have been filled have been filled in tons of files so I won't be listing them all.
     The project requires I include at least 5 rubric items in my code. My code implements all rubrics items except 5. Enjoy.
 #### Loops, Functions, I/O:
-        1. For lots of examples: creator.cpp and character.cpp
+        1. For lots of examples: creator.cpp and character.cpp eg. (creator.cpp ln 47, 65, 156, 191, 198, 212, 258)
         2. N/A
-        3. Lots in creator.cpp
+        3. Lots in creator.cpp eg. (creator.cpp ln 72, 129, 141, 161, 175, 219)
 #### OOP:
-        1. Open any file except main
-        2. Open any file except main
-        3. Open any file except main and creator
-        4. Open any file except main
-        5. Open any file except main
-        6. Open almost any file
-        7. Lots of examples in enums.h/enums.cpp
+        1. All files in src/classes are classes
+        2. All files in src/classes are classes and are sorted accordingly eg. (character.h ln 30, 108. gear.h 10, 24)
+        3. Almost any class file eg. (feat.cpp ln 9. gear.cpp ln 10)
+        4. Check any header file eg. (creator.h ln 14-150)
+        5. All class files eg. (character.cpp ln 1466)
+        6. Open almost any file (character.h ln 112, 115, 124-129)
+        7. Lots of examples in enums.h/enums.cpp eg. (enums.h ln 152, 155, 158, 161, 164, 167)
         8. N/A
         9. N/A
 #### Memory Management:
         1. If r-value references and pointers count, character.h and creator.h have tons of examples. If not hitPoints.h line 27 has 1, and creator.h has 1 on line 19 and 1 on line 21
-        2. creator.h has a destructor that joins threads
-        3. creator.h and character.cpp ToStringForConsole()
-        4. creator.h
-        5. creator.h/creator.cpp and character.h/character.cpp
-        6. Just open any of my code, dude. They are everywhere
+        2. creator.h has a destructor that joins threads eg. (creator.cpp ln 16)
+        3. creator.h and character.cpp ToStringForConsole() eg. (character.cpp ln 858)
+        4. creator.h eg. (creator.h ln 19-27) 
+        5. creator.h/creator.cpp and character.h/character.cpp eg. (creator.cpp ln 404, 1213, 1275)
+        6. Just open any of my code, dude. They are everywhere eg. (character.h ln 124-129)
 #### Concurrency:
-        1. creator.cpp
+        1. creator.cpp eg. (creator.cpp ln 73, 106, 113, 150, 162, 166)
         2. N/A
-        3. character.cpp/character.h
+        3. character.cpp/character.h (character.cpp ln 64, 1349, 1355, 1361, 1367, 1374)
         4. N/A

@@ -11,7 +11,6 @@ using namespace std;
 
 creator::creator(shared_ptr<character> character) : _character(character)
 {
-    Intro();
 }
 
 creator::~creator()
@@ -22,12 +21,27 @@ creator::~creator()
     }
 }
 
+void creator::CreateCharacter()
+{
+    Intro();
+    AbilityScores();
+    Race();
+    Role();
+    Feats();
+    Equipment();
+    Characteristics();
+    for (int i = 0; i < _threads.size(); i++)
+    {
+        _threads.back().join();
+        _threads.pop_back();
+    }
+}
+
 void creator::Intro()
 {
     DelayedCout("Welcome to the character creator, I will walk you through creating a character in Pathfinder 1e right here in the console!");
     DelayedCout("What will happen is as follows: I will ask you questions about the next section in the character sheet, and you will type an appropriate response in the console. Then we repeat this step for the next field.");
     DelayedCout("After all the required steps have been completed I will do a bit of math and fill out any other fields that don't need your input and print your new character sheet to the console for you to use!");
-    AbilityScores();
 }
 
 void creator::AbilityScores()
@@ -44,10 +58,11 @@ void creator::AbilityScores()
     abilityScores[3] = GetScore(intelligence);
     abilityScores[4] = GetScore(wisdom);
     abilityScores[5] = GetScore(charisma);
-    Race(move(abilityScores));
+
+    _character->AbilityScores(move(abilityScores));
 }
 
-void creator::Race(short abilityScores[6])
+void creator::Race()
 {
     DelayedCout("Now that that's done, it's time to pick your race!");
     DelayedCout("Look in the Pathfinder Core Rulebook and decide which race suits your character most;");
@@ -58,6 +73,13 @@ void creator::Race(short abilityScores[6])
     _threads.emplace_back(thread(&character::Race, _character, move(name)));
 #pragma region Ability Scores
 
+    short abilityScores[6];
+    abilityScores[0] = _character->AbilityScore(strength);
+    abilityScores[1] = _character->AbilityScore(dexterity);
+    abilityScores[2] = _character->AbilityScore(constitution);
+    abilityScores[3] = _character->AbilityScore(intelligence);
+    abilityScores[4] = _character->AbilityScore(wisdom);
+    abilityScores[5] = _character->AbilityScore(charisma);
     {
         short abilityScoreAdjs[6];
         DelayedCout("Since we now have a name, First things first, races often come with minor adjustments to your ability scores, giving one or more stats +2 bonus or a -2 penalty.");
@@ -68,12 +90,13 @@ void creator::Race(short abilityScores[6])
         abilityScoreAdjs[3] = GetScoreAdj(intelligence);
         abilityScoreAdjs[4] = GetScoreAdj(wisdom);
         abilityScoreAdjs[5] = GetScoreAdj(charisma);
+
         for (short i = 0; i < 6; i++)
         {
             abilityScores[i] += abilityScoreAdjs[i];
         }
     }
-    _threads.emplace_back(thread(&character::AbilityScores, _character, move(abilityScores)));
+    _character->AbilityScores(move(abilityScores));
 
 #pragma endregion Ability Scores
 
@@ -104,8 +127,7 @@ void creator::Race(short abilityScores[6])
     DelayedCout("Weapons: ", false);
     string weapons;
     getline(cin, weapons, '\n');
-    _threads.emplace_back(thread([this, weapons]()
-                                 { _character->Proficiencies(weapons); }));
+    _character->Proficiencies(weapons);
 
 #pragma endregion Weapon Familiarity
 
@@ -129,8 +151,6 @@ void creator::Race(short abilityScores[6])
     }
 
 #pragma endregion Languages
-
-    Role();
 }
 
 void creator::Role()
@@ -154,8 +174,7 @@ void creator::Role()
     string proficiencies;
     getline(cin, proficiencies, '\n');
     // Sets Proficiencies
-    _threads.emplace_back(thread([this, proficiencies]()
-                                 { _character->Proficiencies(_character->Proficiencies() + " " + proficiencies); }));
+    _character->Proficiencies(_character->Proficiencies() + " " + proficiencies);
     // Sets class as casting class if desired
     IsCastingClass();
     // Sets Base Attack Bonuses
@@ -167,7 +186,6 @@ void creator::Role()
     DelayedCout("Ok, time for the final step of choosing your class: Entering in your class features!");
     // Sets Class Features
     AddClassFeatures();
-    Feats();
 }
 
 void creator::Feats()
@@ -175,7 +193,6 @@ void creator::Feats()
     DelayedCout("Ok now we are gonna go through and add your feats. All characters start at level 1 with 1 feat. Some races and classes may get extras.");
     // Sets Feats
     AddFeat();
-    Equipment();
 }
 
 void creator::Equipment()
@@ -190,8 +207,6 @@ void creator::Equipment()
     AddArmor();
     // Sets Gear
     AddGear();
-    Characteristics();
-    this_thread::sleep_for(chrono::milliseconds(1));
 }
 
 void creator::Characteristics()
@@ -358,7 +373,7 @@ short creator::GetSpeed()
             return stoi(speed);
         else
         {
-            DelayedCout("Please unsure your speed entered is at least 0 and at most " + to_string(SHRT_MAX - 1) + ".");
+            DelayedCout("Please ensure your speed entered is at least 0 and at most " + to_string(SHRT_MAX - 1) + ".");
             DelayedCout("Let's go again.");
             return GetSpeed();
         }
@@ -655,9 +670,10 @@ void creator::SetSkillRanks()
     {
         // This if statement ensures they can't have more ranks than skills which would cause the following for loop to be unable to finish due to the fact that only one rank can be put in each skill
         if (stoi(ranks) + _character->AbilityMod(intelligence) > 35)
-        {
             ranks = "35";
-        }
+
+        if (stoi(ranks) < 0)
+            ranks = "0";
 
         for (int i = stoi(ranks) + _character->AbilityMod(intelligence) - 1; i >= 0; i--)
         {
@@ -1013,7 +1029,7 @@ void creator::IsCastingClass()
     if (tolower(isCastingClass[0]) == 'y')
     {
         // Sets role to casting class and sets up spellstats with bonus spells
-        _threads.emplace_back(thread(&character::SetRoleToCastingClass, _character, 0, GetCastingAbility()));
+        _character->SetRoleToCastingClass(0, GetCastingAbility());
         DelayedCout("Each spell casting class has a description of how spells work for that class under a class feature named \"Spells\".");
         DelayedCout("So, please give me the description (or a shortened version if you'd prefer) of how spells work in your class and I'll write them down in a class feature named spells.");
         DelayedCout("Spells Description: ", false);
@@ -1090,12 +1106,17 @@ void creator::SetSpellsKnown(short spellLevel)
             _threads.emplace_back(thread(&character::SetSpellsKnown, _character, 0, move(spellLevel), -2));
         else if (spellsKnown == "all")
             _threads.emplace_back(thread(&character::SetSpellsKnown, _character, 0, move(spellLevel), -1));
-        else if (stoi(spellsKnown) >= 0)
+        else if (stoi(spellsKnown) >= 0 && stoi(spellsKnown) < SHRT_MAX)
             _threads.emplace_back(thread(&character::SetSpellsKnown, _character, 0, move(spellLevel), stoi(spellsKnown)));
         else if (stoi(spellsKnown) < 0)
         {
             DelayedCout("Dude, you can't know negative spells. How would that even work?");
             DelayedCout("We'll go again, and this time, give my a positive number or one of the words I gave you.");
+            SetSpellsKnown(move(spellLevel));
+        }
+        else
+        {
+            DelayedCout("I'm sorry, but that is a ridiculous amount of spells, I'm gonna have to ask you to reduce that.");
             SetSpellsKnown(move(spellLevel));
         }
     }
@@ -1123,12 +1144,17 @@ void creator::SetSpellsPerDay(short spellLevel)
     }
     try
     {
-        if (stoi(spellsPerDay) >= 0)
+        if (stoi(spellsPerDay) >= 0 && stoi(spellsPerDay) < SHRT_MAX)
             _threads.emplace_back(thread(&character::SetSpellsPerDay, _character, 0, move(spellLevel), stoi(spellsPerDay)));
         else if (stoi(spellsPerDay) < 0)
         {
             DelayedCout("Your class should either be able to cast a positive number or 0 spells per day. Check to make sure you read it correctly.");
             DelayedCout("We'll go again, and this time, give my a positive number.");
+            SetSpellsPerDay(move(spellLevel));
+        }
+        else
+        {
+            DelayedCout("I'm sorry, but not even a god could cast that many spells. Please give me a reasonable number.");
             SetSpellsPerDay(move(spellLevel));
         }
     }
@@ -1443,8 +1469,7 @@ void creator::SetGold()
     try
     {
         stoi(goldPieces);
-        _threads.emplace_back(thread([this, goldPieces]()
-                                     { _character->Currency(gold, stoi(goldPieces)); }));
+        _character->Currency(gold, stoi(goldPieces));
     }
     catch (const std::invalid_argument &e)
     {
@@ -1834,11 +1859,11 @@ short creator::GetNDice()
     getline(cin, numberOfDice, '\n');
     try
     {
-        if (stoi(numberOfDice) > 0)
+        if (stoi(numberOfDice) > 0 && stoi(numberOfDice) < SHRT_MAX)
             return stoi(numberOfDice);
         else
         {
-            DelayedCout("Your weapon must roll at least 1 damage die.");
+            DelayedCout("Your weapon must roll at least 1 damage die and it can't be super ridiculously massive.");
             return GetNDice();
         }
     }
@@ -1893,11 +1918,11 @@ unsigned short creator::GetWeight()
     getline(cin, weight, '\n');
     try
     {
-        if (stoi(weight) >= 0 && stoi(weight) <= USHRT_MAX)
+        if (stoi(weight) >= 0 && stoi(weight) < USHRT_MAX)
             return stoi(weight);
         else
         {
-            DelayedCout("Please don't give my a negative weight or a weight above 65535.");
+            DelayedCout("Please don't give my a negative weight and please make sure it's not so heavy that carrying it would create a blackhole that swallows the planet");
             return GetWeight();
         }
     }
@@ -2012,11 +2037,11 @@ short creator::GetAmmoAmount()
     getline(cin, amount, '\n');
     try
     {
-        if (stoi(amount) > 0)
+        if (stoi(amount) > 0 && stoi(amount) < SHRT_MAX)
             return stoi(amount);
         else
         {
-            DelayedCout("I need a number bigger than 0.");
+            DelayedCout("I need a number bigger than 0 and isn't super large.");
             return GetAmmoAmount();
         }
     }
@@ -2034,11 +2059,11 @@ unsigned short creator::GetACBonus()
     getline(cin, bonus, '\n');
     try
     {
-        if (stoi(bonus) > 0)
+        if (stoi(bonus) > 0 && SHRT_MAX)
             return stoi(bonus);
         else
         {
-            DelayedCout("Your armor most have a bonus of at least 1.");
+            DelayedCout("Your armor most have a bonus of at least 1 and isn't so massive nothing could ever pierce your armor.");
             return GetACBonus();
         }
     }
@@ -2056,11 +2081,11 @@ unsigned short creator::GetMaxDex()
     getline(cin, bonus, '\n');
     try
     {
-        if (stoi(bonus) >= 0)
+        if (stoi(bonus) >= 0 && stoi(bonus) <= USHRT_MAX)
             return stoi(bonus);
         else
         {
-            DelayedCout("Your armors max dex penalty can't be less than 0.");
+            DelayedCout("Your armors max dex penalty can't be less than 0 or greater than 65535.");
             return GetMaxDex();
         }
     }
@@ -2078,7 +2103,13 @@ short creator::GetCheckPenalty()
     getline(cin, penalty, '\n');
     try
     {
-        return stoi(penalty);
+        if (stoi(penalty) > SHRT_MIN && stoi(penalty) < SHRT_MAX)
+            return stoi(penalty);
+        else
+        {
+            DelayedCout("That's outrageous. Be reasonable.");
+            return GetCheckPenalty();
+        }
     }
     catch (const std::invalid_argument &e)
     {
@@ -2094,11 +2125,11 @@ unsigned short creator::GetSpellFailureChance()
     getline(cin, chance, '\n');
     try
     {
-        if (stoi(chance) >= 0)
+        if (stoi(chance) >= 0 && stoi(chance) <= 100)
             return stoi(chance);
         else
         {
-            DelayedCout("Your armors spell failure chance can't be less than 0.");
+            DelayedCout("Your armors spell failure chance can't be less than 0 or more than 100");
             return GetSpellFailureChance();
         }
     }
@@ -2116,11 +2147,11 @@ unsigned short creator::GetBaseSpeedAdjustment()
     getline(cin, speed, '\n');
     try
     {
-        if (stoi(speed) >= 0)
+        if (stoi(speed) >= 0 && stoi(speed) < USHRT_MAX)
             return stoi(speed);
         else
         {
-            DelayedCout("Your armors base speed adjustment can't be less than 0.");
+            DelayedCout("Your armors base speed adjustment can't be less than 0 or greater than 65535.");
             return GetBaseSpeedAdjustment();
         }
     }
@@ -2181,7 +2212,13 @@ short creator::GetAge()
     getline(cin, age, '\n');
     try
     {
-        return stoi(age);
+        if (stoi(age) > SHRT_MIN && stoi(age) < SHRT_MAX)
+            return stoi(age);
+        else
+        {
+            DelayedCout("Please give me a normal amount of age for a fictional character.");
+            return GetAge();
+        }
     }
     catch (const std::invalid_argument &e)
     {
@@ -2199,7 +2236,13 @@ short creator::GetHeight()
     getline(cin, height, '\n');
     try
     {
-        return stoi(height);
+        if (stoi(height) > SHRT_MIN && stoi(height) < SHRT_MAX)
+            return stoi(height);
+        else
+        {
+            DelayedCout("Dude, be serious.");
+            return GetHeight();
+        }
     }
     catch (const std::invalid_argument &e)
     {
@@ -2217,8 +2260,15 @@ short creator::GetCharacterWeight()
     getline(cin, weight, '\n');
     try
     {
-        return stoi(weight);
-    }
+        if (stoi(weight) > SHRT_MIN && stoi(weight) < SHRT_MAX)
+            return stoi(weight);
+        else
+        {
+            DelayedCout("At this rate you'll have your own massive gravitational pull.");
+            DelayedCout("Give me something reasonable.");
+            return stoi(weight);
+        }
+        }
     catch (const std::invalid_argument &e)
     {
         DelayedCout("I need a number.");

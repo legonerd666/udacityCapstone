@@ -11,7 +11,9 @@
 class creator
 {
 public:
-    // Creates a creator object with an empty vector of threads and a shared pointer to the character to create
+    // Stops users from not providing a character object to populate
+    creator() = delete;
+    // Initializes a creator object with the provided character as the character it will edit
     creator(shared_ptr<character> character);
     // Joins all threads in the vector of threads before destructing
     ~creator();
@@ -24,6 +26,9 @@ public:
     // Disables moving a creator object
     creator &operator=(creator &&oldCreator) = delete;
 
+    // Gets user input from the console to set the variables of the provided character
+    void CreateCharacter();
+
     // Prints string to the console one character at a time to make reading it more pleasant and less overwhelming
     void DelayedCout(string &&string);
     // Prints string to the console one character at a time to make reading it more pleasant and less overwhelming and allows you to choose if you'd like a new line character to be added at the end
@@ -32,15 +37,15 @@ public:
 private:
     // Prints a short intro to how the creator is going to work to the console and starts character creation by running the ability scores function
     void Intro();
-    // Gets the characters base ability scores and sends them to the race function
+    // Gets the characters base ability scores and sets them
     void AbilityScores();
-    // Takes the ability scores recieved and adjusts them based on user input and starts a thread to set the characters ability scores while it continues to get user input then sets all other stats in character determined by race in threads (size, speed, racial traits, weapon familiarities, and languages) then runs the role function
-    void Race(short abilityScores[6]);
-    // Takes user input and sets all role determined stats in the character using worker threads (Hitpoints, class skills, skill ranks, proficiencies, isCastingClass, spellstats, spells, BaB, saves, and class features) and then runs Feats function
+    // Gets the ability scores from the character and adjusts them based on user input and gets user input then sets all other stats in character determined by race in threads (size, speed, racial traits, and languages), weapon familiarities however are not set in a worker thread as they are referenced in role and the execution order must be guaranteed
+    void Race();
+    // Takes user input and sets all role determined stats in the character using worker threads (Hitpoints, class skills, skill ranks, proficiencies, isCastingClass, spellstats, spells, BaB, saves, and class features)
     void Role();
-    // Adds any feats the user wants to add using worker threads and then runs equipment
+    // Adds any feats the user wants to add using worker threads
     void Feats();
-    // Takes user input and sets all equipment related stats in the character using worker threads (money, weaponry, armor, and gear) and then runs characteristics
+    // Takes user input and sets all equipment related stats in the character using worker threads (money, weaponry, armor, and gear)
     void Equipment();
     // Takes user input and sets all characteristics using worker threads (name, alignment, player name, deity, homeland, gender, age, height, weight, hair color, and eye color) then waits for user to click enter before ending the creation process
     void Characteristics();
