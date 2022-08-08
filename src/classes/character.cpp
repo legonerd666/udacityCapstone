@@ -1,7 +1,7 @@
 #include <string>
 
 #include "character.h"
-#include "../enums.h"
+#include "enums.h"
 
 #include <climits>
 

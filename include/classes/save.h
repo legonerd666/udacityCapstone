@@ -1,7 +1,7 @@
 #ifndef SAVE_H
 #define SAVE_H
 
-#include "../enums.h"
+#include "enums.h"
 
 class save
 {

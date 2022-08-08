@@ -1,6 +1,6 @@
 #include "currency.h"
 
-#include "../enums.h"
+#include "enums.h"
 
 currency::currency()
 {

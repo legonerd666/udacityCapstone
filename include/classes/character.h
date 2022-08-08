@@ -21,7 +21,7 @@
 #include "role.h"
 #include "hitPoints.h"
 
-#include "../enums.h"
+#include "enums.h"
 
 using namespace std;
 

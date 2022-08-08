@@ -1,6 +1,6 @@
 #include "weapon.h"
 
-#include "../enums.h"
+#include "enums.h"
 
 weapon::weapon()
 {

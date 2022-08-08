@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "../enums.h"
+#include "enums.h"
 
 using namespace std;
 
