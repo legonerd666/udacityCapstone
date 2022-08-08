@@ -1,5 +1,5 @@
 #include "hitDie.h"
-#include "../enums.h"
+#include "enums.h"
 
 hitDie::hitDie()
 {

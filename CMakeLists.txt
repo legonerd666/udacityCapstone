@@ -11,6 +11,8 @@ file(GLOB project_SRCS src/*.cpp src/classes/*.cpp)
 
 add_executable(CharacterCreator ${project_SRCS})
 
+target_include_directories(CharacterCreator PRIVATE include/ include/classes/)    
+
 TARGET_LINK_LIBRARIES(CharacterCreator
     pthread
 )
