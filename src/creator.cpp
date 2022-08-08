@@ -1,11 +1,12 @@
 #include "creator.h"
-#include "classes/character.h"
+#include "character.h"
 #include "enums.h"
 
 #include <iostream>
 #include <memory>
 #include <thread>
 #include <climits>
+#include <algorithm>
 
 using namespace std;
 
@@ -51,6 +52,7 @@ void creator::AbilityScores()
     DelayedCout("Roll 4 six-sided dice and take away the lowest die, then add up the remaining 3 dice to get an ability score!");
     DelayedCout("Write that ability score on a piece of paper and repeat 5 more times so that you have 6 ability scores written down, ranging from 3 to 18 in value.");
     DelayedCout("Figure out which scores you want to use each number for (strength, dexterity, constitution, intelligence, wisdom, and charisma) or you can do them in the order you rolled them.");
+    DelayedCout("If you just want random ability scores then don't enter anything and I'll generate them for you.");
     DelayedCout("Now that you've chosen the order to use them in:");
     abilityScores[0] = GetScore(strength);
     abilityScores[1] = GetScore(dexterity);
@@ -70,7 +72,10 @@ void creator::Race()
     DelayedCout("Let's get a name for your race: ", false);
     string name;
     getline(cin, name, '\n');
-    _threads.emplace_back(thread(&character::Race, _character, move(name)));
+    if (name == "")
+        _threads.emplace_back(thread(&character::Race, _character, "God"));
+    else
+        _threads.emplace_back(thread(&character::Race, _character, move(name)));
 #pragma region Ability Scores
 
     short abilityScores[6];
@@ -127,7 +132,10 @@ void creator::Race()
     DelayedCout("Weapons: ", false);
     string weapons;
     getline(cin, weapons, '\n');
-    _character->Proficiencies(weapons);
+    if (weapons == "")
+        _character->Proficiencies("Fams,");
+    else
+        _character->Proficiencies(weapons);
 
 #pragma endregion Weapon Familiarity
 
@@ -147,7 +155,10 @@ void creator::Race()
     }
     else
     {
-        _threads.emplace_back(thread(&character::Languages, _character, move(languages)));
+        if (languages == "")
+            _threads.emplace_back(thread(&character::Languages, _character, "Common"));
+        else
+            _threads.emplace_back(thread(&character::Languages, _character, move(languages)));
     }
 
 #pragma endregion Languages
@@ -159,8 +170,11 @@ void creator::Role()
     DelayedCout("Figured out your class? What's it called: ", false);
     string name;
     getline(cin, name, '\n');
-    // Initializes your role
-    _threads.emplace_back(thread(&character::AddRole, _character, move(name)));
+    if (name == "")
+        _threads.emplace_back(thread(&character::AddRole, _character, "Wizlord"));
+    else
+        // Initializes your role
+        _threads.emplace_back(thread(&character::AddRole, _character, move(name)));
     DelayedCout("Great! Now what hit die does this class use?");
     // Adds Hitpoints
     _threads.emplace_back(thread(&character::HitPoints, _character, move(GetHitDie())));
@@ -173,8 +187,11 @@ void creator::Role()
     DelayedCout("Proficiencies: ", false);
     string proficiencies;
     getline(cin, proficiencies, '\n');
-    // Sets Proficiencies
-    _character->Proficiencies(_character->Proficiencies() + " " + proficiencies);
+    if (proficiencies == "")
+        _character->Proficiencies(_character->Proficiencies() + " " + "Profs.");
+    else
+        // Sets Proficiencies
+        _character->Proficiencies(_character->Proficiencies() + " " + proficiencies);
     // Sets class as casting class if desired
     IsCastingClass();
     // Sets Base Attack Bonuses
@@ -217,29 +234,43 @@ void creator::Characteristics()
     string playerName;
     DelayedCout("What is the name of the person who plans to play this character (probably your name): ", false);
     getline(cin, playerName, '\n');
+    if (playerName == "")
+        playerName = "Jonathan Joestar";
     string deity;
     DelayedCout("What is the name of the deity your character believes in (if any): ", false);
     getline(cin, deity, '\n');
+    if (deity == "")
+        deity = "Pharasma";
     string homeland;
     DelayedCout("What is the name of your characters homeland: ", false);
     getline(cin, homeland, '\n');
+    if (homeland == "")
+        homeland = "Sandpoint";
     string gender;
     DelayedCout("What gender is your character: ", false);
     getline(cin, gender, '\n');
+    if (gender == "")
+        gender = "Male";
     short age = GetAge();
     short height = GetHeight();
     short weight = GetWeight();
     string hair;
     DelayedCout("What is your characters hair color: ", false);
     getline(cin, hair, '\n');
+    if (hair == "")
+        hair = "Brown";
     string eyes;
     DelayedCout("What is your characters eye color: ", false);
     getline(cin, eyes, '\n');
+    if (eyes == "")
+        eyes = "Brown";
     string name;
     DelayedCout("And finally...");
     DelayedCout("What is your characters...");
     DelayedCout("Name: ", false);
     getline(cin, name, '\n');
+    if (name == "")
+        name = "Jimothy";
     // Sets All Characteristics
     _threads.emplace_back(thread(&character::Characteristics, _character, move(alignment), move(playerName), move(deity), move(homeland), move(gender), move(age), move(height), move(weight), move(hair), move(eyes), move(name)));
     DelayedCout("Ok, great, lemme just fill out everything else.");
@@ -274,8 +305,21 @@ short creator::GetScore(abilityType abilityType)
     }
     catch (const std::invalid_argument &e)
     {
-        DelayedCout("Sorry, but the answer you gave wasn't a number, let's start over. This time please give me a number.");
-        return GetScore(abilityType);
+        if (score == "")
+        {
+            ushort rolls[4];
+            rolls[0] = (rand() % 6) + 1;
+            rolls[1] = (rand() % 6) + 1;
+            rolls[2] = (rand() % 6) + 1;
+            rolls[3] = (rand() % 6) + 1;
+            sort(begin(rolls), end(rolls));
+            return rolls[1] + rolls[2] + rolls[3];
+        }
+        else
+        {
+            DelayedCout("Sorry, but the answer you gave wasn't a number, let's start over. This time please give me a number.");
+            return GetScore(abilityType);
+        }
     }
 }
 
@@ -310,7 +354,7 @@ short creator::GetScoreAdj(abilityType abilityType)
             return GetScoreAdj(abilityType);
         }
     }
-    else if (tolower(isChanged.front()) == 'n')
+    else if (tolower(isChanged.front()) == 'n' || isChanged == "")
     {
         return 0;
     }
@@ -357,6 +401,8 @@ sizeType creator::GetSize()
     }
     catch (const std::invalid_argument &e)
     {
+        if (size == "")
+            return medium;
         DelayedCout("Actually, I need the number corresponding to the size. Please enter the number this time.");
         return GetSize();
     }
@@ -380,7 +426,9 @@ short creator::GetSpeed()
     }
     catch (const std::exception &e)
     {
-        DelayedCout("I jsut need the number of feet per turn, nothing more or less.");
+        if (speed == "")
+            return 30;
+        DelayedCout("I just need the number of feet per turn, nothing more or less.");
         DelayedCout("Let's try again but this time just give me the number. (eg. 30)");
         return GetSpeed();
     }
@@ -397,14 +445,18 @@ void creator::RacialTraits()
         DelayedCout("Lemme know the name of the racial trait and I'll write it down for you: ", false);
         string name;
         getline(cin, name, '\n');
+        if (name == "")
+            name = "Example Trait";
         DelayedCout("Great name! Now you need to tell me what the trait does and then you can make any others if you have more to add.");
         DelayedCout(name + "'s description: ", false);
         string description;
         getline(cin, description, '\n');
+        if (description == "")
+            description = "Example Description";
         _threads.emplace_back(&character::AddRacialTrait, _character, move(make_shared<feat>(name, description)));
         RacialTraits();
     }
-    else if (tolower(addTrait.front()) == 'n')
+    else if (tolower(addTrait.front()) == 'n' || addTrait == "")
     {
         return;
     }
@@ -459,6 +511,8 @@ die creator::GetHitDie()
     }
     catch (const std::invalid_argument &e)
     {
+        if (hitdie == "")
+            return d8;
         DelayedCout("Could I maybe get the number of the die you wanted...? Not too sure what you meant by \"" + hitdie + "\"...");
         return GetHitDie();
     }
@@ -648,7 +702,7 @@ void creator::CheckClassSkills(vector<skillType> skillTypes)
             _threads.emplace_back(thread(&character::AddClassSkill, _character, skillT));
         }
     }
-    else if (tolower(isCorrect[0]) == 'n')
+    else if (tolower(isCorrect[0]) == 'n' || isCorrect == "")
     {
         DelayedCout("Ok, I'll let you enter them again, make sure this time that they are all spelled correctly and that knowledge skills are written \"knowledge (category)\" (eg. \"knowledge (arcana) or knowledge (all)\")");
         SetClassSkills();
@@ -682,9 +736,19 @@ void creator::SetSkillRanks()
     }
     catch (const std::invalid_argument &e)
     {
-        DelayedCout("So, FYI, usually when someone asks for an amount, they are asking for a number.");
-        DelayedCout("It's fine, I'll let you enter it again, but this time, please give me the number of skill ranks your class starts with.");
-        SetSkillRanks();
+        if (ranks == "")
+        {
+            for (int i = 0 + _character->AbilityMod(intelligence) - 1; i >= 0; i--)
+            {
+                AddSkillRankToSkill(i + 1);
+            }
+        }
+        else
+        {
+            DelayedCout("So, FYI, usually when someone asks for an amount, they are asking for a number.");
+            DelayedCout("It's fine, I'll let you enter it again, but this time, please give me the number of skill ranks your class starts with.");
+            SetSkillRanks();
+        }
     }
 }
 
@@ -1035,6 +1099,8 @@ void creator::IsCastingClass()
         DelayedCout("Spells Description: ", false);
         string spellsDesc;
         getline(cin, spellsDesc, '\n');
+        if (spellsDesc == "")
+            spellsDesc = "Magic";
         // Adds class feature for spell casting
         _threads.emplace_back(thread(&character::AddClassFeature, _character, 0, "Spells", move(spellsDesc)));
         // Sets spells known and spells per day for spell levels 0 and 1
@@ -1045,7 +1111,7 @@ void creator::IsCastingClass()
         // Adds all the characters spells to the character
         AddSpell();
     }
-    else if (tolower(isCastingClass[0]) != 'n')
+    else if (tolower(isCastingClass[0]) != 'n' && isCastingClass != "")
     {
         DelayedCout("I don't understand. Please answer Y or n.");
         IsCastingClass();
@@ -1076,6 +1142,8 @@ abilityType creator::GetCastingAbility()
     }
     catch (const std::invalid_argument &e)
     {
+        if (castingAbility == "")
+            return intelligence;
         DelayedCout("I need a number.");
         return GetCastingAbility();
     }
@@ -1122,9 +1190,14 @@ void creator::SetSpellsKnown(short spellLevel)
     }
     catch (const std::invalid_argument &e)
     {
-        DelayedCout("I'm sorry, but the options are: A number, \"all\", \"N/A\", and \"Prepare\". Not whatever you just said.");
-        DelayedCout("Please try that again.");
-        SetSpellsKnown(move(spellLevel));
+        if (spellsKnown == "")
+            _threads.emplace_back(thread(&character::SetSpellsKnown, _character, 0, move(spellLevel), 0));
+        else
+        {
+            DelayedCout("I'm sorry, but the options are: A number, \"all\", \"N/A\", and \"Prepare\". Not whatever you just said.");
+            DelayedCout("Please try that again.");
+            SetSpellsKnown(move(spellLevel));
+        }
     }
 }
 
@@ -1160,9 +1233,14 @@ void creator::SetSpellsPerDay(short spellLevel)
     }
     catch (const std::invalid_argument &e)
     {
-        DelayedCout("I'm gonna need the number of spells per day, please.");
-        DelayedCout("Let's try that again.");
-        SetSpellsPerDay(move(spellLevel));
+        if (spellsPerDay == "")
+            _threads.emplace_back(thread(&character::SetSpellsPerDay, _character, 0, move(spellLevel), 0));
+        else
+        {
+            DelayedCout("I'm gonna need the number of spells per day, please.");
+            DelayedCout("Let's try that again.");
+            SetSpellsPerDay(move(spellLevel));
+        }
     }
 }
 
@@ -1179,6 +1257,8 @@ void creator::AddSpell()
         DelayedCout("What is the spell called: ", false);
         string name;
         getline(cin, name, '\n');
+        if (name == "")
+            name = "Big Magic";
         magicSchool school = GetSchool();
         DelayedCout("Ok, now I need you to tell me which classes can utilize this spell and what level spell it is for that class.");
         vector<shared_ptr<classSpellListItem>> roles;
@@ -1190,30 +1270,44 @@ void creator::AddSpell()
         DelayedCout("What is the spells casting time: ", false);
         string castingTime;
         getline(cin, castingTime, '\n');
+        if (castingTime == "")
+            castingTime = "Short";
         DelayedCout("What are the spells components: ", false);
         string components;
         getline(cin, components, '\n');
+        if (components == "")
+            components = "V";
         DelayedCout("What is the spells range: ", false);
         string range;
         getline(cin, range, '\n');
+        if (range == "")
+            range = "Big";
         DelayedCout("What is the spells target: ", false);
         string target;
         getline(cin, target, '\n');
+        if (target == "")
+            target = "Everyone";
         DelayedCout("What is the spells duration: ", false);
         string duration;
         getline(cin, duration, '\n');
+        if (duration == "")
+            duration = "Long";
         DelayedCout("What is the spells saving throw: ", false);
         string savingThrow;
         getline(cin, savingThrow, '\n');
+        if (savingThrow == "")
+            savingThrow = "None";
         bool spellResistance = GetSpellResistance();
         DelayedCout("What is the spells description: ", false);
         string description;
         getline(cin, description, '\n');
+        if (description == "")
+            description = "Big Magics Everyone";
         // Adds a spell object with all its member variables to the character
         _threads.emplace_back(thread(&character::AddSpell, _character, 0, move(make_shared<spell>(move(name), move(school), move(roles), move(castingTime), move(components), move(range), move(target), move(duration), move(savingThrow), move(spellResistance), move(description)))));
         AddSpell();
     }
-    else if (tolower(addSpell[0] != 'n'))
+    else if (tolower(addSpell[0] != 'n') && addSpell != "")
     {
         DelayedCout("I need you to answer Y or n.");
         AddSpell();
@@ -1256,6 +1350,8 @@ magicSchool creator::GetSchool()
     }
     catch (const std::invalid_argument &e)
     {
+        if (school == "")
+            return evocation;
         DelayedCout("I need you to enter a number.");
         return GetSchool();
     }
@@ -1275,7 +1371,7 @@ void creator::GetRoles(vector<shared_ptr<classSpellListItem>> &roles)
         roles.emplace_back(move(role));
         GetRoles(roles);
     }
-    else if (tolower(addRole[0]) != 'n')
+    else if (tolower(addRole[0]) != 'n' && addRole != "")
     {
         DelayedCout("I don't know what you want me to do.");
         GetRoles(roles);
@@ -1312,6 +1408,8 @@ casterType creator::GetCasterType()
     }
     catch (const std::invalid_argument &e)
     {
+        if (castingClass == "")
+            return sorcererWizard;
         DelayedCout("I need you to enter a number.");
         return GetCasterType();
     }
@@ -1335,6 +1433,8 @@ unsigned short creator::GetLevel()
     }
     catch (const std::invalid_argument &e)
     {
+        if (level == "")
+            return 0;
         DelayedCout("I need you to enter a number.");
         return GetLevel();
     }
@@ -1348,7 +1448,7 @@ bool creator::GetSpellResistance()
     getline(cin, spellResistance, '\n');
     if (tolower(spellResistance[0]) == 'y')
         return true;
-    else if (tolower(spellResistance[0]) == 'n')
+    else if (tolower(spellResistance[0]) == 'n' || spellResistance == "")
         return false;
     else
     {
@@ -1376,6 +1476,8 @@ unsigned short creator::GetBaB()
     }
     catch (const std::invalid_argument &e)
     {
+        if (BaB == "")
+            return 0;
         DelayedCout("I need a number.");
         return GetBaB();
     }
@@ -1400,6 +1502,8 @@ unsigned short creator::GetSave(saveType saveType)
     }
     catch (const std::invalid_argument &e)
     {
+        if (save == "")
+            return 0;
         DelayedCout("I need a number.");
         return GetSave(saveType);
     }
@@ -1416,13 +1520,17 @@ void creator::AddClassFeatures()
         DelayedCout("Please tell me the name of the class feature: ", false);
         string name;
         getline(cin, name, '\n');
+        if (name == "")
+            name = "Example Feature";
         DelayedCout("Ok, now the description: ", false);
         string description;
         getline(cin, description, '\n');
+        if (description == "")
+            description = "Example Description";
         _threads.emplace_back(thread(&character::AddClassFeature, _character, 0, move(name), move(description)));
         AddClassFeatures();
     }
-    else if (tolower(addClassFeature[0]) != 'n')
+    else if (tolower(addClassFeature[0]) != 'n' && addClassFeature != "")
     {
         DelayedCout("Not sure how to respond to that...");
         AddClassFeatures();
@@ -1441,12 +1549,16 @@ void creator::AddFeat()
         string description;
         DelayedCout("What is the name of the feat: ", false);
         getline(cin, name, '\n');
+        if (name == "")
+            name = "Example Feat";
         DelayedCout("What is its description: ", false);
         getline(cin, description, '\n');
+        if (description == "")
+            description = "Example Description";
         _threads.emplace_back(thread(&character::AddFeat, _character, make_unique<feat>(name, description)));
         AddFeat();
     }
-    else if (tolower(addFeat[0]) != 'n')
+    else if (tolower(addFeat[0]) != 'n' && addFeat != "")
     {
         DelayedCout("Could. Not. Parse. An-swer.");
         DelayedCout("Lol, just kidding, its not like I'm some sort of weird robot or smth.");
@@ -1473,8 +1585,13 @@ void creator::SetGold()
     }
     catch (const std::invalid_argument &e)
     {
-        DelayedCout("Please give me the amount of gold as a number.");
-        SetGold();
+        if (goldPieces == "")
+            _character->Currency(gold, 0);
+        else
+        {
+            DelayedCout("Please give me the amount of gold as a number.");
+            SetGold();
+        }
     }
 }
 
@@ -1520,24 +1637,34 @@ void creator::AddWeapon()
             string name;
             DelayedCout("Ok, and what's the name of the weapon: ", false);
             getline(cin, name, '\n');
+            if (name == "")
+                name = "Example Weapon";
             short nOfDice = GetNDice();
             die damageDie = GetDie();
             string critRange;
             DelayedCout("What is the critical range of your weapon: ", false);
             getline(cin, critRange, '\n');
+            if (critRange == "")
+                critRange = "x2";
             string range;
             DelayedCout("What is the range increment of your weapon: ", false);
             getline(cin, range, '\n');
+            if (range == "")
+                range = "Melee";
             unsigned short weight = GetWeight();
             string damageType;
             DelayedCout("What is the Damage Type of your weapon: ", false);
             getline(cin, damageType, '\n');
+            if (damageType == "")
+                damageType = "B";
             abilityType abilityType = GetAbilityType();
             short ammo = GetAmmo();
             string description;
             DelayedCout("Ok, this is the last thing I'll need you to tell me about your weapon.");
             DelayedCout("Please write down any special properties and/or a description of the weapon: ", false);
             getline(cin, description, '\n');
+            if (description == "")
+                description = "Example Description";
 
             // Adds the weapon to both gear and weapons
             _threads.emplace_back(thread(&character::AddGear, _character, make_unique<gear>(name, description, move(weight))));
@@ -1545,7 +1672,7 @@ void creator::AddWeapon()
             AddWeapon();
         }
     }
-    else if (tolower(addWeapon[0]) != 'n')
+    else if (tolower(addWeapon[0]) != 'n' && addWeapon != "")
     {
         DelayedCout("Could you run that by me again? Perhaps using one of the response options I asked for?");
         DelayedCout("Thanks.");
@@ -1577,9 +1704,13 @@ void creator::AddArmor()
             string name;
             DelayedCout("Ok, and what's the name of the armor: ", false);
             getline(cin, name, '\n');
+            if (name == "")
+                name = "Example Armor";
             string actype;
             DelayedCout("Ok, and is it a piece of armor or a shield: ", false);
             getline(cin, actype, '\n');
+            if (actype == "")
+                actype = "Miscellaneous";
             unsigned short aCBonus = GetACBonus();
             unsigned short maxDex = GetMaxDex();
             short checkPenalty = GetCheckPenalty();
@@ -1590,6 +1721,8 @@ void creator::AddArmor()
             DelayedCout("Ok, this is the last thing I'll need you to tell me about your armor.");
             DelayedCout("Please write down any special properties and/or a description of the armor: ", false);
             getline(cin, description, '\n');
+            if (description == "")
+                description = "Example Description";
 
             for (auto &&c : actype)
             {
@@ -1617,7 +1750,7 @@ void creator::AddArmor()
             AddArmor();
         }
     }
-    else if (tolower(addArmor[0]) != 'n')
+    else if (tolower(addArmor[0]) != 'n' && addArmor != "")
     {
         DelayedCout("Could you run that by me again? Perhaps using one of the response options I asked for?");
         DelayedCout("Thanks.");
@@ -1651,17 +1784,21 @@ void creator::AddGear()
             string name;
             DelayedCout("Ok, and what's the name of the gear: ", false);
             getline(cin, name, '\n');
+            if (name == "")
+                name = "Example Item";
             unsigned short weight = GetWeight();
             string description;
             DelayedCout("Ok, this is the last thing I'll need you to tell me about your gear.");
             DelayedCout("Please write down any special properties and/or a description of the gear: ", false);
             getline(cin, description, '\n');
+            if (description == "")
+                description = "Example Description";
             // Adds the item to gear
             _threads.emplace_back(thread(&character::AddGear, _character, make_unique<gear>(name, description, weight)));
             AddGear();
         }
     }
-    else if (tolower(addGear[0]) != 'n')
+    else if (tolower(addGear[0]) != 'n' && addGear != "")
     {
         DelayedCout("*wails uncontrollably* I- Don't- Understaaaaaand");
         AddGear();
@@ -1687,6 +1824,8 @@ currencyType creator::GetCurrencyType()
         return platinum;
     else
     {
+        if (costType == "")
+            return gold;
         DelayedCout("I don't know that currency, please choose one of those listed above and make sure to spell it properly.");
         return GetCurrencyType();
     }
@@ -1709,6 +1848,8 @@ int creator::GetCost()
     }
     catch (const std::invalid_argument &e)
     {
+        if (cost == "")
+            return 0;
         DelayedCout("I'm sorry, but I asked for a number. Not whatever that ridiculousness was.");
         return GetCost();
     }
@@ -1869,6 +2010,8 @@ short creator::GetNDice()
     }
     catch (const std::invalid_argument &e)
     {
+        if (numberOfDice == "")
+            return 1;
         DelayedCout("Please give me the number of dice.");
         return GetNDice();
     }
@@ -1906,6 +2049,8 @@ die creator::GetDie()
     }
     catch (const std::invalid_argument &e)
     {
+        if (damageDie == "")
+            return d4;
         DelayedCout("Sir/Ma'am, I need the number of sides on the damage die your weapon uses.");
         return GetDie();
     }
@@ -1928,6 +2073,8 @@ unsigned short creator::GetWeight()
     }
     catch (const std::invalid_argument &e)
     {
+        if (weight == "")
+            return 0;
         DelayedCout("Number!");
         return GetWeight();
     }
@@ -1956,6 +2103,8 @@ abilityType creator::GetAbilityType()
         return wisdom;
     else if (ability == "charisma")
         return charisma;
+    else if (ability == "")
+        return strength;
     else
     {
         DelayedCout("...");
@@ -1993,9 +2142,13 @@ short creator::GetAmmo()
                 string name;
                 DelayedCout("What's this ammo called: ", false);
                 getline(cin, name, '\n');
+                if (name == "")
+                    name = "Example Ammo";
                 string description;
                 DelayedCout("Please write down any special properties and/or a description of the ammo: ", false);
                 getline(cin, description, '\n');
+                if (description == "")
+                    description = "Example Description";
                 // Adds it to gear
                 _threads.emplace_back(thread(&character::AddGear, _character, make_unique<gear>(move(name + "(" + to_string(AmmoAmount) + ")"), move(description), move(weight))));
                 return AmmoAmount;
@@ -2004,7 +2157,7 @@ short creator::GetAmmo()
         else
             return 0;
     }
-    else if (tolower(usesAmmo[0]) != 'n')
+    else if (tolower(usesAmmo[0]) != 'n' && usesAmmo != "")
     {
         DelayedCout("I'll ask again.");
         return GetAmmo();
@@ -2022,7 +2175,7 @@ bool creator::WillBuyAmmo()
     {
         return true;
     }
-    else if (tolower(willBuy[0]) != 'n')
+    else if (tolower(willBuy[0]) != 'n' && willBuy != "")
     {
         DelayedCout("IIt's a Yes or No question.");
         return WillBuyAmmo();
@@ -2047,6 +2200,8 @@ short creator::GetAmmoAmount()
     }
     catch (const std::invalid_argument &e)
     {
+        if (amount == "")
+            return 1;
         DelayedCout("The... Umm... Amount...?");
         return GetAmmoAmount();
     }
@@ -2069,6 +2224,8 @@ unsigned short creator::GetACBonus()
     }
     catch (const std::invalid_argument &e)
     {
+        if (bonus == "")
+            return 1;
         DelayedCout("Please give me the bonus as a number.");
         return GetACBonus();
     }
@@ -2091,6 +2248,8 @@ unsigned short creator::GetMaxDex()
     }
     catch (const std::invalid_argument &e)
     {
+        if (bonus == "")
+            return USHRT_MAX;
         DelayedCout("Please give me the bonus as a number.");
         return GetMaxDex();
     }
@@ -2113,6 +2272,8 @@ short creator::GetCheckPenalty()
     }
     catch (const std::invalid_argument &e)
     {
+        if (penalty == "")
+            return 0;
         DelayedCout("Please give me the penalty as a number.");
         return GetCheckPenalty();
     }
@@ -2135,6 +2296,8 @@ unsigned short creator::GetSpellFailureChance()
     }
     catch (const std::invalid_argument &e)
     {
+        if (chance == "")
+            return 0;
         DelayedCout("Please give me the chance as a number.");
         return GetSpellFailureChance();
     }
@@ -2157,6 +2320,8 @@ unsigned short creator::GetBaseSpeedAdjustment()
     }
     catch (const std::invalid_argument &e)
     {
+        if (speed == "")
+            return USHRT_MAX;
         DelayedCout("Please give me the adjustment as a number.");
         return GetBaseSpeedAdjustment();
     }
@@ -2198,6 +2363,8 @@ alignment creator::GetAlignment()
     }
     catch (const std::invalid_argument &e)
     {
+        if (alignment == "")
+            return LG;
         DelayedCout("Please enter a number.");
         return GetAlignment();
     }
@@ -2222,6 +2389,8 @@ short creator::GetAge()
     }
     catch (const std::invalid_argument &e)
     {
+        if (age == "")
+            return 0;
         DelayedCout("I need a number.");
         return GetAge();
     }
@@ -2246,6 +2415,8 @@ short creator::GetHeight()
     }
     catch (const std::invalid_argument &e)
     {
+        if (height == "")
+            return 0;
         DelayedCout("I need a number.");
         return GetHeight();
     }
@@ -2268,9 +2439,11 @@ short creator::GetCharacterWeight()
             DelayedCout("Give me something reasonable.");
             return stoi(weight);
         }
-        }
+    }
     catch (const std::invalid_argument &e)
     {
+        if (weight == "")
+            return 0;
         DelayedCout("I need a number.");
         return GetCharacterWeight();
     }
@@ -2280,7 +2453,7 @@ void creator::DelayedCout(string &&string)
 {
     for (auto &&c : string)
     {
-        this_thread::sleep_for(chrono::milliseconds(25));
+        this_thread::sleep_for(chrono::milliseconds(1));
         cout << c;
         cout.flush();
     }
@@ -2293,7 +2466,7 @@ void creator::DelayedCout(string &&string, bool doNewLine)
     {
         for (auto &&c : string)
         {
-            this_thread::sleep_for(chrono::milliseconds(25));
+            this_thread::sleep_for(chrono::milliseconds(1));
             cout << c;
             cout.flush();
         }
@@ -2303,7 +2476,7 @@ void creator::DelayedCout(string &&string, bool doNewLine)
     {
         for (auto &&c : string)
         {
-            this_thread::sleep_for(chrono::milliseconds(25));
+            this_thread::sleep_for(chrono::milliseconds(1));
             cout << c;
             cout.flush();
         }
