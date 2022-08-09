@@ -15,14 +15,13 @@
     The program text is also designed to not be robotic in its phrasing and has its own personality!
 
 ## File Structure:
-    All the relevant code is in the src directory
+    All the relevant code is in the src and include directories
     src/:
         classes/
         creator.cpp
         enums.cpp
         main.cpp
-        creator.h
-        enums.h
+
     src/classes/:
         abilityScore.cpp
         armorClass.cpp
@@ -43,6 +42,13 @@
         spell.cpp
         spellStat.cpp
         weapon.cpp
+
+    include/:
+        classes/
+        creator.h
+        enums.h
+
+    include/classes/:
         abilityScore.h
         armorClass.h
         armorClassItem.h
