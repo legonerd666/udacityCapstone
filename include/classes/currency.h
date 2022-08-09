@@ -2,7 +2,7 @@
 #define MONEY_H
 
 #include <string>
-#include "../enums.h"
+#include "enums.h"
 
 using namespace std;
 

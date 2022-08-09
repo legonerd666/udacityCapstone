@@ -1,5 +1,5 @@
 #include "abilityScore.h"
-#include "../enums.h"
+#include "enums.h"
 
 abilityScore::abilityScore() {
     _score = 10;

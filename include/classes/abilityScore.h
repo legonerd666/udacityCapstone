@@ -1,7 +1,7 @@
 #ifndef ABILITYSCORE_H
 #define ABILITYSCORE_H
 
-#include "../enums.h"
+#include "enums.h"
 
 class abilityScore
 {

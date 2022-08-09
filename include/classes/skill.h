@@ -1,7 +1,7 @@
 #ifndef SKILL_H
 #define SKILL_H
 
-#include "../enums.h"
+#include "enums.h"
 
 class skill
 {

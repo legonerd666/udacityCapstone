@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "../enums.h"
+#include "enums.h"
 #include "classSpellListItem.h"
 #include <memory>
 

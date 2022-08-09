@@ -1,6 +1,6 @@
 #include "save.h"
 
-#include "../enums.h"
+#include "enums.h"
 
 save::save()
 {

@@ -1,6 +1,6 @@
 #include "skill.h"
 
-#include "../enums.h"
+#include "enums.h"
 
 skill::skill(skillType skillType) : _skillType(skillType)
 {
