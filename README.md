@@ -18,88 +18,88 @@
     All the relevant code is in the src and include directories
     src/:
         classes/
-        Creator.cpp
         enums.cpp
         main.cpp
 
     src/classes/:
-        abilityScore.cpp
-        armorClass.cpp
-        armorClassItem.cpp
-        character.cpp
-        classSpellListItem.cpp
-        currency.cpp
-        feat.cpp
-        gear.cpp
-        hitDie.cpp
-        hitPoints.cpp
-        initiative.cpp
-        race.cpp
-        role.cpp
-        save.cpp
-        skill.cpp
-        speed.cpp
-        spell.cpp
-        spellStat.cpp
-        weapon.cpp
+        AbilityScore.cpp
+        ArmorClass.cpp
+        ArmorClassItem.cpp
+        Character.cpp
+        ClassSpellListItem.cpp
+        Creator.cpp
+        Currency.cpp
+        Feat.cpp
+        Gear.cpp
+        HitDie.cpp
+        HitPoints.cpp
+        Initiative.cpp
+        Race.cpp
+        Role.cpp
+        Save.cpp
+        Skill.cpp
+        Speed.cpp
+        Spell.cpp
+        SpellStat.cpp
+        Weapon.cpp
 
     include/:
         classes/
-        Creator.h
         enums.h
 
     include/classes/:
-        abilityScore.h
-        armorClass.h
-        armorClassItem.h
-        character.h
-        classSpellListItem.h
-        currency.h
-        feat.h
-        gear.h
-        hitDie.h
-        hitPoints.h
-        initiative.h
-        race.h
-        role.h
-        save.h
-        skill.h
-        speed.h
-        spell.h
-        spellStat.h
-        weapon.h
+        AbilityScore.h
+        ArmorClass.h
+        SrmorClassItem.h
+        Character.h
+        ClassSpellListItem.h
+        Creator.h
+        Currency.h
+        Feat.h
+        Gear.h
+        HitDie.h
+        HitPoints.h
+        Initiative.h
+        Race.h
+        Role.h
+        Save.h
+        Skill.h
+        Speed.h
+        Spell.h
+        SpellStat.h
+        Weapon.h
 
 ## Class Structure:
     Creator:
         vector<threads> _threads
-    character:
+    Character:
         string _name
         alignment _alignment
             enum
         string _player
-        vector<unique_ptr<role>> _roles
-            role:
+        vector<unique_ptr<Role>> _roles
+            Role:
                 string _name
                 unsigned short _level
-                vector<shared_ptr<feat>> _classFeatures
-                    feat:
+                vector<shared_ptr<Feat>> _classFeatures
+                    Feat:
                         string _name
                         string _description
-                shared_ptr<spellStat> _spellStats[10]
-                    spellStat:
+                shared_ptr<SpellStat> _spellStats[10]
+                    SpellStat:
                         unsigned short _spellLevel
                         short _spellsKnown
                         abilityType _abilityType
                             enum
                         short _spellsPerDay
                         short _bonusSpells
-                vector<shared_ptr<spell>> _spells
-                    spell:
+                vector<shared_ptr<Spell>> _spells
+                    Spell:
                         string _name
                         magicSchool _school
                             enum
-                        vector<shared_ptr<classSpellListItem>> _roles
-                            classSpellListItem:
+                        vector<shared_ptr<ClassSpellListItem>> _roles
+                            ClassSpellListItem:
                                 casterType _casterType
                                     enum
                                 unsigned short _level
@@ -114,11 +114,11 @@
                 bool _isCastingClass
         string _deity
         string _homeland
-        unique_ptr<race> _race
-            race:
+        unique_ptr<Race> _race
+            Race:
                 string _name
-                vector<shared_ptr<feat>> _racialTraits
-                    feat:
+                vector<shared_ptr<Feat>> _racialTraits
+                    Feat:
                         string _name
                         string _description
         sizeType _size
@@ -130,22 +130,22 @@
         string _hairColor
         string _eyeColor
 
-        unique_ptr<hitPoints> _hitpoints
-            hitpoints:
+        unique_ptr<HitPoints> _hitpoints
+            Hitpoints:
                 short _totalHP
                 short _currentDamage
                 short _nonLethalDamage
-                vector<unique_ptr<hitDie>> _hitdice
-                    hitDie:
+                vector<unique_ptr<HitDie>> _hitdice
+                    HitDie:
                         die _hitDie
                             enum
                         short _numberOfHitDice
-        unique_ptr<abilityScore> _abilityScores[6]
-            abilityScore:
+        unique_ptr<AbilityScore> _abilityScores[6]
+            AbilityScore:
                 short _score
                 short _adjustedScore
-        unique_ptr<speed> _speed
-            speed:
+        unique_ptr<Speed> _speed
+            Speed:
                 unsigned short _base
                 unsigned short _baseTempMod
                 unsigned short _armored
@@ -158,19 +158,19 @@
                 unsigned short _climbTempMod
                 unsigned short _burrow
                 unsigned short _burrowTempMod
-        unique_ptr<initiative> _initiative
-            initiative:
+        unique_ptr<Initiative> _initiative
+            Initiative:
                 short _miscMod
-        unique_ptr<armorClass> _armorClass
-            armorClass:
+        unique_ptr<ArmorClass> _armorClass
+            ArmorClass:
                 short _armor
                 short _shield
                 short _naturalArmor
                 short _deflectionBonus
                 short _dodgeBonus
                 short _miscMod
-        unique_ptr<save> _saves[3]
-            save:
+        unique_ptr<Save> _saves[3]
+            Save:
                 saveType _type
                     enum
                 abilityType _abilityType
@@ -179,8 +179,8 @@
                 short _magicMod
                 short _miscMod
                 short _tempMod
-        vector<unique_ptr<skill>> _skills
-            skill:
+        vector<unique_ptr<Skill>> _skills
+            Skill:
                 skillType _skillType
                     enum
                 abilityType _abilityType
@@ -193,8 +193,8 @@
 
         vector<unsigned short> _baseAttackBonuses
         short _spellResistance
-        vector<unique_ptr<weapon>> _weapons
-            weapon:
+        vector<unique_ptr<Weapon>> _weapons
+            Weapon:
                 string _name
                 string _criticalRange
                 string _damageType
@@ -207,8 +207,8 @@
                     enum
         string _proficiencies
 
-        vector<unique_ptr<armorClassItem>> _armorClassItems
-            armorClassItem:
+        vector<unique_ptr<ArmorClassItem>> _armorClassItems
+            ArmorClassItem:
                 string _name
                 string _type
                 unsigned short _bonus
@@ -218,19 +218,19 @@
                 unsigned short _baseSpeedAdjustment
                 unsigned short _weight
                 string _properties
-        vector<unique_ptr<gear>> _gear
-            gear:
+        vector<unique_ptr<Gear>> _gear
+            Gear:
                 string _name
                 string _description
                 unsigned short _weight
-        unique_ptr<currency> _currency[4]
-            currency:
+        unique_ptr<Currency> _currency[4]
+            Currency:
                 currencyType _type
                     enum
                 int _amount
 
-        vector<unique_ptr<feat>> _feats
-            feat:
+        vector<unique_ptr<Feat>> _feats
+            Feat:
                 string _name
                 string _description
 
@@ -247,23 +247,23 @@
         3. Lots in Creator.cpp eg. (Creator.cpp ln 72, 129, 141, 161, 175, 219)
 #### OOP:
         1. All files in src/classes are classes
-        2. All files in src/classes are classes and are sorted accordingly eg. (character.h ln 30, 108. gear.h 10, 24)
-        3. Almost any class file eg. (feat.cpp ln 9. gear.cpp ln 10)
+        2. All files in src/classes are classes and are sorted accordingly eg. (Character.h ln 30, 108. Gear.h 10, 24)
+        3. Almost any class file eg. (Feat.cpp ln 9. Gear.cpp ln 10)
         4. Check any header file eg. (Creator.h ln 14-150)
-        5. All class files eg. (character.cpp ln 1466)
-        6. Open almost any file (character.h ln 112, 115, 124-129)
+        5. All class files eg. (Character.cpp ln 1466)
+        6. Open almost any file (Character.h ln 112, 115, 124-129)
         7. Lots of examples in enums.h/enums.cpp eg. (enums.h ln 152, 155, 158, 161, 164, 167)
         8. N/A
         9. N/A
 #### Memory Management:
-        1. If r-value references and pointers count, character.h and Creator.h have tons of examples. If not hitPoints.h line 27 has 1, and Creator.h has 1 on line 19 and 1 on line 21
+        1. If r-value references and pointers count, Character.h and Creator.h have tons of examples. If not HitPoints.h line 27 has 1, and Creator.h has 1 on line 19 and 1 on line 21
         2. Creator.h has a destructor that joins threads eg. (Creator.cpp ln 16)
-        3. Creator.h and character.cpp ToStringForConsole() eg. (character.cpp ln 858)
+        3. Creator.h and Character.cpp ToStringForConsole() eg. (Character.cpp ln 858)
         4. Creator.h eg. (Creator.h ln 19-27) 
-        5. Creator.h/Creator.cpp and character.h/character.cpp eg. (Creator.cpp ln 404, 1213, 1275)
-        6. Just open any of my code, dude. They are everywhere eg. (character.h ln 124-129)
+        5. Creator.h/Creator.cpp and Character.h/Character.cpp eg. (Creator.cpp ln 404, 1213, 1275)
+        6. Just open any of my code, dude. They are everywhere eg. (Character.h ln 124-129)
 #### Concurrency:
         1. Creator.cpp eg. (Creator.cpp ln 73, 106, 113, 150, 162, 166)
         2. N/A
-        3. character.cpp/character.h (character.cpp ln 64, 1349, 1355, 1361, 1367, 1374)
+        3. Character.cpp/Character.h (Character.cpp ln 64, 1349, 1355, 1361, 1367, 1374)
         4. N/A
