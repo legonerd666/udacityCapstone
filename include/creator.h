@@ -8,10 +8,19 @@
 #include <vector>
 #include <thread>
 
+/**
+ * @brief A class that takes a shared pointer to character and populates it.
+ *
+ * This class takes a shared pointer to a character and gathers user input via the console to fill in all the required character data.
+ */
 class creator
 {
 public:
-    // Stops users from not providing a character object to populate
+    /**
+     * @brief Stops users from not providing a character object to populate.
+     *
+     * This function is deleted because we want to ensure that character pointer is passed to the creator on initialization.
+     */
     creator() = delete;
     // Initializes a creator object with the provided character as the character it will edit
     creator(shared_ptr<character> character);
@@ -26,7 +35,13 @@ public:
     // Disables moving a creator object
     creator &operator=(creator &&oldCreator) = delete;
 
-    // Gets user input from the console to set the variables of the provided character
+    /**
+     * @brief Runs the entire character creator
+     *
+     * Runs the entire character creator.
+     * Gathering input from the user via the console and parsing the data and populating the character object provided.
+     * It then joins all threads in _threads before returning, to ensure all the character information was filled.
+     */
     void CreateCharacter();
 
     // Prints string to the console one character at a time to make reading it more pleasant and less overwhelming
@@ -35,7 +50,11 @@ public:
     void DelayedCout(string &&string, bool doNewLine);
 
 private:
-    // Prints a short intro to how the creator is going to work to the console and starts character creation by running the ability scores function
+    /**
+     * @brief Prints a short intro about how the creator is going to work.
+     *
+     * Prints an intro to the program to the console using DelayedCout().
+     */
     void Intro();
     // Gets the characters base ability scores and sets them
     void AbilityScores();
