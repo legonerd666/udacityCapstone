@@ -22,31 +22,71 @@ public:
      * This function is deleted because we want to ensure that character pointer is passed to the creator on initialization.
      */
     creator() = delete;
-    // Initializes a creator object with the provided character as the character it will edit
+    /**
+     * @brief Construct a new creator object with character pointer.
+     *
+     * Initializes a creator object with the provided character as the character it will populate with data from user input via the console in CreateCharacter().
+     * @param character Saved as a member variable which the creator can then populate with CreateCharacter()
+     */
     creator(shared_ptr<character> character);
-    // Joins all threads in the vector of threads before destructing
+    /**
+     * @brief Destroy the creator object and joins all threads.
+     *
+     * Destroys the creator object and joins any remaining threads in _threads.
+     */
     ~creator();
-    // Disables a creator and its' threads from being copied
+    /**
+     * @brief Disables the creator copy constuctor
+     *
+     * Explicitly deletes the copy constructor of the creator class to ensure threads are kept safe and aren't copied.
+     */
     creator(const creator &) = delete;
-    // Disables a creator and its' threads from being copied
+    /**
+     * @brief Disables the creator copy assignment operator.
+     *
+     * Explicitly deletes the copy assignement operator of the creator class to ensure threads are kept safe and aren't copied.
+     */
     creator &operator=(const creator &) = delete;
-    // Disables moving a creator object
+    /**
+     * @brief Disables the creator move constuctor
+     *
+     * Explicitly deletes the move constructor of the creator class to ensure threads are kept safe and aren't copied.
+     */
     creator(creator &&oldCreator) = delete;
-    // Disables moving a creator object
+    /**
+     * @brief Disables the creator move assignment operator.
+     *
+     * Explicitly deletes the move assignement operator of the creator class to ensure threads are kept safe and aren't copied.
+     */
     creator &operator=(creator &&oldCreator) = delete;
 
     /**
      * @brief Runs the entire character creator
      *
-     * Runs the entire character creator.
-     * Gathering input from the user via the console and parsing the data and populating the character object provided.
+     * Gathers input from the user via the console, parses the data supplied by the user, and populates the character object provided.
      * It then joins all threads in _threads before returning, to ensure all the character information was filled.
+     *
+     * Calls:
+     * Intro(), AbilityScores(), Race(), Role(), Feats(), Equipment(), and Characteristics() before joining _threads.
      */
     void CreateCharacter();
-
-    // Prints string to the console one character at a time to make reading it more pleasant and less overwhelming
+    /**
+     * @brief Adds a short delay before each char printed to the console.
+     *
+     * Prints string to the console one character at a time with a short delay to make reading it more pleasant and less overwhelming.
+     *
+     * @param string The string it should print.
+     */
     void DelayedCout(string &&string);
     // Prints string to the console one character at a time to make reading it more pleasant and less overwhelming and allows you to choose if you'd like a new line character to be added at the end
+    /**
+     * @brief Adds a short delay before each char printed to the console.
+     *
+     * Prints string to the console one character at a time with a short delay to make reading it more pleasant and less overwhelming.
+     *
+     * @param string The string it should print.
+     * @param doNewLine If false does not print a new line after the provided string.
+     */
     void DelayedCout(string &&string, bool doNewLine);
 
 private:
@@ -56,17 +96,80 @@ private:
      * Prints an intro to the program to the console using DelayedCout().
      */
     void Intro();
-    // Gets the characters base ability scores and sets them
+    /**
+     * @brief Fills the ability scores of the character.
+     *
+     * Gives a short explanation of how to generate ability scores in Pathfinder 1e.
+     * Gets user input on what each ability score should be.
+     * If the user provides nothing it randomly sets each ability score using the Standard Method for generating ability scores.
+     * Then sets character ability scores in the main thread to ensure it is done before the main thread retrieves the ability scores later.
+     *
+     * Ability Score values are gotten using GetScore().
+     *
+     * Standard Method: Roll 4d6 and take away the lowest roll. Add up the remaining dice.
+     */
     void AbilityScores();
-    // Gets the ability scores from the character and adjusts them based on user input and gets user input then sets all other stats in character determined by race in threads (size, speed, racial traits, and languages), weapon familiarities however are not set in a worker thread as they are referenced in role and the execution order must be guaranteed
+    /**
+     * @brief Fills in all information determined by the characters race.
+     *
+     * Gathers user input to do the following:
+     *
+     * Sets the name of the users race, all the racial ability score modifiers, characters size, speed, racial traits, languages, and weapon familiarities.
+     *
+     * Uses worker threads to set all values except weapon familiarities and ability scores which are set in the main thread to ensure order of execution.
+     */
     void Race();
-    // Takes user input and sets all role determined stats in the character using worker threads (Hitpoints, class skills, skill ranks, proficiencies, isCastingClass, spellstats, spells, BaB, saves, and class features)
+    /**
+     * @brief Sets characters' class and all attributes determined by their class in Pathfinder.
+     *
+     * Gathers user input and uses it to set:
+     *
+     * Hitpoints and hitdice, class skills, skill ranks and which skills have ranks in them, proficiencies, Base attack bonuses, saves, class features
+     * and determines if the user class is a casting class.
+     *
+     * If the users character is a spell casting class this function additionally sets the characters spell stats for level 0 and level 1 spells,
+     * including determining bonus spells, spell casting ability score, spells in detail which the character knows,
+     * and creates a class feature Spells and fills it with a description on how spells work for the class.
+     *
+     * For any values entered as blank the program fills them with default values.
+     *
+     * The characters race name, hitpoints and hitdice, BaB, Saves, Detailed Spells, and Class Features are all set in worker threads.
+     * Everything else is done in the main thread to ensure order of execution.
+     */
     void Role();
-    // Adds any feats the user wants to add using worker threads
+    /**
+     * @brief Sets the characters feats
+     *
+     * Uses worker threads to set the characters feats with user input.
+     * Sets default values to any feat which isnt provided input.
+     */
     void Feats();
-    // Takes user input and sets all equipment related stats in the character using worker threads (money, weaponry, armor, and gear)
+    /**
+     * @brief Sets characters equipment and gold.
+     *
+     * Gathers user input to fill out the character gold, weapons, armor, and gear.
+     *
+     * When purchasing a weapon, adds it to the characters weapon vector and the characters gear vector.
+     *
+     * When purchasing armor, adds it to the characters armorClassItems vector and gear vector, and adds the armor bonus to the appropriate field in characters armorClass attribute.
+     *
+     * Sets gold in the main thread so that cost is calculated properly for each purchase
+     * and auto converts money to the required currency type if a character doesn't have the required amount of a currency to purchase the item.
+     *
+     * Sets weapons, armor, and other gear in worker threads.
+     *
+     * Will not let a user purchase an item if they don't have enough money to.
+     */
     void Equipment();
-    // Takes user input and sets all characteristics using worker threads (name, alignment, player name, deity, homeland, gender, age, height, weight, hair color, and eye color) then waits for user to click enter before ending the creation process
+    /**
+     * @brief Gets the final bits of data to fill out the character.
+     *
+     * Gets user input to fill out the characters characteristics.
+     *
+     * Eg. Alignment, player name, deity, homeland, gender, age, height, weight, hair color, eye color, and the character name.
+     *
+     * Sets all of these values in a worker thread and then waits for the user to click \<enter\> one last time before joining the threads and ending creation.
+     */
     void Characteristics();
 
     // Returns short ranging from 3 to 18 to be used as ability scores either one entered by the user or a random one if none was entered
