@@ -202,7 +202,7 @@ short EnumToBonus(sizeType sizeType);
 // Returns load enum based off of a characters strength score and current carried weight
 loadType CalcLoad(short strength, unsigned short weight);
 
-// Returns maximum liftable over head load for a character based off of their strength
+// Returns maximum liftable over head load for a Character based off of their strength
 short CalcMaxLoad(short strength);
 
 #endif
