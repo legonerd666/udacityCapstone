@@ -1,5 +1,12 @@
 #include "enums.h"
 
+/**
+ * @brief Holds a \ref casterType "caster class" and a level to represent what \ref Role "classes" can cast a \ref Spell "spell" and at what spell level.
+ *
+ * Stores the information of one \ref casterType "casting class type" and level. \n
+ * The \ref casterType "casting class type" representing what \ref Role "classes" spell list it is in. \n
+ * And the level representing what level the \ref Spell "spell" is for that given \ref Role "class". \n
+ */
 class ClassSpellListItem
 {
 public:

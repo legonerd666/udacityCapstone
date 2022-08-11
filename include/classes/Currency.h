@@ -6,6 +6,11 @@
 
 using namespace std;
 
+/**
+ * @brief Stores one \ref currencyType "type of currency" for a \ref Character "charater".
+ *
+ * Stores the \ref currencyType "type" and amount of a currency for a \ref Character "character". \n
+ */
 class Currency
 {
 public:

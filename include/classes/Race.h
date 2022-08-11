@@ -9,6 +9,10 @@
 
 using namespace std;
 
+/**
+ * @brief Stores all information pertaining to a \ref Character "characters'" \ref Race "race".
+ *
+ */
 class Race
 {
 public:

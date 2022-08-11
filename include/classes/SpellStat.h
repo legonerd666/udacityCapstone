@@ -6,6 +6,10 @@
 
 using namespace std;
 
+/**
+ * @brief Stores all the stats for a \ref Role "classes" \ref Spell "spells" of a given level.
+ *
+ */
 class SpellStat
 {
 public:

@@ -5,6 +5,11 @@
 
 using namespace std;
 
+/**
+ * @brief Stores the info of a piece of \ref Gear "gear"
+ *
+ * Stores all relevant info for an \ref Gear "item" or \ref Gear "piece of gear". \n
+ */
 class Gear
 {
 public:

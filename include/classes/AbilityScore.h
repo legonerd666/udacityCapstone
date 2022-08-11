@@ -3,6 +3,11 @@
 
 #include "enums.h"
 
+/**
+ * @brief Stores an \ref AbilityScore "ability score" for a Character
+ *
+ * Stores an \ref AbilityScore "ability score" for a Character with all the required info of an \ref AbilityScore "ability score" in Pathfinder 1e. \n
+ */
 class AbilityScore
 {
 public:

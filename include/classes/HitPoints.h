@@ -8,6 +8,11 @@
 
 using namespace std;
 
+/**
+ * @brief Stores and calculates a \ref Character "characters'" hit points.
+ *
+ * Stores the characters \ref TotalHP() "max health", \ref HitDie "hit dice", and current lethal and non-lethal damage to calculate all stats related to HP.
+ */
 class HitPoints
 {
 public:

@@ -7,6 +7,11 @@
 
 using namespace std;
 
+/**
+ * @brief Stores the info for one \ref Role "classes'" hitdice.
+ *
+ * Stores the \ref die "type of die" and amount of dice for a \ref Role "classes'" \ref HitDie "hit dice".
+ */
 class HitDie
 {
 public:

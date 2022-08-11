@@ -63,11 +63,17 @@ public:
     /**
      * @brief Runs the entire character creator
      *
-     * Gathers input from the user via the console, parses the data supplied by the user, and populates the Character object provided.
-     * It then joins all threads in _threads before returning, to ensure all the character information was filled.
-     *
-     * Calls:
-     * Intro(), AbilityScores(), Race(), Role(), Feats(), Equipment(), and Characteristics() before joining _threads.
+     * Gathers input from the user via the console, parses the data supplied by the user, and populates the Character object provided. \n
+     * It then joins all threads in _threads before returning, to ensure all the character information was filled. \n
+     * Calls: \n
+     * Intro() \n
+     * AbilityScores() \n
+     * Race() \n
+     * Role() \n
+     * Feat() \n
+     * Equipment() \n
+     * Characteristics() \n
+     * Then joins all threads in Creator::_threads
      */
     void CreateCharacter();
     /**

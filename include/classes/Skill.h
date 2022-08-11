@@ -3,6 +3,10 @@
 
 #include "enums.h"
 
+/**
+ * @brief Stores the data about one of a \ref Character "characters'" \ref skillType "skills" and can calculate the \ref Total() "total bonus" they get on a skill check of that type.
+ *
+ */
 class Skill
 {
 public:

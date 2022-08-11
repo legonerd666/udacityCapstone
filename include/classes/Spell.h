@@ -10,6 +10,10 @@
 
 using namespace std;
 
+/**
+ * @brief Stores all the details of a \ref Spell "spell" in Pathfinder 1e.
+ *
+ */
 class Spell
 {
 public:

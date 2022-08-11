@@ -11,6 +11,13 @@
 
 using namespace std;
 
+/**
+ * @brief Stores all data dictated by one of a \ref Character "characters'" \ref Role "classes".
+ *
+ * Stores all the stats related to a \ref Character "characters'" \ref Role "class". \n
+ * Including \ref SpellStat "spell stats" like a \ref Spell "spells'" \ref SpellStat::SpellDC() "Difficulty Class" and \ref SpellStat::BonusSpells() "bonus spells",
+ * \ref Spell "spells", and more.
+ */
 class Role
 {
 public:

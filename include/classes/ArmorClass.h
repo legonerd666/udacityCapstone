@@ -3,6 +3,12 @@
 
 #include "enums.h"
 
+/**
+ * @brief Stores the armor class of a Character.
+ *
+ * Stores all the values required to calculate an armor class in Pathfinder 1e. \n
+ * And allows you to calculate the full armor score, flat-footed armor, and touch armor class. \n
+ */
 class ArmorClass
 {
 public:

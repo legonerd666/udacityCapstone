@@ -5,6 +5,11 @@
 
 using namespace std;
 
+/**
+ * @brief Stores the data for an item that when worn or wielded changes the \ref Character "characters'" \ref ArmorClass "armor class".
+ *
+ * Stores all the relevent data for an item that affects the \ref Character "characters'" \ref ArmorClass "armor class". \n
+ */
 class ArmorClassItem
 {
 public:

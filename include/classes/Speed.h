@@ -1,6 +1,10 @@
 #ifndef SPEED_H
 #define SPEED_H
 
+/**
+ * @brief Stores all the information related to a \ref Character "characters" \ref Speed "speeds".
+ *
+ */
 class Speed
 {
 public:

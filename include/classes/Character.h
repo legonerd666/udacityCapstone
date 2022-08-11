@@ -25,6 +25,13 @@
 
 using namespace std;
 
+/**
+ * @brief Stores all the information in a character sheet in Pathfinder 1e.
+ *
+ * This is a composite class of raw types and custom classes that stores all the information on a character sheet in Pathfinder 1e. \n
+ * It has functions to return and set different values that are subject to user input and a ToStringForConsole() function which calculates all the values of the
+ * sheet and converts it a formatted string to be printed to the console.
+ */
 class Character
 {
 public:

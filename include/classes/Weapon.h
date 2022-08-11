@@ -7,6 +7,10 @@
 
 using namespace std;
 
+/**
+ * @brief Stores all the information needed to make an attack with a specific \ref Weapon "weapon".
+ *
+ */
 class Weapon
 {
 public:

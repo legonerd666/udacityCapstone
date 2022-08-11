@@ -1,6 +1,10 @@
 #ifndef INITIATIVE_H
 #define INITIATIVE_H
 
+/**
+ * @brief Stores and calculates a \ref Character "characters'" \ref Initiative "initiative".
+ *
+ */
 class Initiative
 {
 public:
