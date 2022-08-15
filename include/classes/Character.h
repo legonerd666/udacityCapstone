@@ -41,6 +41,12 @@ public:
     // Getters
     // Outputs the Character data as a nicely formatted dynamic string
     string ToStringForConsole();
+    /**
+     * @brief Formats the character sheet using html
+     * 
+     * @return string 
+     */
+    string ToStringForWeb();
     // Returns the score of an ability based on the given type
     short GetAbilityScore(abilityType abilityType);
     // Returns the adjusted modifier of an ability of the given type
