@@ -11,7 +11,5 @@ CharacterApplication::CharacterApplication(const WEnvironment &env, string chara
     : WApplication(env)
 {
     setTitle("Pathfinder 1e Character!");
-    auto text = make_unique<WText>(character);
-    text->setTextFormat(TextFormat::UnsafeXHTML);
-    root()->addWidget(move(text));
+    root()->addWidget(make_unique<WText>(character, TextFormat::UnsafeXHTML));
 }

@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 
-#include "enums.h"
+#include "../enums.h"
 #include "ClassSpellListItem.h"
 
 using namespace std;

@@ -1,4 +1,4 @@
-#include "enums.h"
+#include "../enums.h"
 
 /**
  * @brief Holds a \ref casterType "caster class" and a level to represent what \ref Role "classes" can cast a \ref Spell "spell" and at what spell level.

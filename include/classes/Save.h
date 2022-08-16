@@ -1,7 +1,7 @@
 #ifndef SAVE_H
 #define SAVE_H
 
-#include "enums.h"
+#include "../enums.h"
 
 /**
  * @brief Stores all information for a \ref Character "characters'" \ref Save "save", such as their \ref fortitude "fortitude" \ref Save "save".

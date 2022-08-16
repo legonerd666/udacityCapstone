@@ -1,7 +1,7 @@
 #ifndef ARMORCLASS_H
 #define ARMORCLASS_H
 
-#include "enums.h"
+#include "../enums.h"
 
 /**
  * @brief Stores the armor class of a Character.

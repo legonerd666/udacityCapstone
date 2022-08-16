@@ -1,7 +1,7 @@
 #ifndef ABILITYSCORE_H
 #define ABILITYSCORE_H
 
-#include "enums.h"
+#include "../enums.h"
 
 /**
  * @brief Stores an \ref AbilityScore "ability score" for a Character

@@ -2,7 +2,7 @@
 #define CREATOR_H
 
 #include "Character.h"
-#include "enums.h"
+#include "../enums.h"
 
 #include <memory>
 #include <vector>

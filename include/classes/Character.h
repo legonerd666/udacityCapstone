@@ -21,7 +21,7 @@
 #include "Role.h"
 #include "HitPoints.h"
 
-#include "enums.h"
+#include "../enums.h"
 
 using namespace std;
 
@@ -43,8 +43,8 @@ public:
     string ToStringForConsole();
     /**
      * @brief Formats the character sheet using html
-     * 
-     * @return string 
+     *
+     * @return string
      */
     string ToStringForWeb();
     // Returns the score of an ability based on the given type
