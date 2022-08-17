@@ -5,6 +5,10 @@
 #include <memory>
 #include <vector>
 #include <thread>
+#include <mutex>
+#include <condition_variable>
+#include <Wt/WText.h>
+#include <Wt/WLineEdit.h>
 
 #include "../Character.h"
 
@@ -28,8 +32,22 @@ private:
      */
     shared_ptr<Character> _character;
 
+    WText *_promptText;
+    WLineEdit *_inputField;
+
     // Member Functions
-    int GetNumber(string text);
+    /**
+     * @brief Adds a text prompt for the user to input a number.
+     *
+     * Adds a WText and a WLineEdit to root asking for the user to input a number to be used as a field in the charater.
+     * @tparam T The type of number we want to get from the user.
+     * @param text The text prompt we want to display to the user
+     * @param min The lowest value T can hold
+     * @param max The maximum value T can hold
+     * @return T The value to then set the character's field to.
+     */
+    template <typename T>
+    void GetNumber(string text, T min, T max);
 
 public:
     // Constructors and Destructors

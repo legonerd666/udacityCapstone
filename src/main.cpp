@@ -7,6 +7,7 @@
 #include "enums.h"
 #include "Creator.h"
 #include "../include/classes/gui/CharacterApplication.h"
+#include "CreatorApplication.h"
 
 /**
  * \mainpage
@@ -25,7 +26,6 @@ int main(int argc, char **argv)
     std::shared_ptr<Character> testCharacter = make_shared<Character>();
     Creator creator = Creator(testCharacter);
     creator.CreateCharacter();
-    std::string characterString = testCharacter->ToStringForWeb();
-    return WRun(argc, argv, [characterString](const WEnvironment &env)
-                { return std::make_unique<CharacterApplication>(env, characterString); });
+    return WRun(argc, argv, [testCharacter](const WEnvironment &env)
+                { return std::make_unique<CreatorApplication>(env, testCharacter); });
 }
