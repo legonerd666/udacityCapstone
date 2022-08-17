@@ -31,6 +31,28 @@ private:
      *
      */
     shared_ptr<Character> _character;
+    /**
+     * @brief If the input for a field is a valid.
+     *
+     */
+    bool _isValidInput;
+    /**
+     * @brief mutex for the input threads
+     *
+     * mutex that locks out the main thread when the worker thread is checking the validity of the user input.
+     */
+    mutex _inputMutex;
+    /**
+     * @brief Mutex for the character sheet threads
+     *
+     * Mutex that locks other worker threads from accessing the character sheet.
+     */
+    mutex _characterMutex;
+    /**
+     * @brief Condition variable to notify the main thread to move on to the next field once the input is valid.
+     *
+     */
+    condition_variable _inputCond;
 
     WText *_promptText;
     WLineEdit *_inputField;

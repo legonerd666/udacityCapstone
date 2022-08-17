@@ -12,7 +12,13 @@ using namespace Wt;
 CreatorApplication::CreatorApplication(const WEnvironment &env, shared_ptr<Character> character) : WApplication(env), _character(character)
 {
     setTitle("Pathfinder 1e Character Creator");
-    GetNumber<short>("What age do you want to be? ", SHRT_MIN, SHRT_MAX);
+    _threads.emplace_back(thread([this]
+                                 {
+                                    unique_lock<mutex> inputLock(_inputMutex);
+                                    _inputCond.wait(inputLock, [this]
+                                                    { return _isValidInput; });
+                                    _character->Characteristics(LG, "Jonathan Joestar", "Pharasma", "Sandpoint", "Male", stoi(_inputField->valueText()), 0, 0, "Brown", "Brown", "Jimothy");
+                                    cout << _character->ToStringForConsole(); }));
 }
 
 CreatorApplication::~CreatorApplication()
@@ -31,12 +37,12 @@ void CreatorApplication::GetNumber(string text, T min, T max)
     _inputField = root()->addWidget(make_unique<WLineEdit>());
     _inputField->setFocus();
     _inputField->enterPressed().connect([this, min, max]
-                                        { 
+                                        {
+                                            unique_lock<mutex> lock(_inputMutex);
                                             try
                                             {
-                                                if (stoi(_inputField->valueText()) >= min && stoi(_inputField->valueText()) <= max){
-                                                _character->Characteristics(LG, "Jonathan Joestar", "Pharasma", "Sandpoint", "Male", stoi(_inputField->valueText()), 0, 0, "Brown", "Brown", "Jimothy");
-                                                cout << _character->ToStringForConsole();}
+                                                if (stoi(_inputField->valueText()) >= min && stoi(_inputField->valueText()) <= max)
+                                                    _isValidInput = true;
                                                 else
                                                     _inputField->setValueText("");
                                             }
@@ -47,5 +53,6 @@ void CreatorApplication::GetNumber(string text, T min, T max)
                                             catch (const std::out_of_range &e)
                                             {
                                                 _inputField->setValueText("");
-                                            } });
+                                            }
+                                            _inputCond.notify_one(); });
 }
