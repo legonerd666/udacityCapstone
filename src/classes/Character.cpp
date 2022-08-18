@@ -2464,7 +2464,7 @@ string Character::ToStringForWeb()
                     character += " spells.";
                     character += "<br>";
                     character += "                You need at least a";
-                    if (10 + role->SpellStats()[i]->SpellLevel() == 11 |10 + role->SpellStats()[i]->SpellLevel() == 18)
+                    if (10 + role->SpellStats()[i]->SpellLevel() == 11 | 10 + role->SpellStats()[i]->SpellLevel() == 18)
                         character += "n";
                     character += " ";
                     character += to_string(10 + role->SpellStats()[i]->SpellLevel());
@@ -2473,7 +2473,7 @@ string Character::ToStringForWeb()
                     character += " to cast level ";
                     character += to_string(role->SpellStats()[i]->SpellLevel());
                     character += " spells as a";
-                    if (tolower(role->Name()[0]) == 'a' |tolower(role->Name()[0]) == 'e' |tolower(role->Name()[0]) == 'i' |tolower(role->Name()[0]) == 'o' |tolower(role->Name()[0]) == 'u')
+                    if (tolower(role->Name()[0]) == 'a' | tolower(role->Name()[0]) == 'e' | tolower(role->Name()[0]) == 'i' | tolower(role->Name()[0]) == 'o' | tolower(role->Name()[0]) == 'u')
                         character += "n";
                     character += " ";
                     character += role->Name();
@@ -2584,6 +2584,24 @@ currencyType Character::CurrencyType(short index)
 
     unique_lock<mutex> lock(_mutex);
     return _currency[index]->Type();
+}
+
+short Character::Age()
+{
+    unique_lock<mutex> lock(_mutex);
+    return _age;
+}
+
+short Character::Height()
+{
+    unique_lock<mutex> lock(_mutex);
+    return _height;
+}
+
+short Character::Weight()
+{
+    unique_lock<mutex> lock(_mutex);
+    return _weight;
 }
 
 void Character::AbilityScores(short newAbilityScores[6])

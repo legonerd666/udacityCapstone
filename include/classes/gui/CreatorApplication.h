@@ -20,64 +20,33 @@ class CreatorApplication : public WApplication
 private:
     // Member Variables
     /**
-     * @brief Holds the threads that set character values.
-     *
-     * Holds all the threads that set the character values that aren't accessed later in the creation
-     * progress and are only needed once the process is over and the character is displayed.
-     */
-    vector<thread> _threads;
-    /**
      * @brief Stores a pointer to the character object we are gonna change.
      *
      */
     shared_ptr<Character> _character;
-    /**
-     * @brief If the input for a field is a valid.
-     *
-     */
-    bool _isValidInput;
-    /**
-     * @brief mutex for the input threads
-     *
-     * mutex that locks out the main thread when the worker thread is checking the validity of the user input.
-     */
-    mutex _inputMutex;
-    /**
-     * @brief Mutex for the character sheet threads
-     *
-     * Mutex that locks other worker threads from accessing the character sheet.
-     */
-    mutex _characterMutex;
-    /**
-     * @brief Condition variable to notify the main thread to move on to the next field once the input is valid.
-     *
-     */
-    condition_variable _inputCond;
 
     WText *_promptText;
     WLineEdit *_inputField;
 
     // Member Functions
     /**
-     * @brief Adds a text prompt for the user to input a number.
+     * @brief Checks if the value of the string in \ref CreatorApplication::_inputField "_inputField" is valid.
      *
-     * Adds a WText and a WLineEdit to root asking for the user to input a number to be used as a field in the charater.
-     * @tparam T The type of number we want to get from the user.
-     * @param text The text prompt we want to display to the user
+     * Checks if the value of inputField is within the min and max values allowed by the raw type and is also a number.
+     * @tparam T The type of number we want to validate.
      * @param min The lowest value T can hold
      * @param max The maximum value T can hold
-     * @return T The value to then set the character's field to.
+     * @return bool on if it is a valid number
      */
     template <typename T>
-    void GetNumber(string text, T min, T max);
+    bool IsValidNumber(T min, T max);
+
+    void CreateCharacter();
+    void SetAge();
+    void SetHeight();
+    void SetWeight();
 
 public:
-    // Constructors and Destructors
-    /**
-     * @brief Disables creation of a Creator Application if the required args aren't supplied.
-     *
-     */
-    CreatorApplication() = delete;
     /**
      * @brief Construct a new Creator Application object with a shared pointer to the character.
      *
@@ -87,34 +56,5 @@ public:
      * @param env
      */
     CreatorApplication(const WEnvironment &env, shared_ptr<Character> character);
-    /**
-     * @brief Joins any remaining threads in \ref CreatorApplication::_threads "_threads" before destruction.
-     *
-     */
-    ~CreatorApplication();
-    /**
-     * @brief Disables the Creator Application copy constuctor
-     *
-     * Explicitly deletes the copy constructor of the Creator Application class to ensure threads are kept safe and aren't copied.
-     */
-    CreatorApplication(const CreatorApplication &) = delete;
-    /**
-     * @brief Disables the Creator Application copy assignment operator.
-     *
-     * Explicitly deletes the copy assignement operator of the Creator Application class to ensure threads are kept safe and aren't copied.
-     */
-    CreatorApplication &operator=(const CreatorApplication &) = delete;
-    /**
-     * @brief Disables the Creator Application move constuctor
-     *
-     * Explicitly deletes the move constructor of the Creator Application class to ensure threads are kept safe and aren't copied.
-     */
-    CreatorApplication(CreatorApplication &&) = delete;
-    /**
-     * @brief Disables the Creator Application move assignment operator.
-     *
-     * Explicitly deletes the move assignement operator of the Creator Application class to ensure threads are kept safe and aren't copied.
-     */
-    CreatorApplication &operator=(CreatorApplication &&) = delete;
 };
 #endif

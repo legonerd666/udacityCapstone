@@ -57,6 +57,9 @@ public:
     int GetCurrencyAmount(currencyType currency);
     // Returns the type of Currency at a given index
     currencyType CurrencyType(short index);
+    short Age();
+    short Height();
+    short Weight();
 
     // Setters
     // Initializes the characters ability scores base off of an array of 6 shorts
