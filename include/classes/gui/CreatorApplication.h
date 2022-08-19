@@ -41,7 +41,46 @@ private:
     template <typename T>
     bool IsValidNumber(T min, T max);
 
+    /**
+     * @brief Starts the character creation process
+     *
+     */
     void CreateCharacter();
+    /**
+     * @brief Gives the user an intro and then runs the ability scores section
+     *
+     */
+    void Intro();
+    /**
+     * @brief Sets the Ability Scores of the Character object
+     *
+     */
+    void SetAbilityScores();
+    /**
+     * @brief Sets all the stats of the Character object dictated by their Race
+     *
+     */
+    void SetRace();
+    /**
+     * @brief Set the Role and all related stats of the Character object
+     *
+     */
+    void SetRole();
+    /**
+     * @brief Set the Feats of the Character
+     *
+     */
+    void SetFeats();
+    /**
+     * @brief Set the Equipment of the Character.
+     *
+     */
+    void SetEquipment();
+    /**
+     * @brief Set the Characteristics of the Character
+     *
+     */
+    void SetCharacteristics();
     void SetAge();
     void SetHeight();
     void SetWeight();

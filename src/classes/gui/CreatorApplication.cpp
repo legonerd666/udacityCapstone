@@ -6,6 +6,7 @@
 #include "../../../include/classes/gui/CharacterApplication.h"
 #include <iostream>
 #include <Wt/WText.h>
+#include <Wt/WPushButton.h>
 
 using namespace std;
 using namespace Wt;
@@ -40,7 +41,20 @@ bool CreatorApplication::IsValidNumber(T min, T max)
 
 void CreatorApplication::CreateCharacter()
 {
-    SetAge();
+    Intro();
+}
+
+void CreatorApplication::Intro()
+{
+    _promptText->setText("<div style=\"font-size: 2rem\">Welcome to the character creator, I will walk you through creating a character in Pathfinder 1e right here on this site!</div><br><div style=\"font-size: 2rem\">What will happen is as follows: I will ask you questions about the next section in the character sheet, and you will type an appropriate response in the field and press *enter*. Then we repeat this step for the next field.</div><br><div style=\"font-size: 2rem\">After all the required steps have been completed I will do a bit of math and fill out any other fields that don't need your input and display your character sheet here for you to use!</div>");
+    _promptText->setTextFormat(TextFormat::UnsafeXHTML);
+    _promptText->setTextAlignment(AlignmentFlag::Center);
+    WPushButton *begin = root()->addWidget(make_unique<WPushButton>("<div style=\"font-size: 2rem\">Click here to begin!</div>", TextFormat::UnsafeXHTML));
+    begin->setWidth(WLength("16%"));
+    begin->setMargin(WLength("42%"), Side::Left | Side::Right);
+    begin->clicked().connect([this, begin]
+                             { cout << "\n\nSTARTING\n\n"; });
+    _inputField->setHidden(true);
 }
 
 void CreatorApplication::SetAge()

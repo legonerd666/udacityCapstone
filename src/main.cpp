@@ -24,8 +24,8 @@ int main(int argc, char **argv)
 {
     srand(time(0));
     std::shared_ptr<Character> testCharacter = make_shared<Character>();
-    Creator creator = Creator(testCharacter);
-    creator.CreateCharacter();
+    // Creator creator = Creator(testCharacter);
+    // creator.CreateCharacter();
     return WRun(argc, argv, [testCharacter](const WEnvironment &env)
                 { return std::make_unique<CreatorApplication>(env, testCharacter); });
 }
