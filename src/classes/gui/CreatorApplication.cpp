@@ -53,8 +53,14 @@ void CreatorApplication::Intro()
     begin->setWidth(WLength("16%"));
     begin->setMargin(WLength("42%"), Side::Left | Side::Right);
     begin->clicked().connect([this, begin]
-                             { cout << "\n\nSTARTING\n\n"; });
+                             { root()->removeWidget(begin);
+                                SetAbilityScores(); });
     _inputField->setHidden(true);
+}
+
+void CreatorApplication::SetAbilityScores()
+{
+    _promptText->setText("<div style=\"font-size: 2rem\">First up: ability scores!</div><br><div style=\"font-size: 2rem\">Roll 4 six-sided dice and take away the lowest die, then add up the remaining 3 dice to get an ability score!</div><br><div style=\"font-size: 2rem\">Write that ability score on a piece of paper and repeat 5 more times so that you have 6 ability scores written down, ranging from 3 to 18 in value.</div><br><div style=\"font-size: 2rem\">Figure out which scores you want to use each number for (strength, dexterity, constitution, intelligence, wisdom, and charisma) or you can do them in the order you rolled them.</div><br><div style=\"font-size: 2rem\">If you just want random ability scores then don't enter anything and I'll generate them for you.</div>");
 }
 
 void CreatorApplication::SetAge()
