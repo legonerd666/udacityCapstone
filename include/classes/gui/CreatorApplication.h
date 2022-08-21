@@ -54,6 +54,7 @@ private:
     /**
      * @brief Sets the Ability Scores of the Character object
      *
+     * Creates input fields for all six ability scores and adds them to the character object.
      */
     void SetAbilityScores();
     /**
