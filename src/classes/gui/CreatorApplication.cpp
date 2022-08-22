@@ -7,6 +7,7 @@
 #include <iostream>
 #include <Wt/WText.h>
 #include <Wt/WPushButton.h>
+#include <vector>
 
 using namespace std;
 using namespace Wt;
@@ -60,7 +61,74 @@ void CreatorApplication::Intro()
 
 void CreatorApplication::SetAbilityScores()
 {
-    _promptText->setText("<div style=\"font-size: 2rem\">First up: ability scores!</div><br><div style=\"font-size: 2rem\">Roll 4 six-sided dice and take away the lowest die, then add up the remaining 3 dice to get an ability score!</div><br><div style=\"font-size: 2rem\">Write that ability score on a piece of paper and repeat 5 more times so that you have 6 ability scores written down, ranging from 3 to 18 in value.</div><br><div style=\"font-size: 2rem\">Figure out which scores you want to use each number for (strength, dexterity, constitution, intelligence, wisdom, and charisma) or you can do them in the order you rolled them.</div><br><div style=\"font-size: 2rem\">If you just want random ability scores then don't enter anything and I'll generate them for you.</div>");
+    vector<WLineEdit *> scores;
+    scores.emplace_back(root()->addWidget(make_unique<WLineEdit>()));
+    scores.emplace_back(root()->addWidget(make_unique<WLineEdit>()));
+    scores.emplace_back(root()->addWidget(make_unique<WLineEdit>()));
+    scores.emplace_back(root()->addWidget(make_unique<WLineEdit>()));
+    scores.emplace_back(root()->addWidget(make_unique<WLineEdit>()));
+    scores.emplace_back(root()->addWidget(make_unique<WLineEdit>()));
+    WPushButton *enterScores = root()->addWidget(make_unique<WPushButton>("<div style=\"font-size: 2rem\">Enter Scores!</div>", TextFormat::UnsafeXHTML));
+    _promptText->setText("<div style=\"font-size: 2rem\">First up: ability scores!</div><br><div style=\"font-size: 2rem\">Roll 4 six-sided dice and take away the lowest die, then add up the remaining 3 dice to get an ability score!</div><br><div style=\"font-size: 2rem\">Write that ability score on a piece of paper and repeat 5 more times so that you have 6 ability scores written down, ranging from 3 to 18 in value.</div><br><div style=\"font-size: 2rem\">Figure out which scores you want to use each number for (strength, dexterity, constitution, intelligence, wisdom, and charisma) or you can do them in the order you rolled them.</div><br><div style=\"font-size: 2rem\">If you just want random ability scores then don't enter anything and I'll generate them for you.</div><br><div style=\"font-size: 2rem\">Once you are ready just click the button and I'll add them to your character sheet!</div>");
+
+    scores.at(0)->setPlaceholderText("Strength");
+    scores.at(0)->setWidth(WLength("16%"));
+    scores.at(0)->setMargin(WLength("42%"), Side::Left | Side::Right);
+    scores.at(0)->setMargin(WLength("1%"), Side::Bottom);
+    scores.at(0)->setFocus();
+    scores.at(0)->enterPressed().connect([this, scores]
+                                         { scores.at(1)->setFocus(); });
+    root()->addWidget(make_unique<WBreak>());
+
+    scores.at(1)->setPlaceholderText("Dexterity");
+    scores.at(1)->setWidth(WLength("16%"));
+    scores.at(1)->setMargin(WLength("42%"), Side::Left | Side::Right);
+    scores.at(1)->setMargin(WLength("1%"), Side::Bottom);
+    scores.at(1)->enterPressed().connect([this, scores]
+                                         { scores.at(2)->setFocus(); });
+    root()->addWidget(make_unique<WBreak>());
+
+    scores.at(2)->setPlaceholderText("Constitution");
+    scores.at(2)->setWidth(WLength("16%"));
+    scores.at(2)->setMargin(WLength("42%"), Side::Left | Side::Right);
+    scores.at(2)->setMargin(WLength("1%"), Side::Bottom);
+    scores.at(2)->enterPressed().connect([this, scores]
+                                         { scores.at(3)->setFocus(); });
+    root()->addWidget(make_unique<WBreak>());
+
+    scores.at(3)->setPlaceholderText("Intelligence");
+    scores.at(3)->setWidth(WLength("16%"));
+    scores.at(3)->setMargin(WLength("42%"), Side::Left | Side::Right);
+    scores.at(3)->setMargin(WLength("1%"), Side::Bottom);
+    scores.at(3)->enterPressed().connect([this, scores]
+                                         { scores.at(4)->setFocus(); });
+    root()->addWidget(make_unique<WBreak>());
+
+    scores.at(4)->setPlaceholderText("Wisdom");
+    scores.at(4)->setWidth(WLength("16%"));
+    scores.at(4)->setMargin(WLength("42%"), Side::Left | Side::Right);
+    scores.at(4)->setMargin(WLength("1%"), Side::Bottom);
+    scores.at(4)->enterPressed().connect([this, scores]
+                                         { scores.at(5)->setFocus(); });
+    root()->addWidget(make_unique<WBreak>());
+
+    scores.at(5)->setPlaceholderText("Charisma");
+    scores.at(5)->setWidth(WLength("16%"));
+    scores.at(5)->setMargin(WLength("42%"), Side::Left | Side::Right);
+    scores.at(5)->setMargin(WLength("1%"), Side::Bottom);
+    scores.at(5)->enterPressed().connect([this, enterScores]
+                                         { enterScores->setFocus(); });
+    root()->addWidget(make_unique<WBreak>());
+
+    enterScores->setWidth(WLength("16%"));
+    enterScores->setMargin(WLength("42%"), Side::Left | Side::Right);
+    enterScores->clicked().connect([this, scores]
+                                   { CheckAbilityScores(scores); });
+}
+
+void CreatorApplication::CheckAbilityScores(vector<WLineEdit *> scores)
+{
+    cout << "\n\nHello\n\n";
 }
 
 void CreatorApplication::SetAge()
