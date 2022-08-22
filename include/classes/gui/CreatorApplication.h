@@ -82,7 +82,7 @@ private:
      *
      */
     void SetCharacteristics();
-    void CheckAbilityScores(vector<WLineEdit *> scores);
+    void CheckAbilityScores(vector<WLineEdit *> scores, vector<WText *> warnings);
     void SetAge();
     void SetHeight();
     void SetWeight();
