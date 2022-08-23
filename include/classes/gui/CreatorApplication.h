@@ -82,6 +82,16 @@ private:
      *
      */
     void SetCharacteristics();
+    /**
+     * @brief Ensures the ability scores are set to proper values before entering them into the Character object
+     *
+     * Checks if each ability score is either blank (will be set to a random number from 3-18) or contains a number from 3-18
+     * and if an ability score field is not valid it sets the warning text of that score to show and clears the field.
+     * then it sets the focus to the first ability score field.
+     * If/Once all the scores are valid, it sets the Character objects ability scores to the given values and calculates a random value for blank ones.
+     * @param scores
+     * @param warnings
+     */
     void CheckAbilityScores(vector<WLineEdit *> scores, vector<WText *> warnings);
     void SetAge();
     void SetHeight();
