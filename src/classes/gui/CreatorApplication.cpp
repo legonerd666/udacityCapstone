@@ -64,69 +64,38 @@ void CreatorApplication::SetAbilityScores()
 {
     vector<WLineEdit *> scores;
     vector<WText *> warnings;
-    warnings.emplace_back(root()->addWidget(make_unique<WText>("<div style=\"font-size: 1rem; color: red;\">Please ensure that this field is either empty or contains a number from 3 to 18.</div>", TextFormat::UnsafeXHTML)));
-    scores.emplace_back(root()->addWidget(make_unique<WLineEdit>()));
-    warnings.emplace_back(root()->addWidget(make_unique<WText>("<div style=\"font-size: 1rem; color: red;\">Please ensure that this field is either empty or contains a number from 3 to 18.</div>", TextFormat::UnsafeXHTML)));
-    scores.emplace_back(root()->addWidget(make_unique<WLineEdit>()));
-    warnings.emplace_back(root()->addWidget(make_unique<WText>("<div style=\"font-size: 1rem; color: red;\">Please ensure that this field is either empty or contains a number from 3 to 18.</div>", TextFormat::UnsafeXHTML)));
-    scores.emplace_back(root()->addWidget(make_unique<WLineEdit>()));
-    warnings.emplace_back(root()->addWidget(make_unique<WText>("<div style=\"font-size: 1rem; color: red;\">Please ensure that this field is either empty or contains a number from 3 to 18.</div>", TextFormat::UnsafeXHTML)));
-    scores.emplace_back(root()->addWidget(make_unique<WLineEdit>()));
-    warnings.emplace_back(root()->addWidget(make_unique<WText>("<div style=\"font-size: 1rem; color: red;\">Please ensure that this field is either empty or contains a number from 3 to 18.</div>", TextFormat::UnsafeXHTML)));
-    scores.emplace_back(root()->addWidget(make_unique<WLineEdit>()));
-    warnings.emplace_back(root()->addWidget(make_unique<WText>("<div style=\"font-size: 1rem; color: red;\">Please ensure that this field is either empty or contains a number from 3 to 18.</div>", TextFormat::UnsafeXHTML)));
-    scores.emplace_back(root()->addWidget(make_unique<WLineEdit>()));
+    for (short i = 0; i < 6; i++)
+    {
+        warnings.emplace_back(root()->addWidget(make_unique<WText>("<div style=\"font-size: 1rem; color: red;\">Please ensure that this field is either empty or contains a number from 3 to 18.</div>", TextFormat::UnsafeXHTML)));
+        scores.emplace_back(root()->addWidget(make_unique<WLineEdit>()));
+        warnings.at(i)->setTextAlignment(AlignmentFlag::Center);
+        warnings.at(i)->setHidden(true);
+        scores.at(i)->setWidth(WLength("16%"));
+        scores.at(i)->setMargin(WLength("42%"), Side::Left | Side::Right);
+        scores.at(i)->setMargin(WLength("1%"), Side::Bottom);
+    }
+
+    for (short i = 0; i < 5; i++)
+    {
+        scores.at(i)->enterPressed().connect([this, scores, i]
+                                             { scores.at(i + 1)->setFocus(); });
+    }
+
+    scores.at(0)->setFocus();
+
     WPushButton *enterScores = root()->addWidget(make_unique<WPushButton>("<div style=\"font-size: 2rem\">Enter Scores!</div>", TextFormat::UnsafeXHTML));
     _promptText->setText("<div style=\"font-size: 2rem\">First up: ability scores!</div><br><div style=\"font-size: 2rem\">Roll 4 six-sided dice and take away the lowest die, then add up the remaining 3 dice to get an ability score!</div><br><div style=\"font-size: 2rem\">Write that ability score on a piece of paper and repeat 5 more times so that you have 6 ability scores written down, ranging from 3 to 18 in value.</div><br><div style=\"font-size: 2rem\">Figure out which scores you want to use each number for (strength, dexterity, constitution, intelligence, wisdom, and charisma) or you can do them in the order you rolled them.</div><br><div style=\"font-size: 2rem\">If you just want random ability scores then don't enter anything and I'll generate them for you.</div><br><div style=\"font-size: 2rem\">Once you are ready just click the button and I'll add them to your character sheet!</div>");
 
-    for (auto &&warning : warnings)
-    {
-        warning->setTextAlignment(AlignmentFlag::Center);
-        warning->setHidden(true);
-    }
-
     scores.at(0)->setPlaceholderText("Strength");
-    scores.at(0)->setWidth(WLength("16%"));
-    scores.at(0)->setMargin(WLength("42%"), Side::Left | Side::Right);
-    scores.at(0)->setMargin(WLength("1%"), Side::Bottom);
-    scores.at(0)->setFocus();
-    scores.at(0)->enterPressed().connect([this, scores]
-                                         { scores.at(1)->setFocus(); });
-
     scores.at(1)->setPlaceholderText("Dexterity");
-    scores.at(1)->setWidth(WLength("16%"));
-    scores.at(1)->setMargin(WLength("42%"), Side::Left | Side::Right);
-    scores.at(1)->setMargin(WLength("1%"), Side::Bottom);
-    scores.at(1)->enterPressed().connect([this, scores]
-                                         { scores.at(2)->setFocus(); });
-
     scores.at(2)->setPlaceholderText("Constitution");
-    scores.at(2)->setWidth(WLength("16%"));
-    scores.at(2)->setMargin(WLength("42%"), Side::Left | Side::Right);
-    scores.at(2)->setMargin(WLength("1%"), Side::Bottom);
-    scores.at(2)->enterPressed().connect([this, scores]
-                                         { scores.at(3)->setFocus(); });
-
     scores.at(3)->setPlaceholderText("Intelligence");
-    scores.at(3)->setWidth(WLength("16%"));
-    scores.at(3)->setMargin(WLength("42%"), Side::Left | Side::Right);
-    scores.at(3)->setMargin(WLength("1%"), Side::Bottom);
-    scores.at(3)->enterPressed().connect([this, scores]
-                                         { scores.at(4)->setFocus(); });
-
     scores.at(4)->setPlaceholderText("Wisdom");
-    scores.at(4)->setWidth(WLength("16%"));
-    scores.at(4)->setMargin(WLength("42%"), Side::Left | Side::Right);
-    scores.at(4)->setMargin(WLength("1%"), Side::Bottom);
-    scores.at(4)->enterPressed().connect([this, scores]
-                                         { scores.at(5)->setFocus(); });
-
     scores.at(5)->setPlaceholderText("Charisma");
-    scores.at(5)->setWidth(WLength("16%"));
-    scores.at(5)->setMargin(WLength("42%"), Side::Left | Side::Right);
-    scores.at(5)->setMargin(WLength("1%"), Side::Bottom);
+
     scores.at(5)->enterPressed().connect([this, enterScores]
                                          { enterScores->setFocus(); });
+
     enterScores->setWidth(WLength("16%"));
     enterScores->setMargin(WLength("42%"), Side::Left | Side::Right);
     enterScores->clicked().connect([this, scores, warnings]
