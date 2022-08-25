@@ -89,10 +89,14 @@ private:
      * and if an ability score field is not valid it sets the warning text of that score to show and clears the field.
      * then it sets the focus to the first ability score field.
      * If/Once all the scores are valid, it sets the Character objects ability scores to the given values and calculates a random value for blank ones.
-     * @param scores
-     * @param warnings
+     * @param scores pointers to the input fields for each ability in the order of: str, dex, con, int, wis, cha.
+     * @param warnings pointers to the hidden warning text above each field.
      */
     void CheckAbilityScores(vector<WLineEdit *> scores, vector<WText *> warnings);
+    /**
+     * @brief Set the age of the character
+     *
+     */
     void SetAge();
     void SetHeight();
     void SetWeight();
