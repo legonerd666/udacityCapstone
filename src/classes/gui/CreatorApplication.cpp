@@ -104,7 +104,7 @@ void CreatorApplication::SetAbilityScores()
 
 void CreatorApplication::SetRace()
 {
-    cout << "\n\nRace\n\n";
+    _promptText->setText("<div style=\"font-size: 2rem\">Now that that's done, it's time to pick your race!</div><br><div style=\"font-size: 2rem\">Look in the Pathfinder Core Rulebook and decide which race suits your character most.</div><br><div style=\"font-size: 2rem\">Then I'll ask you for all the information about the race and add it to your character sheet!</div><br><div style=\"font-size: 2rem\">Let's get a name for your race: </div>");
 }
 
 void CreatorApplication::CheckAbilityScores(vector<WLineEdit *> scores, vector<WText *> warnings)
