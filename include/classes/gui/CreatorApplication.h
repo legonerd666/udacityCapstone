@@ -92,7 +92,7 @@ private:
      * @param scores pointers to the input fields for each ability in the order of: str, dex, con, int, wis, cha.
      * @param warnings pointers to the hidden warning text above each field.
      */
-    void CheckAbilityScores(vector<WLineEdit *> scores, vector<WText *> warnings);
+    void CheckAbilityScores(vector<WLineEdit *> scores, vector<WText *> warnings, WPushButton *enterScoresBtn);
     /**
      * @brief Set the age of the character
      *

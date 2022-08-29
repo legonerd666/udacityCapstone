@@ -67,7 +67,7 @@ void Creator::AbilityScores()
 void Creator::Race()
 {
     DelayedCout("Now that that's done, it's time to pick your race!");
-    DelayedCout("Look in the Pathfinder Core Rulebook and decide which race suits your character most;");
+    DelayedCout("Look in the Pathfinder Core Rulebook and decide which race suits your character most.");
     DelayedCout("Then I'll ask you for all the information about the race and add it to your character sheet!");
     DelayedCout("Let's get a name for your race: ", false);
     string name;

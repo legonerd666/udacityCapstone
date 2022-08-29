@@ -7,6 +7,7 @@
 #include <iostream>
 #include <Wt/WText.h>
 #include <Wt/WPushButton.h>
+#include <Wt/WCheckBox.h>
 #include <vector>
 
 using namespace std;
@@ -98,16 +99,96 @@ void CreatorApplication::SetAbilityScores()
 
     enterScores->setWidth(WLength("16%"));
     enterScores->setMargin(WLength("42%"), Side::Left | Side::Right);
-    enterScores->clicked().connect([this, scores, warnings]
-                                   { CheckAbilityScores(scores, warnings); });
+    enterScores->clicked().connect([this, scores, warnings, enterScores]
+                                   { CheckAbilityScores(scores, warnings, enterScores); });
 }
 
 void CreatorApplication::SetRace()
 {
+    vector<WCheckBox *> scoreCheckboxes;
+    for (short i = 0; i < 18; i++)
+    {
+
+        if (i % 3 == 0)
+        {
+            WText *label = root()->addWidget(make_unique<WText>());
+            label->setMargin(WLength("45%"), Side::Left);
+            switch (i)
+            {
+            case 0:
+                label->setText("Str:");
+                label->setMargin(WLength("1.4%"), Side::Right);
+                break;
+            case 3:
+                label->setText("Dex:");
+                label->setMargin(WLength("1%"), Side::Right);
+                break;
+            case 6:
+                label->setText("Con:");
+                label->setMargin(WLength("1%"), Side::Right);
+                break;
+            case 9:
+                label->setText("Int:");
+                label->setMargin(WLength("1.4%"), Side::Right);
+                break;
+            case 12:
+                label->setText("Wis:");
+                label->setMargin(WLength("1%"), Side::Right);
+                break;
+            case 15:
+                label->setText("Cha:");
+                label->setMargin(WLength("1%"), Side::Right);
+                break;
+            default:
+                break;
+            }
+            root()->addWidget(make_unique<WText>("-2: "));
+        }
+        else if (i % 3 == 1)
+            root()->addWidget(make_unique<WText>(" 0: "));
+        else
+            root()->addWidget(make_unique<WText>(" +2: "));
+
+        scoreCheckboxes.emplace_back(root()->addWidget(make_unique<WCheckBox>()));
+
+        if ((i + 1) % 3 == 0)
+            root()
+                ->addWidget(make_unique<WBreak>());
+    }
+
+    for (short i = 0; i < 18; i++)
+    {
+        if (i % 3 == 0)
+            scoreCheckboxes.at(i)->checked().connect([this, scoreCheckboxes, i]
+                                                     { scoreCheckboxes.at(i + 1)->setUnChecked();
+                                                       scoreCheckboxes.at(i + 2)->setUnChecked();
+                                                       scoreCheckboxes.at(i)->setDisabled(true);
+                                                       scoreCheckboxes.at(i + 1)->setDisabled(false);
+                                                       scoreCheckboxes.at(i + 2)->setDisabled(false); });
+        else if (i % 3 == 1)
+        {
+            scoreCheckboxes.at(i)->setChecked();
+            scoreCheckboxes.at(i)->setDisabled(true);
+            scoreCheckboxes.at(i)->checked().connect([this, scoreCheckboxes, i]
+                                                     { scoreCheckboxes.at(i - 1)->setUnChecked();
+                                                       scoreCheckboxes.at(i + 1)->setUnChecked();
+                                                       scoreCheckboxes.at(i)->setDisabled(true);
+                                                       scoreCheckboxes.at(i - 1)->setDisabled(false);
+                                                       scoreCheckboxes.at(i + 1)->setDisabled(false); });
+        }
+        else
+            scoreCheckboxes.at(i)->checked().connect([this, scoreCheckboxes, i]
+                                                     { scoreCheckboxes.at(i - 2)->setUnChecked();
+                                                       scoreCheckboxes.at(i - 1)->setUnChecked();
+                                                       scoreCheckboxes.at(i)->setDisabled(true);
+                                                       scoreCheckboxes.at(i - 2)->setDisabled(false);
+                                                       scoreCheckboxes.at(i - 1)->setDisabled(false); });
+    }
+
     _promptText->setText("<div style=\"font-size: 2rem\">Now that that's done, it's time to pick your race!</div><br><div style=\"font-size: 2rem\">Look in the Pathfinder Core Rulebook and decide which race suits your character most.</div><br><div style=\"font-size: 2rem\">Then I'll ask you for all the information about the race and add it to your character sheet!</div><br><div style=\"font-size: 2rem\">Let's get a name for your race: </div>");
 }
 
-void CreatorApplication::CheckAbilityScores(vector<WLineEdit *> scores, vector<WText *> warnings)
+void CreatorApplication::CheckAbilityScores(vector<WLineEdit *> scores, vector<WText *> warnings, WPushButton *enterScores)
 {
     bool allValid = true;
     for (short i = 0; i < 6; i++)
@@ -162,6 +243,15 @@ void CreatorApplication::CheckAbilityScores(vector<WLineEdit *> scores, vector<W
             }
         }
         _character->AbilityScores(abilityScores);
+        for (auto &&score : scores)
+        {
+            root()->removeWidget(score);
+        }
+        for (auto &&warning : warnings)
+        {
+            root()->removeWidget(warning);
+        }
+        root()->removeWidget(enterScores);
         SetRace();
     }
     else
