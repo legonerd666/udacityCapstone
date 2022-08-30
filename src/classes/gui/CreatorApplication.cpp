@@ -105,6 +105,11 @@ void CreatorApplication::SetAbilityScores()
 
 void CreatorApplication::SetRace()
 {
+    /**
+     * @brief Turns checkboxes supplied by Witty into radiobuttons
+     *
+     * Creates 6 sets of 3 checkboxes and turns them into radiobuttons.
+     */
     vector<WCheckBox *> scoreCheckboxes;
     for (short i = 0; i < 18; i++)
     {
